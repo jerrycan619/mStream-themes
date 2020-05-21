@@ -37,7 +37,7 @@ This may break by new updates of mStream but I try to keep them working.<br/>
 <br/>
 If you find bug's or have suggestions for **new Themes** please open an "Issue"<br/>
 Please DON'T open Issues for problems with the Software itself!!! (do that on the main mStream repository)<br/>
-and also DONT'T open Issues for problems with **this Themes** on the main mStream repository!!! (do it HERE)<br/>
+and also DON'T open Issues for problems with **this Themes** on the main mStream repository!!! (do it HERE)<br/>
 
 Thanks to everyone!
 
