@@ -1,0 +1,261 @@
+@font-face {
+  font-family: "Oswald";
+  src: url("/public/fonts/oswald/Oswald-Regular.woff2") format("woff2"),
+    url("/public/fonts/oswald/Oswald-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Oswald";
+  src: url("/public/fonts/oswald/Oswald-Light.woff2") format("woff2"),
+    url("/public/fonts/oswald/Oswald-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Oswald";
+  src: url("/public/fonts/oswald/Oswald-Medium.woff2") format("woff2"),
+    url("/public/fonts/oswald/Oswald-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Oswald";
+  src: url("/public/fonts/oswald/Oswald-ExtraLight.woff2") format("woff2"),
+    url("/public/fonts/oswald/Oswald-ExtraLight.woff") format("woff");
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Oswald";
+  src: url("/public/fonts/oswald/Oswald-SemiBold.woff2") format("woff2"),
+    url("/public/fonts/oswald/Oswald-SemiBold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Oswald";
+  src: url("/public/fonts/oswald/Oswald-Bold.woff2") format("woff2"),
+    url("/public/fonts/oswald/Oswald-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+}
+
+body,
+html {
+  height: 100%;
+}
+
+body {
+  background: url(../img/struckaxiom.png) top left repeat;
+}
+
+.header {
+  margin: 0;
+  padding: 0;
+  background-color: #f60;
+  height: 25px;
+}
+
+.mstream-image {
+  height: 100%;
+  background-color: white;
+  border-radius: 0 0 3px 3px;
+  box-shadow: 0 0 5px #8d8d8d;
+}
+
+.logo-box {
+  overflow-y: visible;
+  width: 1px;
+  height: 140%;
+  margin-left: 35px;
+  z-index: 99;
+}
+
+.browser-header {
+  height: 48px;
+  background-color: #000;
+  border-bottom: none;
+  color: #fff;
+  font-weight: bold;
+  font-family: "Oswald", sans-serif;
+}
+
+.browser-header-text {
+  font-size: 20px;
+  font-weight: 500;
+  padding-top: 16px;
+  padding-left: 10px;
+}
+
+.browser-container {
+  height: calc(100% - 80px);
+  background-color: rgba(250, 250, 250, 0.5);
+  font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+}
+
+.browser {
+  list-style: none;
+  padding: 0;
+  overflow-y: auto;
+  height: calc(100% - 40px);
+  background: #000;
+}
+
+.browser-tools {
+  height: 40px;
+  background-color: #000;
+  width: 100%;
+  color: #fff;
+}
+
+.browser-item {
+  height: auto;
+  border-image: linear-gradient(to right, #2f2f2f, rgba(34, 34, 34, 0)) 1;
+  border-width: 1px;
+  border-style: solid;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+
+  cursor: pointer;
+  width: 100%;
+  color: #fff;
+  font-family: "Oswald", sans-serif;
+  font-size: 10pt;
+  font-weight: 400;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.browser-item:nth-of-type(odd) {
+  background: #070707;
+}
+
+.browser-item:nth-of-type(even) {
+  background: #000;
+}
+
+.browser-item:hover {
+  background: #181818;
+}
+
+.login-icon {
+  max-height: 150px;
+  padding-top: 60px;
+}
+
+.login-form {
+  padding-top: 20px;
+}
+
+button {
+  background-color: #000;
+  border-color: #000;
+  color: white;
+  border: none;
+  width: 100%;
+  font-family: "Oswald", sans-serif !important;
+}
+#login-submit {
+  color: white;
+  margin-top: 1rem;
+  font-size: 0px;
+  height: 50px;
+  font-weight: bold;
+}
+#login-submit::after {
+  content: "CONNECT";
+  font-size: 20px;
+}
+input {
+  width: 100%;
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-bottom: 5px;
+}
+
+label {
+  padding-bottom: 5px;
+  display: block;
+}
+
+.back-button {
+  position: relative;
+  float: left;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.back-button > img {
+  filter: invert(100%);
+}
+
+.back-button:hover {
+  background-color: #181818;
+}
+
+.filepath {
+  position: relative;
+  float: left;
+  padding-top: 10px;
+}
+
+.login-overlay {
+  background: #f60;
+  background-image: radial-gradient(circle, #f60, #000) !important;
+}
+
+#login-code {
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 0px 5px 0px #000;
+  font-family: "Oswald", sans-serif;
+  font-weight: 300;
+  text-align: center;
+  font-size: 2rem;
+  max-width: 200px;
+}
+
+.login-form {
+  font-family: "Oswald", sans-serif;
+  font-size: 16px !important;
+  font-weight: normal;
+  color: #fff;
+  text-align: center;
+}
+
+.play-pause-button {
+  background-color: #f60 !important;
+}
+
+.previous-button {
+  background: rgb(0, 0, 0) !important;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(24, 24, 24, 1) 100%
+  ) !important;
+  box-shadow: none !important;
+}
+
+.next-button {
+  background: rgb(0, 0, 0) !important;
+  background: linear-gradient(
+    270deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(24, 24, 24, 1) 100%
+  ) !important;
+  box-shadow: none !important;
+}
+
+.remote-controls {
+  border-top: 5px solid #f60;
+}
