@@ -4575,7 +4575,7 @@ label.prefix.radius {
 span.postfix,
 label.postfix {
   background: #f60;
-  border-color: #1db653;
+  border-color: #f60;
   border-left: none;
   color: #000000;
 }
