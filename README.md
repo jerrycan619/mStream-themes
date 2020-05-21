@@ -14,7 +14,7 @@ path/to/mStream/
                 |-> electron/
                 |-> modules/
                 |-> ... some other...
-                |-> public/ --- this is where my themes belong in
+                |-> public/ --- this is where my themes replaces some files
 </pre>
 
 Now download the Theme (or everything) from here und unpack it.
@@ -27,10 +27,10 @@ path/to/themes/
                 |-> ...
 </pre>
 
-Now pick the theme you want to install and then copy the public folder into the mStream root folder like this:
-copy: dark_green/public
-paste in: mStream/
-and if get asked if you want to overwrite the files choose "yes" (or "overwrite)
+Now pick the theme you want to install and then copy the public folder into the mStream root folder like this:<br/>
+copy: **dark_green/public**<br/>
+paste in: **mStream/**<br/>
+and if get asked if you want to overwrite the files choose "yes" (or "overwrite) to all!
 
 ## Available Themes
 ### Dark Green
