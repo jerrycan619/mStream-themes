@@ -11,7 +11,7 @@ you should have a folder structure like this:
 <pre>
 path/to/mStream/<br/>
                 |-> build/<br/>
-                |-> electron/<br/>
+                |-> electron/
                 |-> modules/<br/>
                 |-> ... some other...<br/>
                 |-> public/ --- this is where my themes belong in
