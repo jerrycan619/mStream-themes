@@ -35,7 +35,7 @@ and if you get asked if you want to overwrite the files choose "yes" (or "overwr
 Since there is no dedicated theme engine/api the themed files have to overwrite the default files.</br>
 This may break by new updates of mStream but I try to keep them working.<br/>
 <br/>
-If you find bug's or have suggestions for new Themes please open an "Issue"<br/>
+If you find bug's or have suggestions for **new Themes** please open an "Issue"<br/>
 Please DON'T open Issues for problems with the Software itself!!! (do that on the main mStream repository)<br/>
 and also DONT'T open Issues for problems with **this Themes** on the main mStream repository!!! (do it HERE)<br/>
 
@@ -43,6 +43,12 @@ Thanks to everyone!
 
 
 ## Available Themes
+**Tested on:**<br/>
+*Chrome: working<br/>
+*Firefox: working<br/>
+*Opera: working<br/>
+*Android Chrome: working
+
 ### Dark Green
 ![darkGreen Login](/images/mstream_green_3.png)
 ![darkGreen 1](/images/mstream_green_1.png)
