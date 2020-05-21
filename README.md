@@ -8,9 +8,11 @@ First: I don't know how and if it's works on the Binarie and Docker install of m
 For use with the Install from The Command Line:
 you should have a folder structure like this:
 
+<pre>
 path/to/mStream/<br/>
                 |-> build/<br/>
                 |-> electron/<br/>
                 |-> modules/<br/>
                 |-> ... some other...<br/>
                 |-> public/ --- this is where my themes belong in
+</pre>
