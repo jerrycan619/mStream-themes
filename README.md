@@ -9,10 +9,10 @@ For use with the Install from The Command Line:
 you should have a folder structure like this:
 
 <pre>
-path/to/mStream/<br/>
-                |-> build/<br/>
+path/to/mStream/
+                |-> build/
                 |-> electron/
-                |-> modules/<br/>
-                |-> ... some other...<br/>
+                |-> modules/
+                |-> ... some other...
                 |-> public/ --- this is where my themes belong in
 </pre>
