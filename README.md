@@ -6,8 +6,8 @@ Please visit: https://github.com/IrosTheBeggar/mStream/
 **First: I don't know how and if it's works on the Binary and Docker install of mStream!**
 <br/><br/>
 **For use with the "Install from The Command Line" method:**
-you should have a folder structure like this:
 
+you should have a folder structure like this:
 <pre>
 path/to/mStream/
                 |-> build/
@@ -16,3 +16,6 @@ path/to/mStream/
                 |-> ... some other...
                 |-> public/ --- this is where my themes belong in
 </pre>
+
+![darkGreen 1](/images/mstream_green_1.png)
+Format: ![darkGreen 1](url)
