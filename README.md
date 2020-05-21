@@ -30,7 +30,17 @@ path/to/themes/
 Now pick the theme you want to install and then copy the public folder into the mStream root folder like this:<br/>
 copy: **dark_green/public**<br/>
 paste in: **mStream/**<br/>
-and if get asked if you want to overwrite the files choose "yes" (or "overwrite) to all!
+and if you get asked if you want to overwrite the files choose "yes" (or "overwrite) to all!<br/>
+<br/>
+Since there is no dedicated theme engine/api the themed files have to overwrite the default files.</br>
+The may break by new updates of mStream but I try to keep them working.<br/>
+<br/>
+If you find bug's or have suggestion for new Themes please open an "Issue"<br/>
+Please DON'T open Issues for problems with the Software itself!!! (do that on the main mStream repository)<br/>
+and also DONT'T open Issues for problems with **this Themes** on the main mStream repository!!! (do it HERE)<br/>
+
+Thanks to everyone!
+
 
 ## Available Themes
 ### Dark Green
