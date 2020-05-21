@@ -4,8 +4,8 @@ Please visit: https://github.com/IrosTheBeggar/mStream/
 
 ## How-to Install
 **First: I don't know how and if it's works on the Binary and Docker install of mStream!**
-
-For use with the "Install from The Command Line":
+<br/><br/>
+**For use with the "Install from The Command Line" method:**
 you should have a folder structure like this:
 
 <pre>
