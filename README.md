@@ -17,7 +17,7 @@ path/to/mStream/
                 |-> public/ --- this is where my themes replaces some files
 </pre>
 
-Now download the Theme (or everything) from here und unpack it.
+Now download the Theme (or everything) from here und unpack it.<br/>
 if you've done this you should have a structure like this:
 
 <pre>
