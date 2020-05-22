@@ -56,6 +56,6 @@ Thanks to everyone!
 ![darkGreen mobile](/images/mstream_green_4.png)
 
 ### Dark Orange
-**Just one picture but it's also everthing themed like on the Dark Green**
+**Just one picture but it's also everything themed like on the Dark Green**
 ![darkOrange 1](/images/mstream_orange_1.png)
 
