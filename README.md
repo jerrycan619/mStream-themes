@@ -2,6 +2,22 @@
 Themes for the great mStream Music server.
 Please visit: https://github.com/IrosTheBeggar/mStream/
 
+## NEW! redesigned interface 
+### ALPHA status - expect bugs
+### more information at https://github.com/jerrycan619/mStream/tree/interface
+
+## Desktop UI
+![](/images/desktop.gif)
+
+## Mobile UI
+![](/images/mobile.gif)
+
+### Install:
+copy the content of the interface directory into mStream root folder and replace all files if you get asked.
+All your existing config / database remain untouched, but to be 100% sure just copy your mStream folder to a diffrent backup location.
+
+
+## Themes
 ## How-to Install
 **First: I don't know how and if it's works on the Binary and Docker install of mStream!**
 <br/><br/>
