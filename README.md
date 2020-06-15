@@ -13,10 +13,11 @@ Please visit: https://github.com/IrosTheBeggar/mStream/
 ![](/images/mobile.gif)
 
 ### Install:
-copy the content of the interface directory into mStream root folder and replace all files if you get asked.
-All your existing config / database remain untouched, but to be 100% sure just copy your mStream folder to a diffrent backup location.
+copy the content of the interface directory into mStream root folder and replace all files if you get asked.<br/>
+Your existing config / database remain untouched, but to be 100% sure just copy your mStream folder to a different backup location.
 
-
+<br/><br/>
+# ---------------------------------------------
 ## Themes
 ## How-to Install
 **First: I don't know how and if it's works on the Binary and Docker install of mStream!**
