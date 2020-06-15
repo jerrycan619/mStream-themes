@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta content="yes" name="mobile-web-app-capable">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <link rel="apple-touch-icon" sizes="57x57" href="/public/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/public/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/public/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/public/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/public/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/public/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/public/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/public/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/public/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/public/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/public/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/public/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <title>mStream Music</title>
+    <base target="_self">
+
+    <link rel="stylesheet" href="/public/css/normalize.css">
+    <link rel="stylesheet" href="/public/css/materialdesignicons.min.css">
+    <!-- <link rel="stylesheet" href="/public/css/mstream-player.css"> -->
+
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
+
+    <!--<link rel="stylesheet" type="text/css" href="/public/css/nouislider.min.css">-->
+
+    <link rel="stylesheet" href="/public/css/mobile_style.css">
+
+
+
+    <!--<script src="/public/js/lib/jquery-3.5.1.min.js"></script>
+         iziModal needs js 2.x.x-->
+    <script src="/public/js/lib/jquery-2.2.4.min.js"></script>
+
+    <!-- Lozad LazyLoad -->
+    <!-- <script type="text/javascript" src="/public/js/lib/lozad.min.js"></script> -->
+
+    <!-- Vue JS -->
+    <script src="/public/js/lib/vue.min.js"></script>
+    <!-- Sortable JS -->
+    <script src="/public/js/lib/sortable.js"></script>
+    <!-- https://github.com/SortableJS/Vue.Draggable - v2.14.1 -->
+    <script src="/public/js/lib/vue-sortable.js"></script>
+    <!-- <script src="/public/js/lib/vue-router.min.js"></script> -->
+
+    <!-- This is the mStream Player stack
+    DO NOT Change to order these are loaded in -->
+    <script src="/public/js/lib/howler.core.min.js"></script>
+    <script src="/public/js/mstream.player.js"></script>
+
+    <!-- These must be loaded after the player -->
+    <!-- They add functions onto the MSTREAM object -->
+    <script src="/public/js/api2.js"></script>
+    <!-- <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script> -->
+    <script src="/public/js/lib/slick.min.js"></script>
+    <script type="text/javascript" src="/public/js/mstream_mobile.js"></script>
+    <script src="/public/js/mstream.jukebox.js"></script>
+
+    <!-- Star Rating System -->
+    <script src="/public/js/lib/star.js"></script>
+    <script src="/public/js/lib/popper.js"></script>
+
+    <script src="/public/js/lib/butterchurn.min.js"></script>
+    <script src="/public/js/lib/butterchurn-presets.min.js"></script>
+    <script src="/public/js/lib/butterchurn-presets-extra.js"></script>
+
+    <script src="/public/js/t.js"></script>
+    <script src="/public/js/lib/dropzone.js"></script>
+
+    <!-- iziToast -->
+    <script src="/public/js/lib/izi-toast.min.js"></script>
+    <link rel="stylesheet" href="/public/css/izi-toast.min.css">
+
+    <script src="/public/js/lib/modal.js"></script>
+    <link rel="stylesheet" href="/public/css/izi-modal.min.css">
+
+    <!--<link rel="stylesheet" href="/public/css/spinner.css">-->
+
+    <script src="/public/js/lib/clipboard.js"></script>
+    <script src="/public/js/lib/jwt-decode.js"></script>
+
+
+    <!-- Track Progress Bar and Volume Slider -->
+    <script src="/public/js/nouislider.min.js"></script>
+
+    <!-- Get rid of the ugly browser default scrollbars -->
+    <link rel="stylesheet" href="/public/css/simplebar.css" />
+    <script src="/public/js/lib/simplebar.min.js"></script>
+
+    <!-- <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" /> -->
+    <link rel="stylesheet" href="/public/css/slick.css" />
+
+    <!-- Loade huge list views by scrolling -->
+    <link rel="stylesheet" href="/public/css/clusterize.css" />
+    <script src="/public/js/lib/clusterize.min.js"></script>
+
+    <script src="/public/js/lib/star-rating.min.js"></script>
+
+</head>
+
+<body id="top" style="color: #b3b3b3;">
+    <test></test>
+
+    <div id="login_overlay" class="container-fluid h-100" style="display: none;">
+        <div class="d-flex flex-column justify-content-around align-items-center h-100">
+            <svg class="logo pt-3" alt="mStream" width="100%" xmlns="http://www.w3.org/2000/svg"
+                viewBox="10 20 600 110">
+                <g>
+                    <path class="st0"
+                        d="M179.9 45.5c-6.2 0-11.5 1.7-15.9 5s-6.5 8.1-6.5 14.4c0 4.9 1.3 9.1 3.8 12.4 2.5 3.4 5.7 5.8 9.3 7.3 3.7 1.5 7.3 2.8 11 3.8s6.8 2.3 9.3 3.9c2.5 1.5 3.8 3.5 3.8 5.8 0 4.8-4.4 7.2-13.1 7.2h-24.1V118h24.1c17.1 0 25.6-6.7 25.6-20.2 0-1.9-.2-3.8-.6-5.8-.4-2-1.2-4-2.6-6-1.3-2.1-3.3-3.7-5.8-4.9-2.5-1.2-6.4-2.7-11.5-4.5l-8.8-3.1c-.7-.2-1.7-.7-2.9-1.3-1.3-.7-2.2-1.3-2.8-1.9-.6-.6-1.1-1.4-1.6-2.3-.5-.9-.7-2-.7-3.2 0-2 1-3.5 2.9-4.6 1.9-1.1 4.3-1.6 7-1.6h24.6V45.5h-24.5zM226.4 58.3v31c0 10.2 2.5 17.6 7.6 22 5.1 4.4 13 6.6 23.7 6.6v-12.8c-2.7 0-4.9-.2-6.8-.4-1.8-.3-3.7-.9-5.8-1.9-2-.9-3.6-2.6-4.7-4.9-1.1-2.3-1.6-5.2-1.6-8.7V58.3h18.8V45.5h-18.8V31.6L214 58.3h12.4zM281.1 118V76.8c0-7.2.9-12 2.6-14.5 1-1.3 2.2-2.2 3.6-2.8 1.4-.6 2.6-1 3.6-1.1 1-.1 2.5-.1 4.3-.1H310V45.5h-12.2c-3.6 0-6.5.1-8.6.3-2.1.2-4.5.9-7.3 2s-5.1 2.8-7.1 5c-4 4.4-6 12.4-6 24V118h12.3zM326.2 53.8c-6.2 7.4-9.3 17-9.3 28.9 0 10.7 3.2 19.4 9.5 26.2s14.7 10.1 25.3 10.1c8.7 0 16.3-2.7 22.7-8.1L366 102c-3.7 2.1-8.5 3.2-14.3 3.2-6.5 0-11.8-2.3-15.8-6.9-4-4.6-6-10.5-6-17.9 0-7 1.9-12.9 5.6-17.9 3.8-5 8.9-7.5 15.5-7.5 3.3 0 6.1.8 8.2 2.4 2.1 1.6 3.2 4 3.2 7.2 0 5-1.2 8.5-3.6 10.6-2.4 2.1-6.7 3.2-12.9 3.2h-6.7v11.7h5.7c20.3 0 30.5-8.5 30.5-25.4 0-13.6-7.9-20.7-23.7-21.5-10.8-.2-19.3 3.3-25.5 10.6zM412.3 73.2c-7.4 0-13.6 1.9-18.5 5.7-4.9 3.8-7.4 9.4-7.4 16.7 0 7.3 2.3 12.9 7 16.7 4.6 3.8 10.9 5.7 18.8 5.7h31V73.6c0-9.1-2.4-16-7.2-20.8-4.8-4.8-11.7-7.2-20.7-7.2h-22.9v12.8h22.3c10.9 0 16.4 6.1 16.4 18.2v28.7h-18.4c-9.1 0-13.6-3.2-13.6-9.8 0-3.3 1.2-5.9 3.6-7.8 2.4-1.8 5.8-2.7 10.2-2.7 5.1 0 9.4 1.4 12.9 4.3v-14c-4.9-1.4-9.3-2.1-13.5-2.1zM458.8 118H471V58.3h24.4V118h12.2V58.3h5.7c6.8 0 11.3.7 13.5 2 4.3 2.5 6.5 7.7 6.5 15.5V118h12.2V75.7c0-6-.6-11.2-1.9-15.5-1.2-4.3-3.9-7.8-7.9-10.6-3.9-2.7-9.1-4.1-15.7-4.1h-61.4V118z" />
+                    <path class="st1" d="M75 118.5v-83l21 13v70z" />
+                    <path class="st2" d="M99 118.5v-69l11.5 7 10.5-7v69z" />
+                    <path class="st1" d="M124 118.5v-70l21-13v83z" />
+                </g>
+            </svg>
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-end social_icon">
+                        <span><a href="https://github.com/IrosTheBeggar/mStream/" class="mdi-set mdi-github"
+                                target="_blank" title="GitHub"></a></span>
+                        <span><a href="https://discordapp.com/channels/614134709248589845/614134709248589847"
+                                class="mdi-set mdi-discord" target="_blank" title="Discord"></a></span>
+                        <!--<span><a class="fab fa-twitter-square"></a></span>-->
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3 class="pt-0 pb-2">Sign In</h3>
+                    <form v-on:submit.prevent="submitCode($event)">
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="mdi-set mdi-account"></i></span>
+                            </div>
+                            <input id="login_username" type="text" class="form-control" autocomplete="username"
+                                placeholder="username">
+
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="mdi-set mdi-key-variant"></i></span>
+                            </div>
+                            <input id="login_password" type="password" class="form-control"
+                                autocomplete="current-password" placeholder="password" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" id="login_submit" value="Login" class="btn login_btn">
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-center links">
+                        <!--Visit mStream on <a href="https://github.com/IrosTheBeggar/mStream/">GitHub</a>-->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save laylist Modal -->
+    <div class="modal fade" id="savePlaylist" tabindex="-1" role="dialog" aria-labelledby="savePlaylist"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div id="flip-modal-front" class="modal-content modal--front">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Save Playlist</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="mdi-set mdi-close" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="save_playlist_form" class="form">
+                        <input id="playlist_name" class="form__input-text" type="text" required
+                            placeholder="Enter your playlist name" pattern="[a-zA-Z0-9 _-]+">
+                        <label for="playlist_name" class="form__label">Playlist name</label>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" form="save_playlist_form" value="Save Playlist"
+                        class="form__btn btn btn-primary">Save<span
+                            class="form__btn__icon mdi-set mdi-playlist-music" /></button>
+                </div>
+            </div>
+            <div id="flip-modal-back1" class="modal-content modal--back">
+                <div class="modal-header bg-warning">
+                    <span>Error</span>
+                </div>
+                <div class="modal-body"><span>No playlist to save!</span></div>
+            </div>
+            <div id="flip-modal-back2" class="modal-content modal--back">
+                <div class="modal-header bg-success">
+                    <span>Success</span>
+                </div>
+                <div class="modal-body"><span>Playist successfully saved!</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Playlist -->
+    <div class="modal fade" id="sharePlaylist" tabindex="-1" role="dialog" aria-labelledby="sharePlaylist"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal--front">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Share Playlist</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="mdi-set mdi-close" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="share_playlist_form" class="form">
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend"><span class="input-group-text">DAYS</span></div> <input
+                                id="sharePlaylistTime" type="number" min="1" step="1" value="14" class="form-control">
+                        </div>
+                        <label for="sharePlaylistTime">Expiration Time</label>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" form="share_playlist_form" value="Share Playlist"
+                        class="form__btn btn btn-primary">Share<span
+                            class="form__btn__icon mdi-set mdi-share" /></button>
+                </div>
+            </div>
+            <div class="modal-content modal--back modal--back1">
+                <div class="modal-header bg-warning">
+                    <span>Error</span>
+                </div>
+                <div class="modal-body"><span>No playlist to share!</span></div>
+            </div>
+            <div class="modal-content modal--back modal--back2">
+                <div class="modal-header bg-success">
+                    <span>Success</span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="mdi-set mdi-close" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span>Copy this link and share it!</span>
+                    <input id="copyShareLink" type="text" class="form-control" readonly>
+                </div>
+                <div class="modal-footer">
+                    <button id="copyShareLinkButton" title="Copy link to Clipboard"
+                        class="form__btn btn btn-primary">Copy link to Clipboard<span
+                            class="form__btn__icon mdi-set mdi-content-copy" /></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="sharePlaylist" class="hide">
+        <form id="share_playlist_form">
+            <div class="row">
+                <div class="small-6 large-6 columns">
+                    <label>Expiration Time</label>
+                    <input id="share_time" value="14" class="form-control" type="text" pattern="[0-9]+">
+                    <span class="share-time-post postfix radius">Days</span>
+                </div>
+            </div>
+            <input id="share_it" type="submit" value="Share It!">
+        </form>
+        <textarea class="share-textarea" rows="8" cols="60" placeholder="Your URL will be put here"
+            readonly="readonly"></textarea>
+    </div>
+
+    <!-- Download iFrame -->
+    <form id="downform" action="" target="frameframe" method="POST"></form>
+    <iframe id="downframe" src="" width="0" height="0" tabindex="-1" title="empty" hidden name="frameframe"></iframe>
+    <!-- Download iFrame for GET requests -->
+    <a href="#" class="hide" download id="download-file" hidden></a>
+
+
+    <div id="playerOverlay" class="h-100 w-100" style="display: none;"></div>
+    <!-- Bootstrap Container-->
+    <div id="main_content" class="container-fluid h-100 p-0">
+
+
+        <div class="d-flex flex-column" id="panel1">
+            <div class="row mr-0 ml-0">
+                <div class="col">
+                    <span id="contentHeader_text" class="mobileHeading1"></span>
+                </div>
+            </div>
+
+
+            <div id="directory_bar" class="row mr-0 ml-0 flex-nowrap align-items-center" style="display: none;">
+                <div class="col-auto">
+                    <span title="Previous Directory" class="backButton mdi-set mdi-arrow-left navbar_icon"></span>
+                </div>
+                <div class="col p-0">
+                    <span class="directoryName"></span>
+                    <!-- Current Directory -->
+                    <input id="search_folders" class="hide" placeholder="Search List">
+                </div>
+                <div class="col-auto">
+                    <div class="row flex-nowrap">
+                        <div class="col-auto">
+                            <span title="Search" id="search-explorer"
+                                class="mdi-set mdi-text-search navbar_icon"></span>
+                        </div>
+                        <div class="col-auto">
+                            <span title="Add All Songs to Playlist" class="add mdi-set mdi-playlist-plus navbar_icon"
+                                id='addall'></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filelist_wrapper row flex-column m-0">
+                <div class='scroll noselect' id='fillContent'>
+                    <div class="filez">Loading...</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="fixed-bottom">
+            <div id="vert_resize">
+                <!-- Filled by mobile_view.js -->
+                <div id="player">
+                </div>
+
+
+                <div class="playlist_wrapper" id="playlist_container">
+                    <div class="columnHeader noselect">
+                        <div class="row m-0 flex-nowrap">
+                            <div class="col-sm">
+                                <h3 class="hide-for-small">Playlist</h3>
+                            </div>
+                            <div class="col-sm-auto">
+                                <div class="row align-items-center h-100">
+                                    <div class="col">
+                                        <button type="button" title="Save Playlist"
+                                            class="mdi-set mdi-content-save navbar_icon iconBtn" data-toggle="modal"
+                                            data-target="#savePlaylist"></button>
+                                    </div>
+                                    <div class="col">
+                                        <button type="button" title="Download Playlist" id="downloadPlaylist"
+                                            class="mdi-set mdi-download-multiple navbar_icon iconBtn"></button>
+                                    </div>
+                                    <div class="col">
+                                        <button type="button" title="Share Playlist"
+                                            class="mdi-set mdi-share navbar_icon iconBtn" data-toggle="modal"
+                                            data-target="#sharePlaylist"></button>
+                                    </div>
+                                    <div class="col">
+                                        <button title="Clear Playlist" id="clear"
+                                            class="mdi-set mdi-playlist-remove navbar_icon iconBtn"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clear flatline"></div>
+
+                    <!-- This section is tied into the MSTREAMPLAYER module with Vue -->
+                    <!-- see file: mstream.vue-player-controls.js -->
+
+                    <div id="playlist_scrollBox" class="scroll scrollBoxHeight3" data-simplebar>
+                        <draggable :list="playlist" :options="{handle:'.drag-handle'}" @end="checkMove" id="playlist">
+                            <div v-for="(song, index) in playlist" is="playlist-item" :key="index" :index="index"
+                                :song="song">
+                            </div>
+
+                            <div style="visibility:hidden;" class="pop-c" id="pop" role="tooltip">
+                                <div class="my-rating pop-c"></div>
+                            </div>
+                            <div style="visibility:hidden;" class="pop-d" id="pop-d" role="tooltip">
+                                <div class="pop-d pop-playlist">Add To Playlist:</div>
+                                <div v-for="(playlist, index) in playlists" is="popper-playlist-item" :key="index"
+                                    :index="index" :playlist="playlist"></div>
+                            </div>
+                        </draggable>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Navigation -->
+            <nav class="navbar justify-content-around">
+                <div id="get_file_explorer" class="navbar_item" title="File Explorer">
+                    <span class="mdi-set mdi-folder-music iconBtn navbar_icon"></span>
+                    <span class="navbar_text">Files</span>
+                </div>
+                <div id="get_library"" class=" navbar_item" title="Library">
+                    <span class="mdi-set mdi-bookshelf iconBtn navbar_icon"></span>
+                    <span class="navbar_text">Library</span>
+                </div>
+                <div id="get_search" class="navbar_item" title="Search">
+                    <span class="mdi-set mdi-magnify iconBtn navbar_icon"></span>
+                    <span class="navbar_text">Search</span>
+                </div>
+                <div id="get_system" class="navbar_item" title="System">
+                    <span class="mdi-set mdi-cog iconBtn navbar_icon"></span>
+                    <span class="navbar_text">System</span>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/public/js/lib/lazy-load.js"></script>
+    <!--<script>
+        // Lazy load all images in scroallable areas
+        var ll = new LazyLoad({
+            container: document.getElementById('filelist')
+        });
+    </script>-->
+
+    <script>
+
+    </script>
+
+    <script src="/public/js/lib/bootstrap.bundle.min.js"></script>
+    <script src="/public/js/player_mobile.js"></script>
+    <script src="/public/js/mobile_view.js"></script>
+    <script src="/public/js/mstream.vue-player-controls-mobile.js"></script>
+    <script src="/public/js/mstream.vue-browser.js"></script>
+
+</body>
+
+</html>

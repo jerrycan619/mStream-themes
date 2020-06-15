@@ -1,0 +1,79 @@
+<div id="mstream-player2"
+    class="desktop_player_wrapper row m-0 w-100 flex-nowrap justify-content-between align-items-center">
+    <div class="col-auto p-0 player_wrapper_left">
+        <div class="row m-0 track_info">
+            <div class="col-auto track_cover" v-html="albumArtPath">
+
+            </div>
+            <div class="col m-0 p-0 track_text d-flex flex-column">
+                <div v-cloak class="track_text_title">{{currentSongTitle}}</div>
+                <div v-cloak class="track_text_artist">{{currentSongArtist}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col p-0 player_wrapper_center" style="max-width: 50%;">
+        <div class="row m-0 flex-column">
+            <div class="row m-0 justify-content-center player_controls">
+                <div class="col-auto pr-0 control_button-wrapper" v-on:click="rewind30">
+                    <button class="control_button mdi-set mdi-rewind-30 button_normal" title="Rewind 30s"></button>
+                </div>
+                <div class="col-auto pr-0 pl-1 control_button-wrapper" v-on:click="skipPrev">
+                    <button class="control_button mdi-set mdi-skip-previous button_normal" title="Previous"></button>
+                </div>
+                <div id="track_loading" class="col-auto p-0 control_button-wrapper d-none">
+                    <div class="spinner-border text-secondary" role="status" style="vertical-align: middle;">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div id="track_play" class="col-auto p-0 control_button-wrapper" v-on:click="playPause">
+                    <button class="control_button mdi-set button_play" v-bind:class="playPauseIcon"
+                        title="Play"></button>
+                </div>
+                <div class="col-auto pl-0 pr-1 control_button-wrapper" v-on:click="skipNext">
+                    <button class="control_button mdi-set mdi-skip-next button_normal" title="Next"></button>
+                </div>
+                <div class="col-auto pl-0 control_button-wrapper" v-on:click="forward30">
+                    <button class="control_button mdi-set mdi-fast-forward-30 button_normal"
+                        title="Fast Forward 30s"></button>
+                </div>
+            </div>
+            <div class="col">
+                <div class="replay_bar">
+                    <div v-cloak class="replay_bar_time">{{pastTime}}</div>
+                    <div class="progress_bar_wrapper">
+                        <div id="progress_bar" ref="progress_bar"></div>
+                    </div>
+
+                    <div v-cloak class="replay_bar_time">{{trackDuration}}</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-auto p-0 player_wrapper_right">
+        <div class="row m-0 justify-content-end">
+            <div class="col-auto p-0 control_button-wrapper" v-on:click="fadeOverlay">
+                <button class="control_button sub_icon  mdi-set mdi-waveform"
+                    title="Butterchurn Visualizer"></button>
+            </div>
+            <div class="col-auto p-0 control_button-wrapper" v-on:click="togglePlayMode">
+                <button id="togglePlayMode" class="control_button sub_icon  mdi-set" v-bind:class="playModeIcon"
+                    v-bind:title="playModeTitle"></button>
+            </div>
+            <div class="col-auto p-0 control_button-wrapper" v-on:click="toggleAutoDJ">
+                <button id="autodj_icon" class="control_button sub_icon  mdi-set mdi-dice-6" title="Auto DJ"></button>
+            </div>
+            <div class="col-auto pl-0 pr-3">
+                <div class="row m-0 flex-nowrap align-items-center">
+                    <button v-on:click="toggleVolume" id="volume_icon" class="control_button sub_icon  volume-bar__icon mdi-set"
+                        aria-label="Mute"></button>
+                    <div class="volume_bar_wrapper">
+                        <div id="volume_bar" ref="volume_bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/public/js/mstream.vue-player-desktop.js"></script>

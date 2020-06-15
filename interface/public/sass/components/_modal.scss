@@ -1,0 +1,140 @@
+$modal_bg: #333;
+$modal-header-bg: #222;
+$modal-input-bg: #fff;
+$modal-input-bg-shadow: #000;
+
+$color-white: #fff;
+$color-form-invalid: rgb(184, 17, 17);
+$color-form-valid: rgb(36, 184, 17);
+
+$color-grey-dark-2: #999;
+
+/* Override Bootstrap */
+.modal-content {
+    background: $modal_bg !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    backface-visibility: hidden;
+    height: 20rem;
+    transition: all .3s ease;
+
+    .modal-header {
+        background: $modal-header-bg;
+        border: none;
+
+        .close {
+            color: $font-color-primary;
+            text-shadow: none;
+            opacity: 1;
+
+            &:hover {
+                color: $font-color-primary-hover;
+                opacity: 1;
+            }
+        }
+    }
+
+    .modal-footer {
+        border-top: 1px solid #464646;
+    }
+}
+
+.modal-dialog {
+    height: 20rem;
+    perspective: 50rem;
+    -moz-perspective: 50rem;
+
+    & .modal-body .input-group-text {
+        width: 4rem;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+}
+
+.modal--front {
+
+}
+
+.modal--back {
+    transform: rotateY(180deg);
+
+    & .modal-header {
+        & span {
+            font-size: 1.5rem;
+            margin: 0 auto;
+            font-weight: 700;
+        }
+    }
+    & .modal-body {
+        & span {
+            font-size: 1.5rem;
+            display: block;
+            text-align: center;
+        }
+    }
+
+}
+
+
+.form {
+
+    &__input-text {
+        font-size: 1.5rem;
+        font-family: inherit;
+        color: inherit;
+        padding: 1rem 2rem;
+        border-radius: 2px;
+        background-color: rgba($modal-input-bg, .5);
+        border: none;
+        border-bottom: 3px solid transparent;
+        /* border to prevent move on focus */
+        width: 100%;
+        display: block;
+
+        &:focus {
+            outline: none;
+            box-shadow: 0 1rem 2rem rgba($modal-input-bg-shadow, .1) ;
+            border-bottom: 3px solid $color-form-valid;
+        
+            &:invalid {
+                border-bottom: 3px solid $color-form-invalid;
+            }
+        }
+    
+        &::-moz-placeholder,
+        &::-webkit-input-placeholder {
+            color: $color-white;
+        }
+    }
+
+    &__label {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-left: 2rem;
+        margin-top: .7rem;
+        display: block;
+        transition: all .3s;
+    }
+
+    &__input-text:placeholder-shown + &__label { //could NOT be nested!!!
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-4rem);
+    }
+
+    &__btn {
+        text-align: center;
+        display: block;
+        margin: 0 auto;
+        width: 50%;
+        font-size: 1.5rem;
+        font-weight: 700;
+
+        &__icon {
+            padding-left: 1rem;
+        }
+    }
+  }
+
+

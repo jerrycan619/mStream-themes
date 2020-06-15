@@ -1,0 +1,90 @@
+.player_bar_wrapper {
+    grid-area: now-playing-bar;
+    background-color: $mobilePlayer_bar_bg;
+    width: 100%;
+    height: $mobilePlayer_bar_height;
+    z-index: 99;
+    color: $mobilePlayer_bar_primary;
+    position: relative;
+    border-bottom: 1px solid $mobilePlayer_bar_divider1;
+
+    & .progress {
+        height: $mobilePlayer_bar_progress_height;
+        border-radius: 0;
+        background: $mobilePlayer_bar_bg;
+        z-index: 99;
+        position: relative;
+
+        & .progress-bar {
+            background: $mobilePlayer_bar_progress_color;
+        }
+    }
+
+    & .playbar {
+        margin-top: -$mobilePlayer_bar_progress_height;
+    }
+
+    & .track_info {
+        max-width: calc(100% - 5rem);
+        visibility: hidden;
+        &.slick-initialized {
+            visibility: visible;
+        }
+        
+        &  .player_album_icon {
+            font-size: 3rem;
+            line-height: $mobilePlayer_bar_height;
+        }
+
+        & .track_cover {
+            height: 4rem;
+        }
+
+        & .track_text {
+            text-overflow: ellipsis;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            overflow: hidden;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+
+            & .track_text_title {
+                font-size: 0.9rem;
+                font-weight: bold;
+            }
+
+            & .track_text_artist{
+                font-size: 0.8rem;
+            }
+            
+            & .nextPrev_text {
+                font-size: 1rem;
+                padding-left: 1rem;
+                line-height: 4rem;
+            }
+        }
+    }
+
+    & .player_controls {
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding-right: 1rem;
+
+        & .control_button {
+            font-size: 2rem;
+            line-height: $mobilePlayer_bar_height;
+        }
+    }
+    
+
+    
+}

@@ -1,0 +1,231 @@
+$player-overlay-bg1: #363636;
+$player-overlay-bg2: #1f1f1f;
+
+@media (max-height: 470px) {
+    .player_overlay_wrapper .album_art .album_art_container .placeholder_icon {
+        line-height: 12rem !important;
+    }
+}
+
+@media (min-width: 1130px) {
+    .player_overlay_wrapper .album_art .album_art_container .placeholder_icon {
+        font-size: 21rem !important;
+    }
+}
+
+.player_overlay_wrapper {
+    background: $player-overlay-bg2;
+    background: linear-gradient(0deg, $player-overlay-bg2 0%, $player-overlay-bg1 100%);
+
+    & .player-overlay-header {
+        height: 3rem;
+        line-height: 3rem;
+        text-align: center;
+    }
+
+    & .album_art {
+        height: 50%;
+
+        & .album_art_container {
+            padding-left: 4rem;
+            padding-right: 4rem;
+            height: 100%;
+            overflow: hidden;
+
+            & .placeholder_icon {
+                font-size: 30vw; 
+                line-height: 17rem;
+            }
+
+            & .album_art_img {
+                margin: 0 auto;
+            }
+        }
+    }
+
+    & .overlay_track_info {
+        & .track_text {
+            
+            text-align: left;
+
+            & .track_text_title {
+                font-size: 1rem;
+                font-weight: bold;
+            }
+
+            & .track_text_artist {
+                font-size: 0.8rem;
+            }
+        }
+    }
+
+    & .overlay_player_controls {
+        & .overlay_icon_main {
+            font-size: 3rem;
+        }
+        & .overlay_icon_sec {
+            font-size: 2rem;
+        }
+    }
+
+    & .overlay_replay_bar {
+        & .overlay_replay_time {
+            font-size: 0.8rem;
+        }
+    }
+
+    & .overlay_sub_controls {
+        & .overlay_icon_sub {
+            font-size: 1.8rem;
+        }
+    }
+}
+
+.overlay_star_rating {
+    width: 0;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    bottom: 1px;
+    left: 3.2rem;
+    transition: width .5s ease;
+
+    &.overlay_star_expanded {
+        width: 10rem;
+    }
+}
+.overlay_rating_number {
+    font-size: 0.8rem;
+    position: absolute;
+    top: -0.8rem;
+    text-align: center;
+    width: 1.8rem;
+}
+
+.my-rating{
+    transition: width .5s ease;
+    
+    &.mdi-star-off {
+        width: 12rem;
+    }
+}
+
+
+/* General noUISlider */
+.noUi-target, .noUi-target * {
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -ms-touch-action: none;
+    touch-action: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.noUi-connect, .noUi-origin {
+    will-change: transform;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    -ms-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    -webkit-transform-style: preserve-3d;
+    transform-origin: 0 0;
+    transform-style: flat;
+}
+
+.noUi-origin {
+    height: 10%;
+    width: 10%;
+}
+
+.noUi-horizontal .noUi-origin {
+    height: 0;
+}
+
+.noUi-touch-area {
+    height: 100%;
+    width: 100%;
+}
+
+.noUi-handle {
+    background: $audio-slider-handle-bg;
+    cursor: default;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    position: absolute;
+}
+
+/* Progressbar */
+.progress_bar_wrapper {
+    height: 16px;
+    width: 100%;
+    position: relative;
+
+    &:hover .noUi-handle {
+        opacity: 1 !important;
+    }
+
+    & #progress_bar {
+        height: 4px !important;
+        width: 100%;
+        border-radius: 4px;
+        background: $audio-slider-bg1;
+        position: absolute;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+    
+        & .noUi-base, 
+        & .noUi-connects {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 1;
+        }
+    
+        & .noUi-connects{
+            overflow: hidden;
+            z-index: 0;
+            border-radius: 3px;
+        }
+    
+        & .noUi-connect {
+            background: $audio-slider-bg2;
+            height: 100%;
+            width: 100%;
+            border-radius: 4px;
+        }
+        
+        & .noUi-handle {
+            width: 1em;
+            height: 1em;
+            right: -8px;
+            top: -7px;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity .3 ease;
+        }        
+    }
+}
+
+.disabled_icon {
+    color: transparent !important;
+    text-shadow: 0px 0px 2px #4a4a4a;
+}
+
+// Auto DJ Icon Glow Animation
+.icon_animation1 {
+    animation: glow 1s infinite alternate;
+    color: $font-color-primary-active;
+}
+
+@keyframes glow {
+    to {
+        text-shadow: 0 0 10px rgb(141, 141, 141);
+    }
+}

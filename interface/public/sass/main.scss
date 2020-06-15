@@ -1,0 +1,32 @@
+//7-1 sass architecture
+@charset "UTF-8";
+
+// 1. Configuration and helpers
+@import 'abstracts/variables';
+
+// 3. Base stuff
+@import 
+    'base/base',
+    'base/fonts';
+
+// 4. Layout-related sections
+@import 
+    'layout/desktopLayout',
+    'layout/sidebar';
+
+// 5. Components
+@import 
+    'components/modal', 
+    'components/alertOverlay', 
+    'components/audioplayer',
+    'components/nowPlayingDesktop',
+    'components/toggleButton',
+    'components/iconBtn';
+
+// 6. Pages
+@import 
+    'pages/loginDesktop',
+    'pages/settings',
+    'pages/remoteDesktop',
+    'pages/sharedDesktop',
+    'pages/searchDesktop';

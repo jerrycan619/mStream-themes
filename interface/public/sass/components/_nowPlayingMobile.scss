@@ -1,0 +1,32 @@
+
+#vert_resize {
+    min-height: 4rem;
+    height: 4rem;
+    overflow: hidden;
+}
+
+.playlist_wrapper {
+    background: $color-primary;
+    height: calc(100% - 4rem);
+    & .song-button-box {
+        margin: 0;
+        width: 15rem;
+        overflow: hidden;
+        background: $color-primary;
+        position: absolute;
+        right: -12rem;
+        transition: right .3s ease;
+    }
+
+    & .song-button-box.sbb_unfold {
+        right: 0;
+    }
+
+    & .playing {
+        background: $nowPlaying_active_bg;
+        & .song-button-box {
+            background: $nowPlaying_active_bg;
+        }
+    }
+    
+}

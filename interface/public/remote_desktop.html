@@ -1,0 +1,371 @@
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta content="yes" name="mobile-web-app-capable">
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="black" name="apple-mobile-web-app-status-bar-style">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/public/favicon/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/public/favicon/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/public/favicon/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/public/favicon/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/public/favicon/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/public/favicon/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/public/favicon/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/public/favicon/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/public/favicon/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/public/favicon/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/public/favicon/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/public/favicon/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/public/favicon/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  <title>mStream Remote</title>
+  <link rel="stylesheet" href="/public/css/normalize.css">
+  <link rel="stylesheet" href="/public/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
+  <!-- mStream CSS -->
+  <link rel="stylesheet" href="/public/css/desktop_style.css">
+
+  <!--
+  This is the mStream Player stack
+    DO NOT Change to order these are loaded in
+          -->
+  <script src="/public/js/lib/aurora.js"></script>
+  <script src="/public/js/lib/flac.js"></script>
+  <script src="/public/js/lib/howler.core.js"></script>
+  <script src="/public/js/mstream.player.js"></script>
+  <!-- Vue JS -->
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+    crossorigin="anonymous"></script>
+
+  <script src="/public/js/remote.js"></script>
+
+  <!-- Get rid of the ugly browser default scrollbars -->
+  <link rel="stylesheet" href="/public/css/simplebar.css" />
+  <script src="/public/js/lib/simplebar.min.js"></script>
+
+  <script>
+    var remoteProperties = {
+      code: 0,
+      guest: false,
+      error: false,
+      token: false
+    };
+
+    // Auto Focus
+    Vue.directive('focus', {
+      // When the bound element is inserted into the DOM...
+      inserted: function (el) {
+        // Focus the element
+        el.focus()
+      }
+    })
+
+    window.onload = function () {
+      $.ajaxPrefilter(function (options) {
+        options.beforeSend = function (xhr) {
+          xhr.setRequestHeader('x-access-token', remoteProperties.token);
+        }
+      });
+
+      // TODO: Handle guest controls
+
+
+
+      // Prompt user for code
+      // Check code against server
+      // Store code
+
+      // Function to send commands to server
+      function sendCommandToServer(command, value = 0, file = false) {
+        var sendData = JSON.stringify({
+          code: remoteProperties.code,
+          command: command,
+          value: value,
+          file: file,
+        });
+
+        var request = $.ajax({
+          url: "jukebox/push-to-client",
+          type: "POST",
+          contentType: "application/json",
+          dataType: "json",
+          data: sendData
+        });
+
+        console.log("send to server: ", sendData);
+
+        request.done(function (msg) {
+          // var parsedMessage = $.parseJSON(msg);
+          // TODO:
+        });
+
+        request.fail(function (jqXHR, textStatus) {
+          // TODO: IF you get an access denied error, try re-validating the code.  It could be the token expired
+
+          // TODO: clear remoteProperties if token doesn't exist anymore
+        });
+
+      }
+
+      var loginPanel = new Vue({
+        el: '#login-overlay',
+        data: {
+          remote: remoteProperties,
+        },
+        methods: {
+          submitCode: function (e) {
+
+            // Get Code
+            var loginCode = $('#login-code').val();
+
+            // Check Code Against Server
+            var request = $.ajax({
+              url: "jukebox/does-code-exist",
+              type: "POST",
+              contentType: "application/json",
+              dataType: "json",
+              data: JSON.stringify({ code: loginCode })
+            });
+
+            request.done(function (msg) {
+              // var parsedMessage = $.parseJSON(msg);
+              if (msg.status === true) {
+                remoteProperties.error = false;
+                remoteProperties.code = loginCode;
+                remoteProperties.guest = msg.guestStatus;
+                remoteProperties.token = msg.token;
+
+                // Load up the panel
+                MSTREAMAPI.getCurrentDirectoryContents();
+
+              } else {
+                remoteProperties.error = 'Code Not Found';
+
+              }
+            });
+
+            request.fail(function (jqXHR, textStatus) {
+              remoteProperties.error = 'Failed To Connect To Server';
+            });
+          }
+        }
+      });
+
+
+      // Template for data items
+      Vue.component('browser-item', {
+        template: `<div v-on:click="handleClick($event)" class="dirz row ml-0 mr-0 mt-2 mb-2 flex-nowrap align-items-center">
+                    <div class="col-auto">
+                      <span class="mdi-set mdi-folder-music dir_icon"></span>
+                    </div>
+                    <div class="col pl-0">
+                      {{displayText}}
+                    </div>
+                  </div>`,
+        props: ['type', 'item'],
+        // We need the positionCache to track the currently playing song
+        data: function () {
+          return {
+            // positionCache: MSTREAMPLAYER.positionCache,
+          }
+        },
+        // Methods used by playlist item events
+        methods: {
+          // On Click
+          handleClick: function (event) {
+            // get data type
+            var thisType = this.type;
+
+            // do something based on data type
+            if (this.type === 'file') {
+              // TODO: Send to remote
+              sendCommandToServer('addSong', 0, this.item.path);
+
+            } else if (this.type === 'directory') {
+              MSTREAMAPI.goToNextDirectory(this.item.name);
+            }
+          },
+        },
+        computed: {
+          displayText: function () {
+            // Get Type
+            // render based on type
+            // FIXME: Temp workaround
+            return this.item.name;
+          }
+        }
+      });
+
+      var browserPanel = new Vue({
+        el: '#remote_wrapper',
+        data: {
+          dataList: MSTREAMAPI.dataList,
+          currentProperties: MSTREAMAPI.currentProperties,
+          fileExplorer: MSTREAMAPI.fileExplorerArray
+          //currentTrack: MSTREAMAPI.currentTrack
+        },
+        computed: {
+          titleText: function () {
+            // FIXME: Temp workaround
+            return 'File Explorer';
+          },
+
+          filepath: function () {
+            if (this.fileExplorer.length === 1) {
+              return '/';
+            }
+
+            var directoryString = '';
+            for (var i = 0; i < this.fileExplorer.length; i++) {
+              // Ignore root directory
+              if (this.fileExplorer[i].name !== '/') {
+                directoryString += "/" + this.fileExplorer[i].name;
+              }
+            }
+
+            return directoryString;
+          }
+        },
+        methods: {
+          playPause: function() {
+            sendCommandToServer('playPause');
+          },
+          skipNext: function() {
+            sendCommandToServer('next');
+          },
+          skipPrev: function() {
+            sendCommandToServer('previous');
+          },
+          setVolUp: function() {
+            //Increase Volume by 5%
+            sendCommandToServer('setVolUp', 5);
+          },
+          setVolDown: function() {
+            sendCommandToServer('setVolDown', 5);
+          },
+          dirBack: function() {
+            MSTREAMAPI.goBackDirectory();
+          },
+          rewind: function () {
+            sendCommandToServer('seekBack', 30);
+          },
+          forward: function () {
+            sendCommandToServer('seekForward', 30);
+          },
+        }
+      });
+
+    }
+  </script>
+</head>
+
+<body>
+  <div v-if="remote.code === 0" id="login-overlay" class="login-overlay">
+    <div class="container login_wrapper">
+        <div class="row">
+            <div class="col">
+                <img class="login-icon" src="/public/img/mstream-icon.svg">
+                <form id="login-form" class="login-form" v-on:submit.prevent="submitCode($event)">
+                    <div>
+                        <label>Code</label>
+                        <input v-focus required type="text" class="form-control" id="login-code">
+                    </div>
+                    <button id="login-submit" type="submit" class="btn">Connect</button>
+                </form>
+                <div v-show="remote.error !== false" id="login-alert" class="">{{remote.error}}</div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+
+  <div id="remote_wrapper" class="container-fluid remote_wrapper">
+    <div class="row m-0 h-100 flex-nowrap align-items-center">
+      <div class="col">
+        <!-- Header -->
+        <!-- <div class="header">
+          <div class="logo-box">
+            <img class="mstream-image" src="/public/img/mstream-logo.svg">
+          </div>
+          <div id="title-text" class="title-text">{{currentSongText}}</div>
+        </div> -->
+
+        <!-- Browser -->
+        <div id="browser-container" class="browser-container row flex-column flex-nowrap m-0 h-100">
+          <div class="col-auto">
+            <!-- Browser Header -->
+            <div class="browser-header">
+              <div class="browser-header-text">{{titleText}}</div>
+              <div class="button-group">
+                <div class="repeat"></div>
+                <div></div>
+                <div></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-auto">
+            <!-- ToolBar -->
+            <div class="row flex-nowrap align-items-center">
+              <div class="col-auto">
+                <span v-on:click="dirBack" id="backbutton" title="Previous Directory" class="mdi-set mdi-backburger navbar_icon"></span>
+              </div>
+              <div class="col">
+                <div class="filepath">{{filepath}}</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col" style="height: calc(100% - 5rem);">
+            <!-- List Area -->
+            <!-- TODO: data-simplebar -->
+            <div id="browser" class="browser file_wrapper">
+                <div v-for="(item, index) in dataList" :item="item" :type="item.type" is="browser-item" :key="index">
+            </div>
+            </div>
+        <!--
+            <div id="browser2" class="browser">
+              <div v-for="(item, index) in currentTrack" :item="item" :type="item.type" is="browser-item" :key="index">
+              </div>
+            </div>-->
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    <!-- Controls -->
+    <div class="row m-0 justify-content-center align-items-center flex-nowrap fixed-bottom w-100 remote-controls">
+      <div class="col-auto">
+        <button v-on:click="rewind" class="mdi-set mdi-rewind-30 button_normal" title="Rewind -30s"></button>
+      </div>
+      <div class="col-auto">
+        <button v-on:click="skipPrev" class="mdi-set mdi-skip-previous button_normal" title="Previous Track"></button>
+      </div>
+      <div class="col-auto">
+        <button v-on:click="playPause" class="mdi-set mdi-play-pause button_play" title="Play/Pause"></button>
+      </div>
+      <div class="col-auto">
+        <button v-on:click="skipNext" class="mdi-set mdi-skip-next button_normal" title="Next Track"></button>
+      </div>
+      <div class="col-auto">
+        <button v-on:click="forward" class="mdi-set mdi-fast-forward-30 button_normal" title="Seek +30s"></button>
+      </div>
+      <div class="col-auto">
+        <button v-on:click="setVolDown" class="mdi-set mdi-volume-minus button_normal" title="Increase Volume"></button>
+      </div>
+      <div class="col-auto">
+        <button v-on:click="setVolUp" class="mdi-set mdi-volume-plus button_normal" title="Decrease Volume"></button>
+      </div>
+    </div>
+  </div>
+
+  
+
+</body>

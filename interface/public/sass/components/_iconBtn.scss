@@ -1,0 +1,9 @@
+.iconBtn {
+    background: transparent;
+    color: $icon-color-primary;
+    border: none;
+
+    &:hover {
+        color: $icon-color-primary-hover;
+    }
+}

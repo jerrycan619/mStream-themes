@@ -1,0 +1,1199 @@
+/* TODO: Add Loading animations (Spinner) */
+/* TODO: Rewrite in sass für better theming */
+  
+  
+  .clear {
+    clear: both;
+  }
+  
+  .clear:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+  
+  .fullHeight {
+    height: 100%;
+    overflow: scroll;
+  }
+  
+  .playlistColumn {
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .flatline {
+    height: 1px;
+    width: 100%;
+    background: #b4b4b4;
+    display: none;
+  }
+  
+  .libraryColumn {
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .current {
+    background-color: #e6ebfa !important;
+  }
+  
+  .scroll {
+    /*overflow-y: scroll;*/
+    overflow-y: auto;
+    width: 100%;
+    overflow-x: hidden;
+  }
+  
+  .album-art-left-container {
+    display: none;
+  }
+  
+  @media (min-width: 644px) {
+    .album-art-left-container {
+      display: none;
+    }
+  }
+  
+  @media (max-device-width: 643px) {
+    .album-art-left-container {
+      display: block;
+    }
+  }
+  
+  .playerControls {
+    height: 90px;
+  }
+  
+  .albumArt {
+    width: 90px;
+    background-color: blue;
+    height: inherit;
+  }
+  
+  #panel1,
+  #panel2 {
+    height: 100%;
+  }
+  
+  .ohidden {
+    overflow: hidden;
+  }
+  
+  .button {
+    margin-left: 10px;
+    border-radius: 100px;
+    font-weight: 400 !important;
+    font-family: "Open Sans", helvetica, arial, sans-serif;
+  }
+  
+  .button.secondary {
+    -webkit-box-shadow: 0 2px #dadada;
+    -moz-box-shadow: 0 2px #dadada;
+    box-shadow: 0 2px #dadada;
+  }
+  
+  p {
+    font-family: "Oswald", sans-serif;
+    color: #fff;
+    font-size: 14px;
+    margin-left: 10px;
+    font-weight: normal;
+  }
+  
+  
+  .inner-wrap,
+  .off-canvas-wrap {
+    height: 100%;
+  }
+  
+  .filez,
+  .dirz,
+  .back,
+  .artistz,
+  .albumz,
+  .playlist_row_container,
+  .playlist-item,
+  #playlist_container ul li {
+    cursor: pointer;
+    width: 100%;
+    background: transparent;
+    color: $font-color-primary;
+    font-size: 1rem;
+    font-weight: 400;
+    border-image: linear-gradient(to right, #2f2f2f, rgba(34, 34, 34, 0)) 1;
+    border-width: 1px;
+    border-style: solid;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+  
+  .filez:hover,
+  .back:hover,
+  .artistz:hover,
+  .playlistz:hover {
+    background-color: $desktop_file_hover_bg;
+    color: $font-color-primary-hover;
+  }
+  
+  .dirz {
+    position: relative;
+    overflow: visible;
+  }
+  
+  .fileplaylistz {
+    float: left;
+    position: relative;
+    overflow: visible;
+    padding: 10px;
+  }
+  
+  // .playlistz {
+  //   display: block;
+  //   padding: 10px;
+  //   width: 100%;
+  //   float: left;
+  // }
+  
+  .left {
+    float: left;
+  }
+  
+  .audio-book-bar {
+    float: right;
+    display: flex;
+    height: 100%;
+  }
+  
+  .nav-right-icon {
+    padding-left: 10px;
+    padding-right: 10px;
+    cursor: pointer;
+  
+    margin-right: 0px;
+    margin-left: 0px;
+  
+    display: inline-flex;
+  }
+  
+  
+  .bar-container {
+    width: 90px;
+  }
+  
+  .relative {
+    position: relative;
+  }
+  
+  .playlist_row_container {
+    list-style-type: none;
+    overflow: hidden;
+    position: relative;
+    padding: 0 !important;
+  }
+  
+  #playlist_container ul,
+  .playlist-item {
+    margin: 0;
+    position: relative;
+  }
+  
+  #playlist_container ul li,
+  .playlist-item {
+    list-style-type: none;
+    overflow: visible;
+  }
+  
+  .playlist-item::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+  
+  /*.dirz:hover,*/
+  .albumz:hover,
+  .artistz:hover,
+  .playlistz:hover,
+  .fileplaylistz:hover {
+    background-color: #181818 !important;
+  }
+  
+  .back:hover {
+    background-color: #181818 !important;
+  }
+  
+  .add_all {
+    clear: both;
+    padding: 10px 0 0;
+    width: 300px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  
+  .add_all:hover {
+    color: #73b9ff;
+  }
+  
+  #search_folders {
+    margin-top: 3px;
+    width: calc(100% - 99px);
+  }
+  
+  #downform {
+    display: none;
+    position: absolute;
+  }
+  
+  .controls div {
+    cursor: pointer;
+  }
+  
+  .main-section {
+    padding-bottom: 118px;
+    position: relative;
+    z-index: 1;
+    height: 100%;
+  }
+  
+  .libraryColumn,
+  .playlistColumn {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+  
+  
+  .controls {
+    float: right;
+    padding-top: 3px;
+  }
+  
+  .controls a {
+    width: 20px;
+    margin: 0px 5px;
+    text-align: center;
+    float: left;
+    opacity: 0.5;
+  }
+  
+  .controls a:hover {
+    opacity: 1;
+  }
+  
+  .rightControls {
+    padding-top: 12px;
+    margin-bottom: 8px;
+  }
+  
+  .noPaddingLeft {
+    padding-left: 0 !important;
+  }
+  
+  
+  .directoryTitle {
+    background-color: transparent;
+    display: block;
+    overflow: hidden;
+    padding: 7px 0;
+  }
+  
+  @media (min-width: 644px) {
+    .content {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  
+  @media (max-device-width: 643px) {
+    .content {
+      width: 100%;
+    }
+  }
+  
+  @media (min-width: 644px) {
+    .tabs-content>.content {
+      padding: 0;
+      display: inline-block !important;
+    }
+  }
+  
+  @media (max-width: 642px) {
+    .tabs-content>.content {
+      width: 100%;
+      padding-bottom: 50px;
+    }
+  }
+  
+  .tabs dd {
+    width: 50%;
+    /*border: 1px solid #cfcfcf;*/
+    font-size: 20px;
+    font-weight: 500;
+    color: #5a5a5a;
+  }
+  
+  .tabs dd:first-child {
+    border-right: 0;
+  }
+  
+  .tabs dd:last-child {
+    border-left: 0;
+  }
+  
+  .tabs-content {
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  @media (max-device-width: 643px) {
+    dl.tabs {
+      display: none;
+    }
+  }
+  
+  .searchList h2 {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #616161;
+    border-bottom: solid 1px #d0d0d0;
+  }
+  
+  .searchList ul {
+    margin: 0;
+  }
+  
+  .searchList li {
+    font-family: "Open Sans", helvetica, arial, sans-serif;
+    font-size: 14px;
+    padding: 10px 10px;
+    list-style-type: none;
+  }
+  
+  .searchList li:hover {
+    background: #313131;
+    color: #f9f9f9;
+    cursor: pointer;
+  }
+  
+  .main-overlay {
+    position: absolute;
+  
+    padding: 0;
+    margin: 0;
+  
+    top: 0;
+    left: 0;
+  
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 1);
+    z-index: 110;
+  }
+  
+  .login-overlay {
+    position: fixed;
+    padding: 0;
+    margin: 0;
+  
+    top: 0;
+    left: 0;
+  
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 9999;
+
+    label {
+      font-family: "Oswald", sans-serif;
+    font-size: 16px !important;
+    font-weight: normal;
+    }
+  }
+  
+  
+  .super-hide {
+    display: none !important;
+  }
+  
+  .login-icon {
+    max-height: 200px;
+    padding-top: 50px;
+    padding-bottom: 40px;
+    display: block;
+    margin: auto;
+  }
+  
+  .mstream-player {
+    /*position: fixed;
+    bottom: 0;*/
+  }
+  
+  .share-textarea,
+  #fed-textarea,
+  #federation-invitation-code {
+    height: 8em;
+    background: #000 !important;
+    color: #fff !important;
+    border: 1px solid #535353 !important;
+    font-family: "Oswald", sans-serif !important;
+    font-weight: normal !important;
+  }
+  
+  #share_time,
+  #federation-invite-time {
+    width: 4em;
+    float: left;
+    background: #000 !important;
+    color: #fff !important;
+    border-color: #f60 !important;
+  }
+  
+  .share-time-post {
+    width: 4em;
+  }
+  
+  .metadata-panel-text {
+    margin-bottom: 10px;
+    margin-top: 0px;
+    /*text-shadow: -1px 0 #333333, 0 1px #333333, 1px 0 black, 0 -1px #333333;*/
+    color: white;
+    font-family: "Oswald", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+    font-size: 18px;
+    line-height: 100%;
+  }
+  
+  .noselect {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
+  }
+  
+  .autoselect {
+    -webkit-touch-callout: text;
+    /* iOS Safari */
+    -webkit-user-select: text;
+    /* Safari */
+    -khtml-user-select: text;
+    /* Konqueror HTML */
+    -moz-user-select: text;
+    /* Firefox */
+    -ms-user-select: text;
+    /* Internet Explorer/Edge */
+    user-select: text;
+    /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
+  }
+  
+  
+  
+  .folder-image {
+    height: 20px;
+    margin-right: 5px;
+    filter: grayscale(100%) brightness(100%);
+  }
+  
+  .music-image {
+    height: 18px;
+    margin-right: 5px;
+    filter: grayscale(100%);
+  }
+  
+  .fileplaylist-image {
+    height: 25px;
+  }
+  
+  .item-text {
+    vertical-align: text-bottom;
+  }
+  
+  .hover-fill {
+    opacity: 0.6;
+  }
+  
+  .hover-fill:hover {
+    opacity: 1;
+  }
+  
+  .explorer-label-1 {
+    font-family: "Jura", sans-serif;
+  
+    font-style: normal;
+    font-size: 17px;
+    line-height: 100%;
+  }
+  
+  .album-art-box {
+    height: 3rem;
+    border-radius: 3px;
+  }
+  
+  .jq-stars {
+    display: inline-block;
+  }
+  
+  .jq-rating-label {
+    font-size: 22px;
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    font-family: helvetica, arial, verdana;
+  }
+  
+  .jq-star {
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  .jq-star-svg {
+    padding-left: 3px;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .jq-star-svg path {
+    /* stroke: #000; */
+    stroke-linejoin: round;
+  }
+  
+  /* un-used */
+  .jq-shadow {
+    -webkit-filter: drop-shadow(-2px -2px 2px #888);
+    filter: drop-shadow(-2px -2px 2px #888);
+  }
+  
+  #pop {
+    background: #f5f5f5;
+    padding: 3px;
+    border-radius: 3px;
+    border: 1.5px solid #ccc;
+  }
+  
+  .columnHeader {
+    position: relative;
+    background-color: transparent;
+    z-index: 50;
+    color: #fff;
+  }
+  
+  
+  .columnHeader::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+  
+  #viz-canvas {
+    width: 100%;
+    height: 100%;
+  }
+  
+  [v-cloak] {
+    display: none;
+  }
+  
+  .upload-progress-bar {
+    background-color: #b4b4b4;
+    height: 1px;
+  }
+  
+  .upload-progress-inner {
+    background-color: skyblue;
+    box-shadow: 0px 0px 4px 2px rgba(135, 206, 235, 0.91);
+    height: 100%;
+    position: relative;
+    z-index: 1000;
+  }
+  
+  .directory_bar {
+    height: auto;
+    line-height: 2rem;
+
+    & .progress {
+      height: 2rem;
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      background: transparent;
+      border-radius: 0;
+  
+      & .progress-bar {
+        background-color: $color-secondary;
+      }
+    }
+  }
+  
+  
+  .responsive-left-nav {
+    width: 0px;
+    height: 0px;
+    padding-top: 17px;
+    animation: animateleft 0.4s;
+  
+    display: block;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, .8);
+  }
+  
+  .left-nav-menu-header {
+    color: #000;
+    padding: 14px 0px 6px 9px;
+    font-size: 1.2rem;
+    font-weight: 300;
+    font-family: "Oswald", sans-serif;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .nav-logo {
+    cursor: pointer;
+  }
+  
+  ul.left-nav-menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  ul.left-nav-menu li {
+    padding: 0.3rem 0.9375rem;
+    text-transform: uppercase;
+    margin: 0;
+    cursor: pointer;
+    font-weight: normal;
+    font-family: "Oswald", sans-serif;
+    border-image: linear-gradient(to right,
+        #fff0,
+        rgb(66, 66, 66) 50%,
+        rgba(34, 34, 34, 0)) 1;
+    border-width: 1px;
+    border-style: solid;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+  
+  ul.left-nav-menu li:last-child {
+    border-bottom: 1px solid #5e5e5e;
+  }
+  
+  ul.left-nav-menu li:hover {
+    color: #ddd;
+  }
+  
+  ul.left-nav-menu li.selected {
+    font-weight: 500;
+    color: #eee;
+    background: #5a5a6a;
+    font-weight: 500;
+    color: #1a1a1a;
+    background: #f60;
+  }
+  
+  ul.left-nav-menu li.selected::after {
+    content: "";
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 15px solid #1a1a1a;
+    display: inline-block;
+  
+    position: relative;
+  }
+  
+  .left-nav-menu svg {
+    fill: #000 !important;
+  }
+  
+  ul.left-nav-menu li.selected svg {
+    fill: #fff;
+  }
+  
+  .db-status-bar {
+    padding-top: 25px;
+    min-height: 110px;
+  }
+  
+  .aboutModal {
+    font-family: "Jura", sans-serif;
+  }
+  
+  
+  .mobile-links {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .mobile-placeholder {
+    width: 100%;
+  }
+  
+  .app-text {
+    padding: 10px 10px;
+    font-size: 16px;
+    font-weight: normal;
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+    text-align: center;
+  }
+  
+  .loading-screen {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 70px;
+  }
+  
+  .recently-added-input {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 75px;
+    height: 19px !important;
+    text-align: center;
+    background: transparent !important;
+    color: #fff !important;
+  }
+  
+  .super-hide {
+    display: none !important;
+  }
+  
+  #federation-invite-checkbox-area {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+  }
+  
+  .federation-invite-thing {
+    width: calc(100% - 70px);
+    display: inline-block;
+  }
+  
+  #federation-invite-selection-panel {
+    overflow-y: scroll;
+    max-height: 300px;
+  }
+  
+  input[name="autodj-folders"] {
+    cursor: pointer;
+  }
+  
+  #autodj-ratings {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    margin-left: 10px;
+    max-width: calc(100% - 20px);
+    background: transparent;
+    color: #fff;
+    border: 1px solid #4f4f4f;
+    border-left: none;
+    border-right: none;
+  }
+  
+  #autodj-ratings option {
+    color: #000;
+  }
+  
+  #autodj-ratings::-ms-expand {
+    display: none;
+  }
+  
+  #db-search {
+    width: 80%;
+    position: relative;
+    display: flex;
+    margin: 20px auto 0 auto;
+  }
+  
+  #search-term {
+    border: 3px solid #f60;
+    border-radius: 5px 0 0 5px;
+    background: transparent;
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+    font-weight: normal;
+  }
+  
+  .searchButton {
+    width: 60px;
+    height: 37px;
+    border: 1px solid #f60;
+    background: #f60;
+    text-align: center;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+  
+    padding: 0;
+  }
+  
+  #filelist>div:nth-child(odd)>.dirz,
+  #search-results>div:nth-child(odd),
+  #filelist>div:nth-child(odd)>.dirz+.song-button-box {
+    background: transparent;
+  }
+  
+  #filelist>div:nth-child(even)>.dirz,
+  #search-results>div:nth-child(even),
+  #filelist>div:nth-child(even)>.dirz+.song-button-box {
+    background: transparent;
+  }
+  
+  #search-results>div:hover,
+  #filelist .dirz:hover,
+  #filelist .dirz:hover,
+  #filelist .dirz:hover+.song-button-box {
+    background: $desktop_file_hover_bg;
+    color: $font-color-primary-hover;
+  }
+  
+  #filelist .clear:last-of-type~.filez:first-of-type {
+    background: #fff;
+  }
+  
+  
+  #filelist input[type="checkbox"] {
+    display: none;
+  }
+  
+  .jukebox-panel {
+    text-align: center;
+  }
+  
+  .jukebox-panel h1 {
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+    font-weight: 500;
+  }
+  
+  .jukebox-panel h2 {
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+    font-weight: 300;
+  }
+  
+  .jukebox-panel h4 {
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+    font-weight: 200;
+  }
+  
+  .jukebox-panel h4>a {
+    color: #f60 !important;
+  }
+  
+  .jukebox_connect {
+    background: #f60 !important;
+    border: none !important;
+    border-radius: 5px !important;
+    margin: 0 auto !important;
+    display: block !important;
+    width: 70% !important;
+    font-family: "Oswald", sans-serif !important;
+    font-weight: bold !important;
+    font-size: 20px !important;
+  }
+  
+  .jukebox-panel+h3 {
+    text-align: center;
+  }
+  
+  #clear>svg {
+    filter: brightness(9999.9%) grayscale(100%);
+  }
+  
+  .login-overlay {
+    position: fixed;
+    padding: 0;
+    margin: 0;
+  
+    top: 0;
+    left: 0;
+  
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 9999;
+  }
+  
+  .login-overlay label {
+    font-family: "Oswald", sans-serif;
+    font-size: 16px !important;
+    font-weight: normal;
+  }
+  
+  #login-form .form-group input {
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.17);
+    box-shadow: 0px 0px 5px 0px #000;
+    font-family: "Oswald", sans-serif;
+    font-weight: 300;
+  }
+  
+  #login-form .form-group input:focus {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+    box-shadow: 0px 0px 5px 0px #000 !important;
+  }
+  
+  #login-submit {
+    background: rgba(255, 255, 255, 0.17);
+    width: 50%;
+    border: none;
+    font-family: "Oswald", sans-serif;
+    font-size: 20px;
+    height: 50px;
+    border-radius: 50px;
+    font-weight: bold;
+    text-align: center;
+    transition: background 200ms ease;
+  }
+  
+
+  
+  .scan-status {
+    text-align: center;
+    font-size: 0.9rem;
+  }
+  
+  .scan-status-files {
+    text-align: center;
+    font-size: 0.9rem;
+  }
+  
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #000 inset !important;
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+  
+  body,html {
+  background-image: url('../img/login_bg.jpg');
+  /* Image license free from https://unsplash.com/ */
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100%;
+  font-family: 'Ubuntu', sans-serif;
+  }
+  
+  .container{
+  height: 100%;
+  align-content: center;
+  }
+
+  .input-group-prepend span{
+  width: 50px;
+  background-color: #b3b3b3;
+  color: black;
+  border:0 !important;
+  }
+  
+  input:focus{
+  outline: 0 0 0 0  !important;
+  box-shadow: 0 0 0 0 !important;
+  
+  }
+  
+  .remember {
+  color: white;
+  }
+  
+  .remember input
+  {
+  width: 20px;
+  height: 20px;
+  margin-left: 15px;
+  margin-right: 5px;
+  }
+  
+  .login_btn{
+  color: black !important;
+  background-color: #FFC312 !important;
+  width: 100px !important;
+  margin: 0 auto !important;
+  display: block !important;
+  }
+  
+  .login_btn:hover{
+  color: black;
+  background-color: white;
+  }
+  
+  .links{
+  color: white;
+  }
+  
+  .links a{
+  margin-left: 4px;
+  }
+  
+  #main_content {
+    background: #121212;
+  }
+  
+  .dir_icon {
+    font-size: 2rem;
+    background: #282828;
+    width: 3rem;
+    height: 3rem;
+    text-align: center;
+    border-radius: 3px;
+  }
+  
+  .navbar_icon {
+    font-size: 1.5rem !important;
+  }
+
+  .icon_normal {
+    font-size: 1.5rem !important;
+  }
+  
+  .hide {
+    display: none;
+  }
+  
+  .directoryName {
+  
+  }
+  
+  .backButton {
+  
+  }
+
+  .spinner_big {
+    width: 10rem;
+    height: 10rem;
+  }
+
+  .filelist_wrapper {
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    min-height: 0px;
+  }
+
+  .col_track_title {
+    font-weight: 500;
+    font-size: 1rem;
+    white-space: nowrap;
+  }
+
+  .col_track_artist {
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .rezise_handle {
+    background: $desktop_resize_handle_bg;
+  }
+
+  .heading {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.sub_heading {
+  display: block;
+  font-size: 0.8rem;
+}
+
+.settings_box {
+  & .input_checkbox:checked + label {
+    background: #3a3938;
+  }
+  & .input_checkbox + label {
+    background: #262626;
+    padding: 0.5rem 2rem;
+    border-radius: 2rem;
+  }
+}
+  
+//#################### Panel Resize Handle ####################
+#panel2:after {
+  content: " ";
+     background-color: $desktop_resize_handle_bg;
+     position: absolute;
+     left: 0;
+     top: 0;
+     width: 4px;
+     height: 100%;
+     cursor: w-resize;
+ }
+
+.libraryHeaderContainer {
+  padding-left: 1rem;
+}
+
+// ######################## File Explorer ####################
+.file_wrapper {
+  & .dir_icon {
+    font-size: 1.5rem;
+    background: transparent;
+    width: 1.5rem;
+    height: 1.5rem;
+    text-align: center;
+    border-radius: 3px;
+    line-height: 1.5rem;
+  }
+
+  & .song-button-box {
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+    margin: 0;
+    width: 12rem;
+    overflow: hidden;
+    background: $color-primary;
+    position: absolute;
+    right: -9rem;
+    top: 0;
+    transition: right .3s ease;
+  }
+
+  & .song-button-box.sbb_unfold {
+    right: 0;
+  }
+}
+
+//####################### All Artists ###########################
+.artistz {
+  & .dir_icon {
+    font-size: 1.5rem;
+    background: transparent;
+    width: 1.5rem;
+    height: 1.5rem;
+    text-align: center;
+    border-radius: 3px;
+    line-height: 1.5rem;
+  }
+}
+
+
+/* Scrollbar */
+.simplebar-scrollbar::before {
+  background-color: $scrollbar_handle !important;
+}

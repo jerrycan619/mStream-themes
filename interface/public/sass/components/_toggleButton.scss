@@ -1,0 +1,97 @@
+
+$toggle_button_on_bg: #606060;
+$toggle_button_off_bg: #2d2d2d;
+$toggle_button_handle: #fff;
+$toggle_button_transition: .3s ease;
+  
+  .switch {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    width: 4rem;
+    height: 1.25rem;
+    padding: 3px;
+    border-radius: 1rem;
+    cursor: pointer;
+  }
+  
+  .switch-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+  }
+  
+  .switch-label {
+    position: relative;
+    display: block;
+    height: inherit;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    background: $toggle_button_off_bg;
+    border-radius: inherit;
+    transition: all $toggle_button_transition;
+  
+    &:before, &:after {
+      position: absolute;
+      top: 50%;
+      margin-top: -.5em;
+      line-height: 1;
+    
+    }
+  
+    &:before {
+      content: attr(data-off);
+      right: 11px;
+      color: #aaa;
+      text-shadow: 0 1px rgba(white, .5);
+    }
+  
+    &:after {
+      content: attr(data-on);
+      left: 11px;
+      color: white;
+      text-shadow: 0 1px rgba(black, .2);
+      opacity: 0;
+    }
+  
+    .switch-input:checked ~ & {
+      background: $toggle_button_on_bg;
+      box-shadow: inset 0 1px 2px rgba(black, .15),
+                  inset 0 0 3px rgba(black, .2);
+  
+      &:before { opacity: 0; }
+      &:after { opacity: 1; }
+    }
+  }
+  
+  .switch-handle {
+    position: absolute;
+    top: 3px;
+    left: 4px;
+    width: 1.2rem;
+    height: 1.2rem;
+    background: $toggle_button_handle;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px rgba(black, .2);
+    transition: all $toggle_button_transition;
+  
+    &:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -6px 0 0 -6px;
+      width: 12px;
+      height: 12px;
+      background: #f9f9f9;
+      border-radius: 6px;
+      box-shadow: inset 0 1px rgba(black, .02);
+    }
+  
+    .switch-input:checked ~ & {
+        left: 2.7rem;
+        box-shadow: -1px 1px 5px rgba(black, .2);
+    }
+  }
+  

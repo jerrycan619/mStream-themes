@@ -1,0 +1,176 @@
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>mStream Music</title>
+    <!-- mStream CSS -->
+    <!-- <link rel="stylesheet" href="/public/css/shared.css">
+    <link rel="stylesheet" href="/public/css/mstream-player.css"> -->
+  
+    <link rel="stylesheet" href="/public/css/normalize.css">
+    <link rel="stylesheet" href="/public/css/materialdesignicons.min.css">
+    <!-- <link rel="stylesheet" href="/public/css/mstream-player.css"> -->
+
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="/public/css/desktop_style.css">
+
+    <!-- iziToast -->
+    <script src="/public/js/lib/izi-toast.min.js"></script>
+    <link rel="stylesheet" href="/public/css/izi-toast.min.css">
+  
+  
+    <script src="/public/js/lib/jquery-2.2.4.min.js"></script>
+  
+    <!-- Vue JS -->
+    <script src="/public/js/lib/vue.min.js"></script>
+    <!-- Sortable JS -->
+    <script src="/public/js/lib/sortable.js"></script>
+    <!-- https://github.com/SortableJS/Vue.Draggable - v2.6 -->
+    <script src="/public/js/lib/vue-sortable.js"></script>
+  
+  
+    <link rel="apple-touch-icon" sizes="57x57" href="/public/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/public/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/public/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/public/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/public/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/public/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/public/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/public/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/public/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/public/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/public/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/public/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <!--
+    This is the mStream Player stack
+      DO NOT Change to order these are loaded in -->
+    <script src="/public/js/lib/howler.core.min.js"></script>
+    <script src="/public/js/mstream.player.js"></script>
+    <script src="/public/js/api2.js"></script>
+  
+    <!-- Star Rating System -->
+    <script src="/public/js/lib/star.js"></script>
+    <script src="/public/js/lib/popper.js"></script>
+  
+  
+    <script src="/public/js/lib/butterchurn.min.js"></script>
+    <script src="/public/js/lib/butterchurn-presets.min.js"></script>
+    <script src="/public/js/lib/butterchurn-presets-extra.js"></script>
+    <script src="/public/js/t.js"></script>
+
+    <!-- Track Progress Bar and Volume Slider -->
+    <script src="/public/js/nouislider.min.js"></script>
+  
+    <style>
+      /* Some hack from foundation */
+  
+      *,
+      ::before,
+      ::after {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+    </style>
+  
+    <script>
+      window.onload = function () {
+        // TODO: Handle metatdata
+  
+        // Get token from url
+        var path = window.location.pathname;
+        var uuid = path.split("/").pop();
+  
+        // Call Server
+        var request = $.ajax({
+          url: "/shared/get-token-and-playlist",
+          type: "POST",
+          contentType: "application/json",
+          dataType: "json",
+          data: JSON.stringify({ tokenid: uuid })
+        });
+  
+        request.done(function (msg) {
+          var playlist = msg.playlist;
+          for (var i = 0; i < playlist.length; i++) {
+            MSTREAMPLAYER.addSong({
+              url: '/media/' + playlist[i] + '?token=' + msg.token,
+              filepath: playlist[i],
+              metadata: {
+                "artist": "",
+                "album": "",
+                "track": "",
+                "title": "",
+                "year": "",
+                "album-art": ""
+              }
+            });
+          }
+        });
+  
+        request.fail(function (jqXHR, textStatus) {
+          iziToast.error({
+            title: 'Failed to get playlist',
+            position: 'topCenter',
+            timeout: 3500
+          });
+        });
+      }
+    </script>
+  </head>
+  
+  <body>
+
+    <!-- Download iFrame -->
+    <form id="downform" action="" target="frameframe" method="POST"></form>
+    <iframe id="downframe" src="" width="0" height="0" tabindex="-1" title="empty" hidden name="frameframe"></iframe>
+    <!-- Download iFrame for GET requests -->
+    <a href="#" class="hide" download id="download-file" hidden></a>
+
+   <div id="main_content" class="container-fluid w-100 h-100">
+       <div class="shared_content row flex-column">
+           <div class="col">
+               <!-- Header
+                <div class="header">
+                    <div class="logo-box">
+                    <img class="mstream-image" src="/public/img/mstream-logo.svg">
+                    </div>
+                </div> -->
+           </div>
+           <div class="col">
+               <!-- Playlist Header -->
+                <div class="playlist-header">
+                    <div class="playlist-header-text"><h3>Now Playing</h3></div>
+                    <div class="button-group">
+                    <div class="repeat"></div>
+                    <div></div>
+                    <div></div>
+                    </div>
+                </div>
+           </div>
+           <div class="col">
+               <!-- Playlist -->
+                <div class="playlist-container">
+                    <draggable :list="playlist" @end="checkMove" id="playlist">
+                    <div v-for="(song, index) in playlist" is="playlist-item" :key="index" :index="index" :song="song">
+                    </div>
+                    </draggable>
+                </div>
+           </fiv>
+       </div>
+
+       <!-- Filled by load_player_desktop.js -->
+        <div class="row w-100 m-0 fixed-bottom">
+            <div id="player" class="w-100">
+        </div>
+    </div>
+   </div>
+
+    <script src="/public/js/player_desktop.js"></script>
+    <script src="/public/js/mstream.vue-player-controls-desktop.js"></script>
+  </body>

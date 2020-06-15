@@ -1,0 +1,12 @@
+$settings_button_bg: #b3b3b3;
+
+.settings {
+    //user-select: all;
+
+    & .settings_button {
+        background: $settings_button_bg;
+        border: none;
+        border-radius: 1rem;
+        text-align: center;
+    }
+}

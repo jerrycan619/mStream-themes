@@ -1,0 +1,155 @@
+.playlistColumn {
+    
+    & .columnHeader {
+        height: 3rem;
+        padding-left: 1rem;
+    }
+    
+}
+
+.playlist-item:hover #playlist_container ul li:hover,
+.playlist-item:hover {
+    background-color: $desktop_file_hover_bg;
+    color: $font-color-primary-hover;
+
+    & .song-button-box {
+        background-color: $desktop_file_hover_bg; 
+    }
+  }
+  
+
+.playlist_scrollBox {
+    height: calc(100% - 3rem);
+    overflow-x: hidden;
+
+    & .playlist-item {
+        padding: 0;
+        height: 3rem;
+        overflow: hidden;
+    }
+
+    & .song-button-box {
+        margin: 0;
+        width: 15rem;
+        overflow: hidden;
+        background: $color-primary;
+        position: absolute;
+        right: -13rem;
+        transition: right .3s ease;
+
+        & .sbb_rating_number {
+            position: absolute;
+            top: -2px;
+            color: $font-color-primary;
+            width: 2rem;
+            text-align: center;
+            left: -4px;
+            font-size: 0.8rem;
+            text-shadow: 0px 1px 2px $main_bg_color;
+        }
+    }
+
+    & .song-button-box.sbb_unfold {
+        right: 0;
+    }
+    
+    & .playing {
+        background: $nowPlaying_active_bg;
+        
+        & .song-button-box {
+            background: $nowPlaying_active_bg;
+        }
+    }
+}
+
+//########################## Meta Box ##########################
+
+.meta-box-wrapper {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    height: 0;
+    background: $desktop_metabox_bg;
+    transition: height .3s ease;
+
+    &.expanded {
+        height: 9rem;
+    }
+
+    & .meta-box-grip {
+        height: 1.5rem;
+        z-index: 9;
+        color: #fff;
+        text-align: center;
+        width: 70%;
+        margin: 0 auto;
+        background: $desktop_metabox_button_bg;
+        border: none;
+        border-radius: 20px 20px 0px 0px;
+        position: absolute;
+        top: -1.5rem;
+        left: 0;
+        right: 0;
+    }
+
+    & .meta-album-art {
+        height: 7rem;
+    }
+
+    & .meta-box-title {
+        font-size: 1rem;
+    }
+    & .meta-box-artist {
+        font-size: 0.9rem;
+    }
+    & .meta-box-album {
+        font-size: 0.9rem;
+    }
+    & .meta-box-year {
+        font-size: 0.9rem;
+    }
+    & .meta-box-path {
+        font-size: 0.8rem;
+    }
+
+}
+  
+  
+
+  
+
+  
+  
+  .meta-box {
+    width: 100%;
+    height: 160px;
+    background: linear-gradient(to bottom right, #222, #000);
+    position: relative;
+    -webkit-box-shadow: 0px 0px 30px 20px #000;
+    -moz-box-shadow: 0px 0px 30px 20px #000;
+    box-shadow: 0px 0px 30px 20px #000;
+    z-index: -1;
+  }
+  
+  .meta-box-down {
+    bottom: -160px;
+  }
+  
+  .meta-box-up {
+    bottom: 0px;
+  }
+  
+  
+  
+  .meta-spacer {
+    width: 5px;
+    float: left;
+    height: 5px;
+  }
+  
+  .meta-info {
+    /*height: 100%;*/
+    width: calc(100% - 155px);
+    float: left;
+  }
+

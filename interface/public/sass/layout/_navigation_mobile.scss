@@ -1,0 +1,15 @@
+.navbar {
+    height: 4rem;
+    z-index: 999;
+
+    .navbar_item {
+        vertical-align: top;
+        display: inline-block;
+        text-align: center;
+    
+        & .navbar_text {
+            display: block;
+            font-size: 0.7rem;
+        }
+    }
+}

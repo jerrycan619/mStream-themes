@@ -1,0 +1,129 @@
+<div class="player_overlay_wrapper container-fluid h-100 p-0 m-0" id="mstream-player-overlay">
+    <div class="d-flex flex-column flex-nowrap justify-content-between h-100">
+        <div class="row m-0 player-overlay-header">
+            <div class="col-auto">
+                <span class="mdi-set mdi-close overlay_icon" v-on:click="close"></span>
+            </div>
+            <div class="col">
+                <span>Now Playing</span>
+            </div>
+            <div class="col-auto">
+                <span class="mdi-set mdi-dots-horizontal overlay_icon "></span>
+            </div>
+        </div>
+        <div class="row album_art">
+            <div class="col album_art_container" v-html="albumArtPath" style="text-align: center;">
+                <!-- <span class="mdi-set mdi-music">{{albumArtPath}}</span>
+                <img class="album_art_img responsive_img" v-bind:src="albumArtPath" alt=""> -->
+            </div>
+        </div>
+
+        <div class="row m-0 align-self-start overlay_track_info">
+            <div class="col track_text">
+                <div class="track_text_title">
+                    <span>{{currentSongTitle}}</span>
+                </div>
+                <div class="track_text_artist">
+                    <span>{{currentSongArtist}}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row m-0 align-self-center flex-column w-100 overlay_replay_bar">
+            <div class="col w-100">
+                <div class="progress_bar_wrapper">
+                    <div id="progress_bar" ref="progress_bar"></div>
+                </div>
+            </div>
+            <div class="col w-100">
+                <div class="row w-100 m-0 justify-content-between">
+                    <div class="col-auto p-0">
+                        <div class="overlay_replay_time">{{pastTime}}</div>
+                    </div>
+                    <div class="col-auto p-0">
+                        <div class="overlay_replay_time">{{trackDuration}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col w-100">
+                <div
+                    class="row w-100 m-0 align-items-center flex-nowrap justify-content-center overlay_player_controls">
+                    <div class="col-auto pr-0">
+                        <button v-on:click="skipPrev" class="overlay_icon_sec mdi-set mdi-skip-previous iconBtn"
+                            title="Previous">
+                        </button>
+                    </div>
+                    <div id="track_loading" class="col-auto p-0 control_button-wrapper d-none">
+                        <div class="spinner-border text-secondary" role="status" style="vertical-align: middle;">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                    <div id="track_play" class="col-auto">
+                        <button v-on:click="playPause" class="overlay_icon_main mdi-set iconBtn"
+                            v-bind:class="playPauseIcon" title="Play"></button>
+                    </div>
+                    <div class="col-auto pl-0">
+                        <button v-on:click="skipNext" class="overlay_icon_sec mdi-set mdi-skip-next iconBtn"
+                            title="Next">
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col w-100">
+                <div class="row w-100 m-0 justify-content-between flex-nowrap overlay_sub_controls">
+                    <div class="col-auto">
+                        <span class="overlay_rating_number">{{rating}}</span>
+                        <span v-on:click="overlay_rate" v-bind:class="overlay_star_icon"
+                            class="mdi-set my-rating overlay_icon_sub" title="Rate Song"></span>
+                        <star-rating class="overlay_star_rating" @rating-selected="overlay_setRating" v-model="rating"
+                            v-bind:increment="0.5" v-bind:clearable="true" v-bind:star-size="25" v-bind:padding="8"
+                            v-bind:border-color="000">
+                        </star-rating>
+                    </div>
+                    <div class="col-auto">
+
+                        <span id="autodj_icon" v-on:click="toggleAutoDJ" class="mdi-set mdi-dice-6 overlay_icon_sub"
+                            title="Auto DJ"></span>
+                        <span id="togglePlayMode" v-on:click="togglePlayMode" class="pl-5 mdi-set overlay_icon_sub"
+                            v-bind:class="playModeIcon" v-bind:title="playModeTitle"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="overlay_player_controls row m-0 align-self-center align-items-center flex-nowrap justify-content-center">
+            <!-- <div class="col-auto">
+                <button v-on:click="rewind30" class="overlay_icon_sec mdi-set mdi-rewind-30 iconBtn" title="Rewind 30s">
+                </button>
+            </div> -->
+
+
+            <!-- <div class="col-auto">
+                <button v-on:click="forward30" class="overlay_icon_sec mdi-set mdi-fast-forward-30 iconBtn"
+                    title="Fast Forward 30s">
+                </button>
+            </div> -->
+        </div>
+
+        <!-- <div class="row m-0 align-self-end flex-column w-100 overlay_sub_controls">
+            <div class="col w-100">
+                <div class="row w-100 m-0 justify-content-between">
+                    <div class="col-auto">
+                        <span class="mdi-set mdi-star overlay_icon_sub" title="Rate Song"></span>
+                    </div>
+                    <div class="col-auto">
+
+                        <span v-on:click="toggleAutoDJ" class="mdi-set mdi-dice-6 overlay_icon_sub"
+                            title="Auto DJ"></span>
+                        <span v-on:click="togglePlayMode" class="mdi-set overlay_icon_sub" v-bind:class="playModeIcon"
+                            v-bind:title="playModeTitle"></span>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+    </div>
+</div>
+
+<script src="/public/js/mstream.vue-player-mobile-overlay.js"></script>

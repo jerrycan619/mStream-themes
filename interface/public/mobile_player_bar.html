@@ -1,0 +1,58 @@
+<div class="player_bar_wrapper" id="mstream-player2">
+    <!-- <div class="progress_bar_wrapper">
+        <div id="progress_bar" ref="progress_bar"></div>
+    </div> -->
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" v-bind:style="progress_width" aria-valuenow="0" aria-valuemin="0"
+            aria-valuemax="100"></div>
+    </div>
+    <div class="playbar">
+        <div class="track_info">
+            <div>
+                <div class="row m-0">
+                    <div class="col m-0 p-0 track_text">
+                        <div class="track_text_title" style="text-align: center;">
+                            <span class="nextPrev_text">Previous</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div id="infoBox" class="row m-0">
+                    <div class="col-auto pl-0 track_cover" v-html="albumArtPath_bar">
+                    </div>
+                    <div class="col m-0 p-0 track_text">
+                        <div class="track_text_title">
+                            <span v-cloak>{{currentSongTitle}}</span>
+                        </div>
+                        <div class="track_text_artist">
+                            <span v-cloak>{{currentSongArtist}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="row m-0">
+                    <div class="col m-0 p-0 track_text">
+                        <div class="track_text_title" style="text-align: center;">
+                            <span class="nextPrev_text">Next</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="player_controls">
+            <div id="track_loading2" class="col-auto p-0 control_button-wrapper d-none">
+                <div class="spinner-border text-secondary" role="status" style="vertical-align: middle;">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            <div id="track_play2" v-on:click="playPause" class="control_button-wrapper"><button class="control_button mdi-set iconBtn"
+                    v-bind:class="playPauseIcon" title="Play"></button>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="/public/js/mstream.vue-player-mobile-bar.js"></script>

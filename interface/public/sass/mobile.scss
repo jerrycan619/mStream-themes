@@ -1,0 +1,31 @@
+//7-1 sass architecture
+@charset "UTF-8";
+
+// 1. Configuration and helpers
+@import 'abstracts/variables';
+
+// 3. Base stuff
+@import 
+    'base/base',
+    'base/fonts';
+
+// 4. Layout-related sections
+@import 
+    'layout/mobileLayout',
+    'layout/navigation_mobile';
+
+// 5. Components
+@import 
+    'components/modal',
+    'components/library', 
+    'components/playerBarMobile',
+    'components/playerOverlay',
+    'components/nowPlayingMobile',
+    'components/iconBtn',
+    'components/toggleButton';
+
+// 6. Pages
+@import 
+    'pages/sharedMobile',
+    'pages/searchMobile',
+    'pages/remoteMobile';

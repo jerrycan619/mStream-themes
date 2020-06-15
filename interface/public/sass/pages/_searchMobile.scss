@@ -1,0 +1,45 @@
+$searchMobile_input_bg: #282828;
+$searchMobile_checkbox_bg: #282828;
+$searchMobile_checkbox_checked_bg: #535353;
+
+.search_page_wrapper {
+
+    & #db-search {
+        width: 100%;
+        position: relative;
+    }
+    
+    & #search-term {
+        border-radius: 5px 0 0 5px;
+        background: $searchMobile_input_bg;
+        color: $font-color-primary-active;
+        font-family: inherit;
+        font-size: 1.2rem;
+        width: 100%;
+        border: none;
+        padding: 0.2rem 1rem;
+    }
+    
+    & .searchButton {
+        color: $font-color-primary;
+        border: none;
+    }
+
+    & .search_checkboxes {
+        font-size: 0.8rem;
+
+        & label {
+            margin: 0;
+            background: $searchMobile_checkbox_bg;
+            padding: 0.2rem 1rem;
+        }
+
+        & input[type="checkbox"] {
+            display: none;
+        }
+        & input[type="checkbox"]:checked + label {
+            color: $font-color-primary-active;
+            background: $searchMobile_checkbox_checked_bg;
+        }
+    }
+}
