@@ -318,6 +318,11 @@ $(document).ready(function () {
           $('#login_overlay').slideUp("slow");
           $('#main_content').removeClass("d-none");
           $('#main_content').addClass("d-block");
+
+          //If User is logged in show logout button
+          if (localStorage.getItem('token')) {
+            $("#logout_btn").toggleClass("d-none");
+          }
         });
       }
     }

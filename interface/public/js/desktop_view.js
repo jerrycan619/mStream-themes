@@ -196,6 +196,10 @@ $(document).ready(function (e) {
         $(".navbar_icon", this).toggleClass("mdi-cog mdi-chevron-down");
     });
 
+    //If User is logged in show logout button
+    if (localStorage.getItem('token')) {
+        $("#logout_btn").toggleClass("d-none");
+    }
 
 });
 
