@@ -1919,22 +1919,6 @@ $(document).ready(function () {
                       <div class="col">\
                         <div class="row m-0 align-items-center justify-content-between">\
                             <div class="col pl-0">\
-                              <span class="heading">User</span>\
-                              <span class="sub_heading"></span>\
-                            </div>\
-                            <div class="col-auto">\
-                              <button class="settings_button" id="logout">
-                                Logout
-                                <span class="mdi-set mdi-logout navbar_icon"></span>\
-                              </button>
-                            </div>\
-                        </div>\
-                      </div>\
-                    </div>\
-                    <div class="row mt-4">\
-                      <div class="col">\
-                        <div class="row m-0 align-items-center justify-content-between">\
-                            <div class="col pl-0">\
                               <span class="heading">Mobile</span>\
                               <span class="sub_heading">Android App<br />IOS comming soon</span>\
                             </div>\

@@ -245,12 +245,13 @@ new Vue({
         },
         toggleVolume: function () {
             if (this.playerStats.volume === 0) {
-                MSTREAMPLAYER.changeVolume(this.lastVol);
+                //Recover last saved Vol
                 this.curVol = this.lastVol;
+                this.$refs.volume_bar.noUiSlider.set(this.curVol);
             } else {
-                this.lastVol = this.curVol;
-                MSTREAMPLAYER.changeVolume(0);
-                this.curVol = 0;
+                //Save last Vol
+                this.lastVol = MSTREAMPLAYER.playerStats.volume;
+                this.$refs.volume_bar.noUiSlider.set(0);
             }
         },
         rewind30: function () {

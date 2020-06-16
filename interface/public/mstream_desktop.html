@@ -155,7 +155,7 @@
         </div>
     </div>
 
-    <!-- Save laylist Modal -->
+    <!-- Save Playlist Modal -->
     <div class="modal fade" id="savePlaylist" tabindex="-1" role="dialog" aria-labelledby="savePlaylist"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -194,7 +194,7 @@
         </div>
     </div>
 
-    <!-- Share Playlist -->
+    <!-- Share Playlist Modal -->
     <div class="modal fade" id="sharePlaylist" tabindex="-1" role="dialog" aria-labelledby="sharePlaylist"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -209,9 +209,9 @@
                     <form id="share_playlist_form" class="form">
                         <div class="input-group form-group">
                             <div class="input-group-prepend"><span class="input-group-text">DAYS</span></div> <input
-                                id="sharePlaylistTime" type="number" min="1" step="1" value="14" class="form-control">
+                                id="share_time" type="number" min="1" step="1" value="14" class="form-control">
                         </div>
-                        <label for="sharePlaylistTime">Expiration Time</label>
+                        <label for="share_time">Expiration Time</label>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -244,22 +244,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Share Modal -->
-    <div id="sharePlaylist" class="hide">
-        <form id="share_playlist_form">
-            <div class="row">
-                <div class="small-6 large-6 columns">
-                    <label>Expiration Time</label>
-                    <input id="share_time" value="14" class="form-control" type="text" pattern="[0-9]+">
-                    <span class="share-time-post postfix radius">Days</span>
-                </div>
-            </div>
-            <input id="share_it" type="submit" value="Share It!">
-        </form>
-        <textarea class="share-textarea" rows="8" cols="60" placeholder="Your URL will be put here"
-            readonly="readonly"></textarea>
     </div>
 
     <!-- Download iFrame -->
