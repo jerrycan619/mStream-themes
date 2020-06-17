@@ -728,30 +728,6 @@ input[name="autodj-folders"] {
 #autodj-ratings::-ms-expand {
   display: none; }
 
-#db-search {
-  width: 80%;
-  position: relative;
-  display: flex;
-  margin: 20px auto 0 auto; }
-
-#search-term {
-  border: 3px solid #f60;
-  border-radius: 5px 0 0 5px;
-  background: transparent;
-  color: #fff;
-  font-family: "Oswald", sans-serif;
-  font-weight: normal; }
-
-.searchButton {
-  width: 60px;
-  height: 37px;
-  border: 1px solid #f60;
-  background: #f60;
-  text-align: center;
-  color: #fff;
-  border-radius: 0 5px 5px 0;
-  padding: 0; }
-
 #filelist > div:nth-child(odd) > .dirz,
 #search-results > div:nth-child(odd),
 #filelist > div:nth-child(odd) > .dirz + .song-button-box {
@@ -771,9 +747,6 @@ input[name="autodj-folders"] {
 
 #filelist .clear:last-of-type ~ .filez:first-of-type {
   background: #fff; }
-
-#filelist input[type="checkbox"] {
-  display: none; }
 
 .jukebox-panel {
   text-align: center; }
@@ -862,14 +835,6 @@ input[name="autodj-folders"] {
   text-align: center;
   font-size: 0.9rem; }
 
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px #000 inset !important;
-  color: #fff !important;
-  -webkit-text-fill-color: #fff !important; }
-
 body, html {
   background-image: url("../img/login_bg.jpg");
   /* Image license free from https://unsplash.com/ */
@@ -942,14 +907,6 @@ input:focus {
   width: 10rem;
   height: 10rem; }
 
-.filelist_wrapper {
-  -webkit-flex: 1 1 auto;
-  flex: 1 1 auto;
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden;
-  min-height: 0px; }
-
 .col_track_title {
   font-weight: 500;
   font-size: 1rem;
@@ -970,14 +927,6 @@ input:focus {
 .sub_heading {
   display: block;
   font-size: 0.8rem; }
-
-.settings_box .input_checkbox:checked + label {
-  background: #3a3938; }
-
-.settings_box .input_checkbox + label {
-  background: #262626;
-  padding: 0.5rem 2rem;
-  border-radius: 2rem; }
 
 #panel2:after {
   content: " ";
@@ -1028,6 +977,9 @@ input:focus {
 /* Scrollbar */
 .simplebar-scrollbar::before {
   background-color: #fff !important; }
+
+.panel_one_name {
+  color: #fff; }
 
 #sidebar-container {
   overflow-y: auto;
@@ -1769,11 +1721,34 @@ input:focus {
   right: 20px;
   top: -45px; }
 
-.settings .settings_button {
-  background: #b3b3b3;
-  border: none;
-  border-radius: 1rem;
-  text-align: center; }
+.settings_box .input_checkbox:checked + label {
+  background: #3a3938; }
+
+.settings_box .input_checkbox + label {
+  background: #262626;
+  padding: 0.5rem 2rem;
+  border-radius: 2rem; }
+
+.settings_button {
+  background: transparent;
+  color: #b3b3b3;
+  font-weight: 300;
+  border: 1px solid #fff;
+  border-radius: 2rem;
+  text-align: center;
+  padding: 0.15rem 1rem; }
+  .settings_button:hover {
+    transform: scale(1.1);
+    color: #fff; }
+
+.link_button {
+  text-decoration: none;
+  color: #b3b3b3;
+  font-size: 2rem; }
+  .link_button:hover {
+    transform: scale(1.1);
+    text-decoration: none;
+    color: #fff; }
 
 .login_wrapper button {
   margin: 1rem auto;
@@ -1842,32 +1817,41 @@ input:focus {
   .shared_content .song-button-box .mdi-chevron-left {
     display: none; }
 
-.search_page_wrapper #db-search {
-  width: 100%;
-  position: relative; }
+#db-search {
+  margin-bottom: 0.5rem; }
+  #db-search #filterString {
+    font-size: 0.8rem; }
+  #db-search #dbSearchForm {
+    width: 100%;
+    background: #282828; }
+    #db-search #dbSearchForm input {
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      color: #fff; }
+      #db-search #dbSearchForm input:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0 30px #282828 inset !important;
+        -webkit-text-fill-color: #fff !important; }
+        #db-search #dbSearchForm input:-webkit-autofill:hover, #db-search #dbSearchForm input:-webkit-autofill:focus, #db-search #dbSearchForm input:-webkit-autofill:active {
+          -webkit-box-shadow: 0 0 0 30px #282828 inset !important;
+          -webkit-text-fill-color: #fff !important; }
+    #db-search #dbSearchForm button {
+      background: transparent;
+      border: none;
+      color: #b3b3b3;
+      font-size: 1.5rem; }
+      #db-search #dbSearchForm button:hover {
+        color: #fff;
+        transform: scale(1.2); }
 
-.search_page_wrapper #search-term {
-  border-radius: 5px 0 0 5px;
-  background: #282828;
-  color: #fff;
-  font-family: inherit;
-  font-size: 1.2rem;
-  width: 100%;
-  border: none;
-  padding: 0.2rem 1rem; }
-
-.search_page_wrapper .searchButton {
-  color: #b3b3b3;
-  border: none; }
-
-.search_page_wrapper .search_checkboxes {
+.search_checkboxes {
   font-size: 0.8rem; }
-  .search_page_wrapper .search_checkboxes label {
+  .search_checkboxes label {
     margin: 0;
     background: #282828;
     padding: 0.2rem 1rem; }
-  .search_page_wrapper .search_checkboxes input[type="checkbox"] {
+  .search_checkboxes input[type="checkbox"] {
     display: none; }
-  .search_page_wrapper .search_checkboxes input[type="checkbox"]:checked + label {
+  .search_checkboxes input[type="checkbox"]:checked + label {
     color: #fff;
     background: #535353; }
