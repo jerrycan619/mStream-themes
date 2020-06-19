@@ -191,12 +191,6 @@ p {
   position: relative;
   overflow: visible; }
 
-.fileplaylistz {
-  float: left;
-  position: relative;
-  overflow: visible;
-  padding: 10px; }
-
 .left {
   float: left; }
 
@@ -261,8 +255,10 @@ p {
   color: #73b9ff; }
 
 #search_folders {
-  margin-top: 3px;
-  width: calc(100% - 99px); }
+  width: 100%;
+  background: transparent;
+  color: #fff;
+  border: none; }
 
 #downform {
   display: none;
@@ -573,7 +569,7 @@ p {
   height: auto;
   line-height: 2rem; }
   .directory_bar .progress {
-    height: 2rem;
+    height: 100%;
     position: absolute;
     width: 100%;
     bottom: 0;
@@ -708,25 +704,6 @@ ul.left-nav-menu li.selected svg {
 
 input[name="autodj-folders"] {
   cursor: pointer; }
-
-#autodj-ratings {
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
-  cursor: pointer;
-  margin-left: 10px;
-  max-width: calc(100% - 20px);
-  background: transparent;
-  color: #fff;
-  border: 1px solid #4f4f4f;
-  border-left: none;
-  border-right: none; }
-
-#autodj-ratings option {
-  color: #000; }
-
-#autodj-ratings::-ms-expand {
-  display: none; }
 
 #filelist > div:nth-child(odd) > .dirz,
 #search-results > div:nth-child(odd),
@@ -903,6 +880,10 @@ input:focus {
 .hide {
   display: none; }
 
+.directoryName {
+  display: block;
+  line-height: 1.2rem; }
+
 .spinner_big {
   width: 10rem;
   height: 10rem; }
@@ -944,7 +925,7 @@ input:focus {
 .file_wrapper .dir_icon {
   font-size: 1.5rem;
   background: transparent;
-  width: 1.5rem;
+  width: 3rem;
   height: 1.5rem;
   text-align: center;
   border-radius: 3px;
@@ -968,7 +949,7 @@ input:focus {
 .artistz .dir_icon {
   font-size: 1.5rem;
   background: transparent;
-  width: 1.5rem;
+  width: 3rem;
   height: 1.5rem;
   text-align: center;
   border-radius: 3px;
@@ -1694,7 +1675,6 @@ input:focus {
     color: #fff; }
 
 .card {
-  height: 270px;
   margin-top: auto;
   margin-bottom: auto;
   width: 400px;
@@ -1741,6 +1721,16 @@ input:focus {
     transform: scale(1.1);
     color: #fff; }
 
+#autoDjDirs {
+  height: 100%;
+  /* width: 3rem; */
+  font-size: 2rem;
+  color: #b3b3b3;
+  line-height: 100%;
+  border: 1px solid #fff;
+  border-radius: 12rem;
+  background: transparent; }
+
 .link_button {
   text-decoration: none;
   color: #b3b3b3;
@@ -1749,6 +1739,23 @@ input:focus {
     transform: scale(1.1);
     text-decoration: none;
     color: #fff; }
+
+#autodj-ratings {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  margin-left: 10px;
+  max-width: calc(100% - 20px);
+  background: transparent;
+  color: #fff;
+  border: none; }
+
+#autodj-ratings option {
+  color: #000; }
+
+#autodj-ratings::-ms-expand {
+  display: none; }
 
 .login_wrapper button {
   margin: 1rem auto;

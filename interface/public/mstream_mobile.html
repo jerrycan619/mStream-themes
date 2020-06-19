@@ -107,6 +107,9 @@
 
     <script src="/public/js/lib/star-rating.min.js"></script>
 
+    <!-- https://github.com/sindresorhus/screenfull.js - To make page Fullscreen -->
+    <script src="/public/js/lib/screenfull.min.js"></script>
+
 </head>
 
 <body id="top" style="color: #b3b3b3;">
@@ -134,7 +137,7 @@
                         <!--<span><a class="fab fa-twitter-square"></a></span>-->
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body pb-0">
                     <h3 class="pt-0 pb-2">Sign In</h3>
                     <form v-on:submit.prevent="submitCode($event)">
                         <div class="input-group form-group">
@@ -157,10 +160,10 @@
                         </div>
                     </form>
                 </div>
-                <div class="card-footer">
+                <div class="card-footer pt-0">
                     <div class="d-flex justify-content-center links">
                         <!--Visit mStream on <a href="https://github.com/IrosTheBeggar/mStream/">GitHub</a>-->
-
+                        Developed By Paul Sori
                     </div>
                 </div>
             </div>
@@ -270,128 +273,156 @@
     <div id="main_content" class="container-fluid h-100 p-0">
 
 
-        <div class="d-flex flex-column" id="panel1">
-            <div class="row mr-0 ml-0">
-                <div class="col">
-                    <span id="contentHeader_text" class="mobileHeading1"></span>
-                </div>
-            </div>
+        <div class="row m-0 flex-column flex-nowrap" id="panel1">
 
-
-            <div id="directory_bar" class="row mr-0 ml-0 flex-nowrap align-items-center" style="display: none;">
-                <div class="col-auto">
-                    <span title="Previous Directory" class="backButton mdi-set mdi-arrow-left navbar_icon"></span>
-                </div>
-                <div class="col p-0">
-                    <span class="directoryName"></span>
-                    <!-- Current Directory -->
-                    <input id="search_folders" class="hide" placeholder="Search List">
-                </div>
-                <div class="col-auto">
-                    <div class="row flex-nowrap">
-                        <div class="col-auto">
-                            <span title="Search" id="search-explorer"
-                                class="mdi-set mdi-text-search navbar_icon"></span>
-                        </div>
-                        <div class="col-auto">
-                            <span title="Add All Songs to Playlist" class="add mdi-set mdi-playlist-plus navbar_icon"
-                                id='addall'></span>
+            <div class="col-auto">
+                <!-- Header -->
+                <div class="row mr-0 ml-0 flex-row flex-nowrap align-items-center contentHeader">
+                    <div class="col pl-0">
+                        <span id="contentHeader_text" class="mobileHeading1"></span>
+                    </div>
+                    <div id="header_btns" class="col-auto pr-0">
+                        <div class="row flex-nowrap">
+                            <div class="col-auto">
+                                <span title="Search" id="search-explorer"
+                                    class="mdi-set mdi-text-search header_icon"></span>
+                            </div>
+                            <div class="col-auto">
+                                <span title="Add All Songs to Playlist" class="add mdi-set mdi-playlist-plus header_icon"
+                                    id='addall'></span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <div class="col-auto p-0">
+                <!-- Directory Bar -->
+                <div id="directory_bar" class="row mr-0 ml-0 flex-nowrap align-items-center" style="display: none;">
+                    <div class="col-auto">
+                        <span title="Previous Directory" class="backButton mdi-set mdi-arrow-left navbar_icon"></span>
+                    </div>
+                    <div class="col p-0">
+                        <span class="directoryName"></span>
+                        <!-- Current Directory -->
+                        <input id="search_folders" class="hide" placeholder="Search List">
+                    </div>
+                    <div class="col-auto">
+                        <!-- <div class="row flex-nowrap">
+                            <div class="col-auto">
+                                <span title="Search" id="search-explorer"
+                                    class="mdi-set mdi-text-search navbar_icon"></span>
+                            </div>
+                            <div class="col-auto">
+                                <span title="Add All Songs to Playlist" class="add mdi-set mdi-playlist-plus navbar_icon"
+                                    id='addall'></span>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
 
-            <div class="filelist_wrapper row flex-column m-0">
-                <div class='scroll noselect' id='fillContent'>
+            <div class="col filelist_wrapper overflow-hidden">
+                <!-- Content filled per page in mstream_mobile.js -->
+                <div class='noselect row m-0 flex-column flex-nowrap overflow-hidden h-100' id='fillContent'>
                     <div class="filez">Loading...</div>
                 </div>
             </div>
 
+            <!-- <div class="filelist_wrapper row flex-column m-0">
+                <div class='scroll noselect' id='fillContent'>
+                    <div class="filez">Loading...</div>
+                </div>
+            </div> -->
+
         </div>
 
-        <div class="fixed-bottom">
-            <div id="vert_resize">
-                <!-- Filled by mobile_view.js -->
-                <div id="player">
-                </div>
-
-
-                <div class="playlist_wrapper" id="playlist_container">
-                    <div class="columnHeader noselect">
-                        <div class="row m-0 flex-nowrap">
-                            <div class="col-sm">
-                                <h3 class="hide-for-small">Playlist</h3>
-                            </div>
-                            <div class="col-sm-auto">
-                                <div class="row align-items-center h-100">
-                                    <div class="col">
-                                        <button type="button" title="Save Playlist"
-                                            class="mdi-set mdi-content-save navbar_icon iconBtn" data-toggle="modal"
-                                            data-target="#savePlaylist"></button>
-                                    </div>
-                                    <div class="col">
-                                        <button type="button" title="Download Playlist" id="downloadPlaylist"
-                                            class="mdi-set mdi-download-multiple navbar_icon iconBtn"></button>
-                                    </div>
-                                    <div class="col">
-                                        <button type="button" title="Share Playlist"
-                                            class="mdi-set mdi-share navbar_icon iconBtn" data-toggle="modal"
-                                            data-target="#sharePlaylist"></button>
-                                    </div>
-                                    <div class="col">
-                                        <button title="Clear Playlist" id="clear"
-                                            class="mdi-set mdi-playlist-remove navbar_icon iconBtn"></button>
+        <div class="row m-0 flex-column flex-nowrap fixed-bottom">
+            <div class="col-auto p-0">
+                <!-- Player Bar + pull-up playlist-->
+                <div id="vert_resize">
+                    <!-- Player Bar Filled by mobile_view.js -->
+                    <div id="player"></div>
+    
+                    <!-- Playlist -->
+                    <div class="playlist_wrapper" id="playlist_container">
+                        <div class="columnHeader noselect">
+                            <div class="row m-0 flex-nowrap">
+                                <div class="col-sm">
+                                    <h3 class="hide-for-small">Playlist</h3>
+                                </div>
+                                <div class="col-sm-auto">
+                                    <div class="row align-items-center h-100">
+                                        <div class="col">
+                                            <button type="button" title="Save Playlist"
+                                                class="mdi-set mdi-content-save navbar_icon iconBtn" data-toggle="modal"
+                                                data-target="#savePlaylist"></button>
+                                        </div>
+                                        <div class="col">
+                                            <button type="button" title="Download Playlist" id="downloadPlaylist"
+                                                class="mdi-set mdi-download-multiple navbar_icon iconBtn"></button>
+                                        </div>
+                                        <div class="col">
+                                            <button type="button" title="Share Playlist"
+                                                class="mdi-set mdi-share navbar_icon iconBtn" data-toggle="modal"
+                                                data-target="#sharePlaylist"></button>
+                                        </div>
+                                        <div class="col">
+                                            <button title="Clear Playlist" id="clear"
+                                                class="mdi-set mdi-playlist-remove navbar_icon iconBtn"></button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+    
+                        <div class="clear flatline"></div>
+    
+                        <!-- This section is tied into the MSTREAMPLAYER module with Vue -->
+                        <!-- see file: mstream.vue-player-controls.js -->
+    
+                        <div id="playlist_scrollBox" class="scroll scrollBoxHeight3" data-simplebar>
+                            <draggable :list="playlist" :options="{handle:'.drag-handle'}" @end="checkMove" id="playlist">
+                                <div v-for="(song, index) in playlist" is="playlist-item" :key="index" :index="index"
+                                    :song="song">
+                                </div>
+    
+                                <div style="visibility:hidden;" class="pop-c" id="pop" role="tooltip">
+                                    <div class="my-rating pop-c"></div>
+                                </div>
+                                <div style="visibility:hidden;" class="pop-d" id="pop-d" role="tooltip">
+                                    <div class="pop-d pop-playlist">Add To Playlist:</div>
+                                    <div v-for="(playlist, index) in playlists" is="popper-playlist-item" :key="index"
+                                        :index="index" :playlist="playlist"></div>
+                                </div>
+                            </draggable>
+                        </div>
                     </div>
-
-                    <div class="clear flatline"></div>
-
-                    <!-- This section is tied into the MSTREAMPLAYER module with Vue -->
-                    <!-- see file: mstream.vue-player-controls.js -->
-
-                    <div id="playlist_scrollBox" class="scroll scrollBoxHeight3" data-simplebar>
-                        <draggable :list="playlist" :options="{handle:'.drag-handle'}" @end="checkMove" id="playlist">
-                            <div v-for="(song, index) in playlist" is="playlist-item" :key="index" :index="index"
-                                :song="song">
-                            </div>
-
-                            <div style="visibility:hidden;" class="pop-c" id="pop" role="tooltip">
-                                <div class="my-rating pop-c"></div>
-                            </div>
-                            <div style="visibility:hidden;" class="pop-d" id="pop-d" role="tooltip">
-                                <div class="pop-d pop-playlist">Add To Playlist:</div>
-                                <div v-for="(playlist, index) in playlists" is="popper-playlist-item" :key="index"
-                                    :index="index" :playlist="playlist"></div>
-                            </div>
-                        </draggable>
-                    </div>
-
                 </div>
-
             </div>
-
-            <!-- Navigation -->
-            <nav class="navbar justify-content-around">
-                <div id="get_file_explorer" class="navbar_item" title="File Explorer">
-                    <span class="mdi-set mdi-folder-music iconBtn navbar_icon"></span>
-                    <span class="navbar_text">Files</span>
-                </div>
-                <div id="get_library"" class=" navbar_item" title="Library">
-                    <span class="mdi-set mdi-bookshelf iconBtn navbar_icon"></span>
-                    <span class="navbar_text">Library</span>
-                </div>
-                <div id="get_search" class="navbar_item" title="Search">
-                    <span class="mdi-set mdi-magnify iconBtn navbar_icon"></span>
-                    <span class="navbar_text">Search</span>
-                </div>
-                <div id="get_system" class="navbar_item" title="System">
-                    <span class="mdi-set mdi-cog iconBtn navbar_icon"></span>
-                    <span class="navbar_text">System</span>
-                </div>
-            </nav>
+            
+            <div class="col-auto p-0">
+                <!-- Bottom Bar Navigation -->
+                <!-- Navigation -->
+                <nav class="navbar justify-content-around">
+                    <div id="get_file_explorer" class="navbar_item" title="File Explorer">
+                        <span class="mdi-set mdi-folder-music iconBtn navbar_icon"></span>
+                        <span class="navbar_text">Files</span>
+                    </div>
+                    <div id="get_library"" class=" navbar_item" title="Library">
+                        <span class="mdi-set mdi-bookshelf iconBtn navbar_icon"></span>
+                        <span class="navbar_text">Library</span>
+                    </div>
+                    <div id="get_search" class="navbar_item" title="Search">
+                        <span class="mdi-set mdi-magnify iconBtn navbar_icon"></span>
+                        <span class="navbar_text">Search</span>
+                    </div>
+                    <div id="get_system" class="navbar_item" title="System">
+                        <span class="mdi-set mdi-cog iconBtn navbar_icon"></span>
+                        <span class="navbar_text">System</span>
+                    </div>
+                </nav>
+            </div>
         </div>
     </div>
 

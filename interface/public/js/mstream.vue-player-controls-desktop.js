@@ -107,9 +107,11 @@ var VUEPLAYER = (function () {
         MSTREAMPLAYER.removeSongAtPosition(this.index, false);
       },
       downloadSong: function (event) {
-        $("#download-file").attr("href", "/media/" + this.song.filepath + "?token=" + MSTREAMAPI.currentServer.token);
-        document.getElementById('download-file').click();
-        console.log(MSTREAMAPI.currentServer.token);
+        //TODO: no need for "<a>" tag in .html if all other replaced with this
+        var link = document.createElement('a');
+        link.download = ''; //TODO: Name File like %artist% - %title%.mp3 or so
+        link.href = `/media/${this.song.filepath}?token=${MSTREAMAPI.currentServer.token}`;
+        link.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));
       },
       createPopper: function (event) {
         if (currentPopperSongIndex === this.index) {

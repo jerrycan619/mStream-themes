@@ -22,13 +22,14 @@ function escapeHtml(string) {
 }
 
 function createFileplaylistHtml(dataDirectory) {
-  return `<div class="row m-2 align-items-center">
-              <div class="col file_wrapper">
-                <div data-directory="${dataDirectory}" class="fileplaylistz row align-items-center">
-                  <div class="col-auto">
+  return `<div class="col-auto p-0">
+            <div class="row mt-1 mb-1 ml-0 mr-0 overflow-hidden align-items-center">
+              <div class="col p-0 file_wrapper">
+                <div data-directory="${dataDirectory}" class="fileplaylistz row m-0 align-items-center">
+                  <div class="col-auto pl-0">
                     <span class="mdi-set mdi-playlist-music dir_icon"></span>
                   </div>
-                  <div class="col pl-0">
+                  <div class="col p-0">
                     <span class="item-text">${dataDirectory}</span>
                   </div>
                 </div>
@@ -44,22 +45,25 @@ function createFileplaylistHtml(dataDirectory) {
                   </div>
                 </div>
               </div>
-            </div>`;
+            </div>
+          </div>`;
 }
 
 function createMusicfileHtml(fileLocation, title, titleClass) {
-  return '<div class="row m-2 align-items-center">' +  
-            '<div class="col file_wrapper">' +
-              '<div data-file_location="' + fileLocation + '" class="filez row align-items-center">' + 
-                '<div class="col-auto">' +
-                  '<span class="mdi-set mdi-music-note dir_icon" />' + 
-                '</div>' +
-                '<div class="col pl-0">' +
-                  '<span class="' + titleClass + '">' + title + '</span>' +
-                '</div>' +
-              '</div>' + 
-            '</div>' +
-          '</div>';
+  return `<div class="col-auto p-0">
+          <div class="row mt-1 mb-1 ml-0 mr-0 overflow-hidden align-items-center">  
+            <div class="col p-0 file_wrapper">
+              <div data-file_location="${fileLocation}" class="filez row m-0 align-items-center"> 
+                <div class="col-auto pl-0">
+                  <span class="mdi-set mdi-music-note dir_icon"></span>
+                </div>
+                <div class="col p-0">
+                  <span class="${titleClass}">${title}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
 }
 
 $(document).ready(function () {
@@ -318,6 +322,9 @@ $(document).ready(function () {
           $('#login_overlay').slideUp("slow");
           $('#main_content').removeClass("d-none");
           $('#main_content').addClass("d-block");
+
+          //Refresh slick because sometimes (on Firefox) it has a width of 0 after login
+          $('.track_info').slick("refresh");
 
           //If User is logged in show logout button
           if (localStorage.getItem('token')) {
@@ -607,17 +614,17 @@ $(document).ready(function () {
       const fileLocation = this.path || response.path + this.name;
       if (this.type == 'directory') {
         filelist.push(`<div class="col-auto p-0">
-                        <div class="row m-2 align-items-center overflow-hidden">
-                          <div class="col file_wrapper">
-                            <div data-directory="${this.name}" class="dirz row align-items-center">
-                              <div class="col-auto">
+                        <div class="row mt-1 mb-1 ml-0 mr-0 overflow-hidden align-items-center">
+                          <div class="col p-0 file_wrapper">
+                            <div data-directory="${this.name}" class="dirz row m-0 align-items-center">
+                              <div class="col-auto pl-0">
                                 <span class="mdi-set mdi-folder-music dir_icon"></span>
                               </div>
                               <div class="col pl-0">
                                 <span class="item-text">${this.name}</span>
                               </div>
                             </div>
-                            <div class="song-button-box row align-items-center flex-nowrap sbb_fold ">
+                            <div class="song-button-box row m-0 align-items-center flex-nowrap sbb_fold ">
                               <div class="col">
                                 <span class="fold mdi-set mdi-chevron-left"></span>
                               </div>
@@ -643,7 +650,7 @@ $(document).ready(function () {
 
     // Post the html to the filelist div
     //$('#filelist').html(filelist);
-    $('#filelist').html("<div data-simplebar class='col h-100'><div class='row flex-column flex-nowrap w-100'>" + filelist.join("") + "</div></div>");
+    $('#filelist').html("<div data-simplebar class='col h-100 mh-100 p-0'><div class='row m-0 flex-column flex-nowrap w-100'>" + filelist.join("") + "</div></div>");
     
 
     if (previousState && previousState.previousScroll) {
@@ -668,7 +675,7 @@ $(document).ready(function () {
   });
 
 
-  // Search Files
+  //######################### Search on Directory Bar - Search Files #########################
   $('#search_folders').on('change keyup', function () {
     var searchVal = $(this).val();
 
@@ -681,21 +688,78 @@ $(document).ready(function () {
     // This causes an error in the playlist display
     $.each(currentBrowsingList, function () {
       var lowerCase = this.name !== null ? this.name.toLowerCase() : 'null';
-
+      
       if (lowerCase.indexOf(searchVal.toLowerCase()) !== -1) {
+        let type_icon = '';
+        let info = [];
+
         if (this.type === 'directory') {
-          filelist.push('<div class="clear relative"><div data-directory="' + this.name + '" class="dirz"><img class="folder-image" src="/public/img/folder.svg"><span class="item-text">' + this.name + '</span></div><div data-directory="' + this.name + '" class="song-button-box"><span title="Add All To Queue" class="recursiveAddDir" data-directory="' + this.name + '"><svg xmlns="http://www.w3.org/2000/svg" height="9" width="9" viewBox="0 0 1280 1276"><path d="M6760 12747 c-80 -5 -440 -10 -800 -11 -701 -2 -734 -4 -943 -57 -330 -84 -569 -281 -681 -563 -103 -256 -131 -705 -92 -1466 12 -241 16 -531 16 -1232 l0 -917 -1587 -4 c-1561 -3 -1590 -3 -1703 -24 -342 -62 -530 -149 -692 -322 -158 -167 -235 -377 -244 -666 -43 -1404 -42 -1813 7 -2355 21 -235 91 -400 233 -548 275 -287 730 -389 1591 -353 1225 51 2103 53 2330 7 l60 -12 6 -1489 c6 -1559 6 -1548 49 -1780 100 -535 405 -835 933 -921 88 -14 252 -17 1162 -24 591 -4 1099 -4 1148 1 159 16 312 56 422 112 118 59 259 181 333 290 118 170 195 415 227 722 18 173 21 593 6 860 -26 444 -32 678 -34 1432 l-2 811 54 7 c30 4 781 6 1670 5 1448 -2 1625 -1 1703 14 151 28 294 87 403 168 214 159 335 367 385 666 15 85 29 393 30 627 0 105 4 242 10 305 43 533 49 1047 15 1338 -44 386 -144 644 -325 835 -131 140 -278 220 -493 270 -92 21 -98 21 -1772 24 l-1680 3 3 1608 c2 1148 0 1635 -8 1706 -49 424 -255 701 -625 841 -243 91 -633 124 -1115 92z" transform="matrix(.1 0 0 -.1 0 1276)"/></svg></span><span class="downloadDir"><svg width="12" height="12" viewBox="0 0 2048 2048" xmlns="http://www.w3.org/2000/svg"><path d="M1803 960q0 53-37 90l-651 652q-39 37-91 37-53 0-90-37l-651-652q-38-36-38-90 0-53 38-91l74-75q39-37 91-37 53 0 90 37l294 294v-704q0-52 38-90t90-38h128q52 0 90 38t38 90v704l294-294q37-37 90-37 52 0 91 37l75 75q37 39 37 91z"/></svg></span></div></div>');
+          type_icon = '<span class="mdi-set mdi-folder-music dir_icon"></span>';
+          //filelist.push('<div class="clear relative"><div data-directory="' + this.name + '" class="dirz"><img class="folder-image" src="/public/img/folder.svg"><span class="item-text">' + this.name + '</span></div><div data-directory="' + this.name + '" class="song-button-box"><span title="Add All To Queue" class="recursiveAddDir" data-directory="' + this.name + '"><svg xmlns="http://www.w3.org/2000/svg" height="9" width="9" viewBox="0 0 1280 1276"><path d="M6760 12747 c-80 -5 -440 -10 -800 -11 -701 -2 -734 -4 -943 -57 -330 -84 -569 -281 -681 -563 -103 -256 -131 -705 -92 -1466 12 -241 16 -531 16 -1232 l0 -917 -1587 -4 c-1561 -3 -1590 -3 -1703 -24 -342 -62 -530 -149 -692 -322 -158 -167 -235 -377 -244 -666 -43 -1404 -42 -1813 7 -2355 21 -235 91 -400 233 -548 275 -287 730 -389 1591 -353 1225 51 2103 53 2330 7 l60 -12 6 -1489 c6 -1559 6 -1548 49 -1780 100 -535 405 -835 933 -921 88 -14 252 -17 1162 -24 591 -4 1099 -4 1148 1 159 16 312 56 422 112 118 59 259 181 333 290 118 170 195 415 227 722 18 173 21 593 6 860 -26 444 -32 678 -34 1432 l-2 811 54 7 c30 4 781 6 1670 5 1448 -2 1625 -1 1703 14 151 28 294 87 403 168 214 159 335 367 385 666 15 85 29 393 30 627 0 105 4 242 10 305 43 533 49 1047 15 1338 -44 386 -144 644 -325 835 -131 140 -278 220 -493 270 -92 21 -98 21 -1772 24 l-1680 3 3 1608 c2 1148 0 1635 -8 1706 -49 424 -255 701 -625 841 -243 91 -633 124 -1115 92z" transform="matrix(.1 0 0 -.1 0 1276)"/></svg></span><span class="downloadDir"><svg width="12" height="12" viewBox="0 0 2048 2048" xmlns="http://www.w3.org/2000/svg"><path d="M1803 960q0 53-37 90l-651 652q-39 37-91 37-53 0-90-37l-651-652q-38-36-38-90 0-53 38-91l74-75q39-37 91-37 53 0 90 37l294 294v-704q0-52 38-90t90-38h128q52 0 90 38t38 90v704l294-294q37-37 90-37 52 0 91 37l75 75q37 39 37 91z"/></svg></span></div></div>');
+          filelist.push(`<div class="col-auto p-0">
+                          <div class="row mt-1 mb-1 ml-0 mr-0 align-items-center overflow-hidden">
+                            <div class="col p-0 file_wrapper">
+                              <div data-directory="${this.name}" class="dirz row m-0 align-items-center">
+                                <div class="col-auto pl-0">
+                                  ${type_icon}
+                                </div>
+                                <div class="col pl-0">
+                                  <span class="item-text">${this.name}</span>
+                                </div>
+                              </div>
+                              <div class="song-button-box row align-items-center flex-nowrap sbb_fold ">
+                                <div class="col">
+                                  <span class="fold mdi-set mdi-chevron-left"></span>
+                                </div>
+                                <div class="col">
+                                  <span title="Add All To Queue" class="recursiveAddDir mdi-set mdi-playlist-plus" data-directory="${this.name}"></span>
+                                </div>
+                                <div class="col">
+                                  <span data-directory="${this.name}" title="Download Directory" class="downloadDir mdi-set mdi-download"></span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>`);
         } else if (this.type === 'playlist') {
-          filelist.push('<div data-playlistname="' + encodeURIComponent(this.name) + '" class="playlist_row_container"><span data-playlistname="' + encodeURIComponent(this.name) + '" class="playlistz force-width">' + escapeHtml(this.name) + '</span><div class="song-button-box"><span data-playlistname="' + encodeURIComponent(this.name) + '" class="deletePlaylist">Delete</span></div></div>');
+          filelist.push('<div data-playlistname="' + encodeURIComponent(this.name) + '" class="playlist_row_container">' +
+                          '<span data-playlistname="' + encodeURIComponent(this.name) + '" class="playlistz force-width">' + 
+                            escapeHtml(this.name) + 
+                          '</span>' +
+                        '<div class="song-button-box">' +
+                          '<span data-playlistname="' + encodeURIComponent(this.name) + '" class="deletePlaylist">Delete</span>' +
+                        '</div>' +
+                      '</div>');
         } else if (this.type === 'album') {
           var artistString = this.artist ? 'data-artist="' + this.artist + '"' : '';
           var albumString = this.name ? this.name : 'SINGLES';
 
+          info[0] = '';
+          info[1] = albumString;
+
           if (this.album_art_file) {
-            filelist.push('<div ' + artistString + ' data-album="' + this.name + '" class="albumz"><img class="album-art-box"  data-original="/album-art/' + this.album_art_file + '?token=' + MSTREAMAPI.currentServer.token + '"><span class="explorer-label-1">' + albumString + '</span></div>');
+            //lazyload???
+            //type_icon = '<img class="album-art-box"  data-original="/album-art/' + this.album_art_file + '?token=' + MSTREAMAPI.currentServer.token + '">';
+            type_icon = '<img class="album-art-box dir_icon"  src="/album-art/' + this.album_art_file + '?token=' + MSTREAMAPI.currentServer.token + '">';
           } else {
-            filelist.push('<div ' + artistString + ' data-album="' + this.name + '" class="albumz"><img class="album-art-box" src="/public/img/default.png"><span class="explorer-label-1">' + albumString + '</span></div>');
+            type_icon = '<span class="mdi-set mdi-album dir_icon"></span>';
+            //filelist.push('<div ' + artistString + ' data-album="' + this.name + '" class="albumz"><img class="album-art-box" src="/public/img/default.png"><span class="explorer-label-1">' + albumString + '</span></div>');
           }
+
+          filelist.push(`<div ${artistString} data-album="${this.name}" class="albumz row m-2 align-items-center">
+                                <div class="col">
+                                  <div class="row align-items-center">
+                                    <div class="col-auto">
+                                      ${type_icon}
+                                    </div>
+                                    <div class="col pl-0 d-flex flex-column">
+                                      <span class="col_track_title">${info[1]}</span>
+                                      <span class="col_track_artist">${info[0]}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>`);
+
         } else if (this.type === 'artist') {
           filelist.push('<div data-artist="' + this.name + '" class="artistz">' + this.name + ' </div>');
         } else {
@@ -719,7 +783,7 @@ $(document).ready(function () {
     });
 
     // Post the html to the filelist div
-    $('#filelist').html(filelist);
+    $('#filelist').html("<div data-simplebar class='col p-0 h-100 mh-100'><div class='row m-0 flex-column flex-nowrap w-100'>" + filelist.join("") + "</div></div>");
     ll.update();
   });
 
@@ -962,10 +1026,10 @@ $(document).ready(function () {
       var playlists = [];
       $.each(response, function () {
         playlists.push('<div class="col-auto p-0">' +
-                          '<div data-playlistname="' + encodeURIComponent(this.name) + '" class="playlist_row_container row m-2 align-items-center">' +
-                            '<div data-playlistname="' + encodeURIComponent(this.name) + '" class="playlistz col">' +
-                              '<div class="row align-items-center">' +
-                                '<div class="col-auto">' +
+                          '<div data-playlistname="' + encodeURIComponent(this.name) + '" class="playlist_row_container row mt-1 mb-1 ml-0 mr-0 overflow-hidden align-items-center">' +
+                            '<div data-playlistname="' + encodeURIComponent(this.name) + '" class="playlistz col p-0">' +
+                              '<div class="row m-0 align-items-center">' +
+                                '<div class="col-auto pl-0">' +
                                   '<span class="mdi-set mdi-playlist-music dir_icon"></span>' +
                                 '</div>' +
                                 '<div class="col pl-0 d-flex flex-column">' +
@@ -976,7 +1040,7 @@ $(document).ready(function () {
                                 '</div>' +
                               '</div>' +
                             '</div>' +
-                            '<div class="col-auto">' +
+                            '<div class="col-auto pr-0">' +
                               '<span data-playlistname="' + encodeURIComponent(this.name) + '" class="deletePlaylist mdi-set mdi-delete dir_icon"></span>' +
                             '</div>' +
                           '</div>' +
@@ -986,7 +1050,7 @@ $(document).ready(function () {
         VUEPLAYER.playlists.push(this);
       });
       // Add playlists to the left panel
-      $('#filelist').html("<div data-simplebar class='col h-100'><div class='row flex-column flex-nowrap w-100'>" + playlists.join("") + "</div></div>");
+      $('#filelist').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + playlists.join("") + "</div></div>");
 
       if (previousState && previousState.previousScroll) {
         $('#filelist').scrollTop(previousState.previousScroll);
@@ -1130,7 +1194,7 @@ $(document).ready(function () {
 
       });
 
-      $('#filelist').html("<div data-simplebar class='col h-100'><div class='row flex-column flex-nowrap w-100'>" + files.join("") + "</div></div>");
+      $('#filelist').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + files.join("") + "</div></div>");
       // update lazy load plugin
       ll.update();
     });
@@ -1342,8 +1406,8 @@ $(document).ready(function () {
           album_art = '<span class="mdi-set mdi-album dir_icon"></span>';
         }
         albums.push(`<div class="col-auto p-0">
-                      <div data-album="${value.name}" class="albumz row m-2 align-items-center">\
-                        <div class="col-auto">\
+                      <div data-album="${value.name}" class="albumz row mt-1 mb-1 ml-0 mr-0 overflow-hidden align-items-center">\
+                        <div class="col-auto pl-0">\
                           ${album_art}\
                         </div>\
                         <div class="col pl-0">\
@@ -1353,7 +1417,7 @@ $(document).ready(function () {
                     </div>`)
       });
 
-      $('#filelist').html("<div data-simplebar class='col h-100'><div class='row flex-column flex-nowrap w-100'>" + albums.join("") + "</div></div>");
+      $('#filelist').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + albums.join("") + "</div></div>");
       if (previousState && previousState.previousScroll) {
         $('#filelist').scrollTop(previousState.previousScroll);
       }
@@ -1422,10 +1486,10 @@ $(document).ready(function () {
         }
 
         filelist.push(`<div class="col-auto p-0">
-                        <div data-file_location="${this.filepath}" class="filez row m-2 align-items-center">
-                          <div class="col">
-                            <div class="row align-items-center">
-                              <div class="col-auto">
+                        <div data-file_location="${this.filepath}" class="filez row mt-1 mb-1 ml-0 mr-0 overflow-hidden align-items-center">
+                          <div class="col p-0">
+                            <div class="row m-0 align-items-center">
+                              <div class="col-auto pl-0">
                                 ${type_icon}
                               </div>
                               <div class="col pl-0 d-flex flex-column">
@@ -1439,7 +1503,7 @@ $(document).ready(function () {
 
       });
 
-      $('#filelist').html("<div data-simplebar class='col h-100'><div class='row flex-column flex-nowrap w-100'>" + filelist.join("") + "</div></div>");
+      $('#filelist').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + filelist.join("") + "</div></div>");
     });
   }
 
@@ -1469,8 +1533,8 @@ $(document).ready(function () {
       var artists = [];
       $.each(response.artists, function (index, value) {
         artists.push(`<div class="col-auto p-0">
-                        <div data-artist="${value}" class="artistz row m-2 align-items-center">
-                            <div class="col-auto">
+                        <div data-artist="${value}" class="artistz row mt-1 mb-1 ml-0 mr-0 overflow-hidden align-items-center">
+                            <div class="col-auto pl-0">
                               <span class="mdi-set mdi-microphone dir_icon"></span>
                             </div>
                             <div class="col pl-0">
@@ -1484,7 +1548,7 @@ $(document).ready(function () {
         });
       });
 
-      $('#filelist').html("<div data-simplebar class='col h-100'><div class='row flex-column flex-nowrap w-100'>" + artists.join("") + "</div></div>");
+      $('#filelist').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + artists.join("") + "</div></div>");
       if (previousState && previousState.previousScroll) {
         $('#filelist').scrollTop(previousState.previousScroll);
       }
@@ -1532,10 +1596,10 @@ $(document).ready(function () {
         }
 
         albums.push(`<div class="col-auto p-0">
-                      <div data-artist="${artist}" data-album="${value.name}" class="albumz row m-2 align-items-center">
-                        <div class="col">
-                          <div class="row align-items-center">
-                            <div class="col-auto">
+                      <div data-artist="${artist}" data-album="${value.name}" class="albumz row mt-1 mb-1 ml-0 mr-0 overflow-hidden align-items-center">
+                        <div class="col p-0">
+                          <div class="row m-0 align-items-center">
+                            <div class="col-auto pl-0">
                               ${type_icon}
                             </div>
                             <div class="col pl-0 d-flex flex-column">
@@ -1555,7 +1619,7 @@ $(document).ready(function () {
         })
       });
 
-      $('#filelist').html("<div data-simplebar class='col h-100'><div class='row flex-column flex-nowrap w-100'>" + albums.join("") + "</div></div>");
+      $('#filelist').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + albums.join("") + "</div></div>");
 
       if (previousState && previousState.previousScroll) {
         $('#filelist').scrollTop(previousState.previousScroll);
@@ -1634,20 +1698,18 @@ $(document).ready(function () {
         }
 
         files.push(`<div class="col-auto p-0">
-                      <div data-file_location="${value.filepath}" class="filez row m-2 align-items-center">
+                      <div data-file_location="${value.filepath}" class="filez row mt-1 mb-1 ml-0 mr-0 overflow-hidden align-items-center">
                         <div class="col p-0">
                           <div class="row m-0 align-items-center">
-                            <div class="col-auto">
+                            <div class="col-auto pl-0">
                               ${type_icon}
                             </div>
                             <div class="col pl-0 d-flex flex-column">
                               <span class="col_track_title">${info[1]}</span>
                               <span class="col_track_artist">${info[0]}</span>
                             </div>
-                            <div class="col-auto">
-                              <div class="">
-                                <span class="mdi-set mdi-star rating_icon">${rating}</span>
-                              </div>
+                            <div class="col-auto pr-0">
+                              <span class="mdi-set mdi-star rating_icon">${rating}</span>
                             </div>
                           </div>
                         </div>
@@ -1656,7 +1718,7 @@ $(document).ready(function () {
 
       });
 
-      $('#filelist').html("<div data-simplebar class='col h-100'><div class='row flex-column flex-nowrap w-100'>" + files.join("") + "</div></div>");
+      $('#filelist').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + files.join("") + "</div></div>");
       // update lazy load plugin
       ll.update();
     });
@@ -1691,7 +1753,7 @@ $(document).ready(function () {
     }
 
     var newHtml = `
-      <div class="col-auto">
+      <div class="col-auto p-0">
         <form id="db-search" onsubmit="return false;">
           <div id="dbSearchForm" class="input-group">
             <input ${valString} type="text" id="search-term" class="form-control" placeholder="Search Database" aria-label="Search Database" aria-describedby="basic-addon2" required>
@@ -1705,7 +1767,7 @@ $(document).ready(function () {
           </span>
         </form>\
       </div>
-      <div data-simplebar class="col h-100">
+      <div data-simplebar class="col h-100 mh-100">
         <div id="search-results" class="row align-items-center">
           <div id="scrollSearch" class="clusterize-scroll col">
             <div id="contentSearch" class="clusterize-content">
@@ -1898,10 +1960,10 @@ $(document).ready(function () {
             data_html = value.name;
           }
 
-          searchList.push(`<div data-${searchMap[key].data}="${data_html}" class="${searchMap[key].class} row m-2 align-items-center">
-                                <div class="col">
-                                  <div class="row align-items-center">
-                                    <div class="col-auto">
+          searchList.push(`<div data-${searchMap[key].data}="${data_html}" class="${searchMap[key].class} row mt-1 mb-1 ml-0 mr-0 align-items-center">
+                                <div class="col p-0">
+                                  <div class="row m-0 align-items-center">
+                                    <div class="col-auto pl-0">
                                       ${type_icon}
                                     </div>
                                     <div class="col pl-0 d-flex flex-column">
@@ -1955,22 +2017,42 @@ $(document).ready(function () {
     }
 
     const newHtml = `
-    <div data-simplebar class="col h-100">
-      <div class="row flex-column flex-nowrap w-100">
-        <div class="col-auto">
-          <div class="row mt-2 mb-2 settings_box">
-            <div class="col">
-              <span class="heading">Auto DJ<span class="mdi-set mdi-dice-6" style="margin-left: 1rem;"></span></span>\
-              <span class="sub_heading">Auto DJ randomly generates a playlist</span>\
-              ${autodjDirs_html}
-              <span>Minimum Rating</span>
-              <select id="autodj-ratings">
-                ${autodjRating_html}
-              </select>
-            </div>\
+    <div data-simplebar class="col p-0 h-100 mh-100" style="overflow-x:hidden;">
+      <div class="row m-0 flex-column flex-nowrap w-100">
+        <div class="col-auto p-0">
+          <div class="row mt-2 mb-2 settings_box">\
+            <div class="col">\
+              <div class="row m-0 align-items-center justify-content-between">
+                <div class="col pl-0">
+                  <span class="heading">Auto DJ</span>\
+                  <span class="sub_heading">Auto DJ randomly generates a playlist</span>\
+                </div>
+              </div>
+            </div>
           </div>\
+          <div class="row m-0">
+            <div class="col pl-0">
+              <div class="row m-0 flex-column autoDjDirsSelect">
+                <div class="col p-0">
+                  <span id="autoDjDirs_included"></span>
+                </div>
+                <div class="col p-0">
+                  <span id="autoDjDirs_excluded"></span>
+                </div>
+              </div>
+            </div>
+            <div class="col-auto p-0">
+              <button id="autoDjDirs" type="button" class="mdi-set mdi-circle-edit-outline" data-toggle="popover" title="Include"></button>
+            </div>
+          </div>
+          <div class="col pl-0">
+            <span>Minimum Rating:</span>
+            <select id="autodj-ratings">
+              ${autodjRating_html}
+            </select>
+          </div>
         </div>
-        <div class="col-auto">
+        <div class="col-auto p-0">
           <div class="row mt-4">\
             <div class="col">\
               <div class="row m-0 align-items-center justify-content-between">\
@@ -1978,7 +2060,7 @@ $(document).ready(function () {
                   <span class="heading">Autoplay</span>\
                   <span class="sub_heading">Start Playing on Track Add</span>\
                 </div>\
-                <div class="col-auto">\
+                <div class="col-auto pr-0">\
                   <label class="switch">\
                     <input id="autoplay" type="checkbox" class="switch-input" ${autoDJ_checked}>\
                     <span class="switch-label" data-on="On" data-off="Off"></span>\
@@ -1989,13 +2071,13 @@ $(document).ready(function () {
             </div>\
           </div>\
         </div>
-        <div class="col-auto">
+        <div class="col-auto p-0">
           <div class="row mt-4">\
             <div id="jukeBox_html" class="col">\
             </div>\
           </div>\
         </div>
-        <div class="col-auto">
+        <div class="col-auto p-0">
           <div class="row mt-4">\
             <div class="col">\
               <div class="row m-0 align-items-center justify-content-between">\
@@ -2003,7 +2085,7 @@ $(document).ready(function () {
                     <span class="heading">Database</span>\
                     <span id="dbStatus" class="sub_heading"></span>\
                   </div>\
-                  <div class="col-auto">\
+                  <div class="col-auto pr-0">\
                     <button class="settings_button" id="build_database" title="Build Database">
                       <span>Scan</span>
                       <span class="mdi-set mdi-database navbar_icon"></span>\
@@ -2013,7 +2095,7 @@ $(document).ready(function () {
             </div>\
           </div>\
         </div>
-        <div class="col-auto">
+        <div class="col-auto p-0">
           <div class="row mt-4">\
             <div class="col">\
               <div class="row m-0 align-items-center justify-content-between">\
@@ -2021,19 +2103,19 @@ $(document).ready(function () {
                     <span class="heading">Mobile</span>\
                     <span class="sub_heading">Android App<br />IOS comming soon</span>\
                   </div>\
-                  <div class="col-auto">\
-                    <a target="_blank" href="https://play.google.com/store/apps/details?id=mstream.music&amp;pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1" class="mdi-set mdi-google-play link_button mr-3"></a>\
+                  <div class="col-auto pr-0">\
+                    <a target="_blank" href="https://play.google.com/store/apps/details?id=mstream.music&amp;pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1" class="mdi-set mdi-google-play link_button"></a>\
                   </div>\
               </div>\
               <div class="row m-0 flex-column">
-                <div class="col">
+                <div class="col p-0">
                   <a target="_blank" href="/public/qr-tool.html" class="">Add server to the app</a>
                 </div>
               </div>
             </div>\
           </div>\
         </div>
-        <div class="col-auto">
+        <div class="col-auto p-0">
           <div class="row mt-4">\
             <div class="col">\
               <div class="row m-0 align-items-center justify-content-between">\
@@ -2041,12 +2123,12 @@ $(document).ready(function () {
                     <span class="heading">About</span>\
                     <span class="sub_heading">mStream WebApp v4.0</span>\
                   </div>\
-                  <div class="col-auto">\
-                    <a target="_blank" href="https://github.com/IrosTheBeggar/mStream" class="mdi-set mdi-github link_button mr-3"></a>\
+                  <div class="col-auto pr-0">\
+                    <a target="_blank" href="https://github.com/IrosTheBeggar/mStream" class="mdi-set mdi-github link_button"></a>\
                   </div>\
               </div>\
               <div class="row m-0 flex-column">
-                <div class="col">Developed By Paul Sori</div>
+                <div class="col p-0">Developed By Paul Sori</div>
               </div>
             </div>\
           </div>\
@@ -2079,6 +2161,88 @@ $(document).ready(function () {
 
     $('#filelist').html(newHtml);
     setupJukeboxPanel();
+
+    //Initial Call
+    updateAutoDjDirs();
+
+    function updateAutoDjDirs() {
+      let autoDjDirs_excluded = [];
+      let autoDjDirs_included = [];
+      for (var i = 0; i < MSTREAMAPI.currentServer.vpaths.length; i++) {
+        if (!MSTREAMPLAYER.ignoreVPaths[MSTREAMAPI.currentServer.vpaths[i]]) {
+          autoDjDirs_included.push(MSTREAMAPI.currentServer.vpaths[i]);
+        } else {
+          autoDjDirs_excluded.push(MSTREAMAPI.currentServer.vpaths[i]);
+        }
+      }
+      const autoDjDirs_included_String = autoDjDirs_included.join(",\n");
+      const autoDjDirs_excluded_String = autoDjDirs_excluded.join(",\n");
+      $('#autoDjDirs_included').html(`
+        Included: ${autoDjDirs_included_String}
+      `); 
+      $('#autoDjDirs_excluded').html(`
+        Excluded: ${autoDjDirs_excluded_String}
+      `); 
+    }
+
+    //Init Popover (Bootstrap)
+    $("#autoDjDirs").popover({
+      trigger: "click",
+      container: '#autoDjDirs',
+      html: true,
+      placement: 'left',
+      sanitize: false,
+      boundary: "window",
+      content: function() {
+        let autoDjDirs_select = '';
+        for (var i = 0; i < MSTREAMAPI.currentServer.vpaths.length; i++) {
+          let checkedString = '';
+          if (!MSTREAMPLAYER.ignoreVPaths[MSTREAMAPI.currentServer.vpaths[i]]) {
+            checkedString = 'checked';
+          } else {
+          }
+          autoDjDirs_select += `<div class="col-auto p-0 mt-2 text-nowrap">
+                                  <input ${checkedString} id="autodj-folder-${MSTREAMAPI.currentServer.vpaths[i]}" type="checkbox" value="${MSTREAMAPI.currentServer.vpaths[i]}" name="autodj-folders">
+                                  <label for="autodj-folder-${MSTREAMAPI.currentServer.vpaths[i]}">${MSTREAMAPI.currentServer.vpaths[i]}</label>
+                                </div>`;
+        }
+        return autoDjDirs_select;
+      }
+    }).click(function (event) {event.stopPropagation();})
+    .on('inserted.bs.popover', function () {
+      $(".popover").click(function (event) {
+        event.stopPropagation();
+      })
+    })
+  
+    //Hide Popover on click outside
+    $(document).click(function () {
+      $("#autoDjDirs").popover('hide');
+    });
+
+    //Save input data on popover close
+    $('#autoDjDirs').on('hide.bs.popover', function () {
+      let autodjIgnorePaths = [];
+      for (var i = 0; i < MSTREAMAPI.currentServer.vpaths.length; i++) {
+        if(typeof $(`.popover-body #autodj-folder-${MSTREAMAPI.currentServer.vpaths[i]}`).prop("checked") !== 'undefined') {
+          //console.log("close");
+          if ($(`.popover-body #autodj-folder-${MSTREAMAPI.currentServer.vpaths[i]}`).prop("checked")) {
+            MSTREAMPLAYER.ignoreVPaths[MSTREAMAPI.currentServer.vpaths[i]] = false;
+            //Remove from array
+            autodjIgnorePaths = $.grep(autodjIgnorePaths, function(value) {
+              return value != MSTREAMAPI.currentServer.vpaths[i];
+            });
+          } else {
+            MSTREAMPLAYER.ignoreVPaths[MSTREAMAPI.currentServer.vpaths[i]] = true;
+            autodjIgnorePaths.push(MSTREAMAPI.currentServer.vpaths[i]);
+          }
+        } else {
+          return;
+        }
+      }
+      localStorage.setItem("autoDJ-ignorePaths", autodjIgnorePaths);
+      updateAutoDjDirs();
+    });
   }
 
   // LogOut
@@ -2400,7 +2564,7 @@ $(document).ready(function () {
                     <span class="heading">Jukebox</span>
                     <span class="sub_heading">Control mStream remotely</span>
                   </div>
-                  <div class="col-auto">
+                  <div class="col-auto pr-0">
                     <button id="jukebox_connect" class="settings_button">
                       Create Session
                       <span class="mdi-set mdi-remote-tv navbar_icon"></span>
@@ -2444,15 +2608,15 @@ $(document).ready(function () {
       }
   
       if (JUKEBOX.stats.adminCode) {
-        jukeBox_html_inner = `<div class="col">Admin Code: ${JUKEBOX.stats.adminCode}</div>`;
+        jukeBox_html_inner = `<div class="col p-0">Admin Code: ${JUKEBOX.stats.adminCode}</div>`;
       }
       if (JUKEBOX.stats.guestCode) {
-        jukeBox_html_inner += `<div class="col">Guest Code: ${JUKEBOX.stats.guestCode}</div>`;
+        jukeBox_html_inner += `<div class="col p-0">Guest Code: ${JUKEBOX.stats.guestCode}</div>`;
       }
   
       var adrs = window.location.protocol + '//' + window.location.host + '/remote_desktop';
-      jukeBox_html_inner +=  `<div class="col">Remote Jukebox Controls: <a target="_blank" href="${adrs}"></div>
-                              <div class="col">${adrs}</a></div>`;
+      jukeBox_html_inner +=  `<div class="col p-0">Remote Jukebox Controls: <a target="_blank" href="${adrs}"></div>
+                              <div class="col p-0">${adrs}</a></div>`;
   
 
       const jukeBox_html = `<div class="row m-0 align-items-center justify-content-between">
@@ -2460,7 +2624,7 @@ $(document).ready(function () {
                                 <span class="heading">Jukebox</span>
                                 <span class="sub_heading">Control mStream remotely</span>
                               </div>
-                              <div class="col-auto">
+                              <div class="col-auto pr-0">
                                 <button id="jukebox_connect" class="settings_button" readonly>
                                   Active Session
                                   <span class="mdi-set mdi-remote-tv navbar_icon"></span>

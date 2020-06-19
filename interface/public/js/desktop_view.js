@@ -207,17 +207,17 @@ $(document).ready(function (e) {
 /* Delegated events - for elements that gets dynamically renderd */
 /* Attach event-hanlder to parent which is present on document render (#filelist) */
 /* get its childs which are dynamically added or removed (.song-button-box) */
-$("#filelist").on("click", ".song-button-box", function (event) {
-    console.log($(this).attr('class'));
+$("#filelist").on("click", ".fold", function (event) {
+    //console.log($(this).attr('class'));
     //$(this).css("width", "auto");
-    $(this).toggleClass('sbb_fold sbb_unfold');
-    $(".fold", this).toggleClass('mdi-chevron-left mdi-chevron-right');
+    $(this).closest(".song-button-box").toggleClass('sbb_fold sbb_unfold');
+    $(this).toggleClass('mdi-chevron-left mdi-chevron-right');
 });
-$("#playlist_scrollBox").on("click", ".song-button-box", function (event) {
-    console.log($(this).attr('class'));
+$("#playlist_scrollBox").on("click", ".fold", function (event) {
+    //console.log($(this).attr('class'));
     //$(this).css("width", "auto");
-    $(this).toggleClass('sbb_fold sbb_unfold');
-    $(".fold", this).toggleClass('mdi-chevron-left mdi-chevron-right');
+    $(this).closest(".song-button-box").toggleClass('sbb_fold sbb_unfold');
+    $(this).toggleClass('mdi-chevron-left mdi-chevron-right');
 });
 
 const BORDER_SIZE = 4;

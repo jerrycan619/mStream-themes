@@ -94,6 +94,9 @@
     <link rel="stylesheet" href="/public/css/simplebar.css" />
     <script src="/public/js/lib/simplebar.min.js"></script>
 
+    <!-- https://github.com/sindresorhus/screenfull.js - To make page Fullscreen -->
+    <script src="/public/js/lib/screenfull.min.js"></script>
+
 
 </head>
 
@@ -148,7 +151,7 @@
                 <div class="card-footer">
                     <div class="d-flex justify-content-center links">
                         <!--Visit mStream on <a href="https://github.com/IrosTheBeggar/mStream/">GitHub</a>-->
-
+                        Developed By Paul Sori
                     </div>
                 </div>
             </div>
@@ -423,7 +426,7 @@
                                 <div id="progress_bar" class="progress-bar" role="progressbar" aria-valuenow="0"
                                     aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
                             </div>
-                            <div class="col-auto">
+                            <div class="col-auto pl-0">
                                 <span title="Previous Directory"
                                     class="backButton mdi-set mdi-backburger navbar_icon"></span>
                             </div>
@@ -432,8 +435,8 @@
                                 <!-- Current Directory -->
                                 <input id="search_folders" class="hide" placeholder="Search List">
                             </div>
-                            <div class="col-auto">
-                                <div class="row">
+                            <div class="col-auto pr-0">
+                                <div class="row m-0">
                                     <div class="col">
                                         <span title="Search" id="search-explorer"
                                             class="mdi-set mdi-text-search navbar_icon"></span>
@@ -502,7 +505,7 @@
                             <div style="visibility:hidden;" class="pop-c" id="pop" role="tooltip">
                                 <div class="my-rating pop-c"></div>
                             </div>
-                            <div style="visibility:hidden;" class="pop-d" id="pop-d" role="tooltip">
+                            <div style="visibility:hidden; background: #fff; color: #000" class="pop-d" id="pop-d" role="tooltip">
                                 <div class="pop-d pop-playlist">Add To Playlist:</div>
                                 <div v-for="(playlist, index) in playlists" is="popper-playlist-item" :key="index"
                                     :index="index" :playlist="playlist"></div>
