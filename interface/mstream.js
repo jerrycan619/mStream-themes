@@ -14,8 +14,6 @@ const defaults = require('./modules/defaults.js');
 const ddns = require('./modules/ddns');
 const federation = require('./modules/federation');
 
-express
-
 exports.serveIt = config => {
   const program = defaults.setup(config);
 
@@ -87,6 +85,10 @@ exports.serveIt = config => {
     res.sendFile( 'shared_mobile.html', { root: program.webAppDirectory });
   });
   // Serve Jukebox Page
+  mstream.all('/remote', (req, res) => {
+    res.sendFile('remote.html', { root: program.webAppDirectory });
+  });
+
   mstream.all('/remote_desktop', (req, res) => {
     res.sendFile('remote_desktop.html', { root: program.webAppDirectory });
   });

@@ -28,6 +28,9 @@ var VUEBROWSER = (function () {
       logout: function () {
         localStorage.removeItem('token');
         location.reload();
+        //$('#login_overlay').slideDown("slow")
+        //$('#main_content').removeClass("d-block");
+        //$('#main_content').addClass("d-none");
       },
       fullscreen: function () {
         screenfull.toggle();

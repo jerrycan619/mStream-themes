@@ -2769,7 +2769,7 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
         jukeBox_html_inner += `<div class="col pl-0">Guest Code: ${JUKEBOX.stats.guestCode}</div>`;
       }
   
-      var adrs = window.location.protocol + '//' + window.location.host + '/remote_mobile';
+      var adrs = window.location.protocol + '//' + window.location.host + '/remote';
       jukeBox_html_inner +=  `<div class="col pl-0">Remote Jukebox Controls: <a target="_blank" href="${adrs}"></div>
                               <div class="col pl-0">${adrs}</a></div>`;
   

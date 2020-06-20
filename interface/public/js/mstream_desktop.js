@@ -324,7 +324,8 @@ $(document).ready(function () {
           $('#main_content').addClass("d-block");
 
           //Refresh slick because sometimes (on Firefox) it has a width of 0 after login
-          $('.track_info').slick("refresh");
+          //Slick not used on desktop view
+          //$('.track_info').slick("refresh");
 
           //If User is logged in show logout button
           if (localStorage.getItem('token')) {
@@ -2608,13 +2609,13 @@ $(document).ready(function () {
       }
   
       if (JUKEBOX.stats.adminCode) {
-        jukeBox_html_inner = `<div class="col p-0">Admin Code: ${JUKEBOX.stats.adminCode}</div>`;
+        jukeBox_html_inner = `<div class="col p-0">Admin Code: <span style="user-select: all;">${JUKEBOX.stats.adminCode}</span></div>`;
       }
       if (JUKEBOX.stats.guestCode) {
-        jukeBox_html_inner += `<div class="col p-0">Guest Code: ${JUKEBOX.stats.guestCode}</div>`;
+        jukeBox_html_inner += `<div class="col p-0">Guest Code: <span style="user-select: all;">${JUKEBOX.stats.guestCode}</span></div>`;
       }
   
-      var adrs = window.location.protocol + '//' + window.location.host + '/remote_desktop';
+      var adrs = window.location.protocol + '//' + window.location.host + '/remote';
       jukeBox_html_inner +=  `<div class="col p-0">Remote Jukebox Controls: <a target="_blank" href="${adrs}"></div>
                               <div class="col p-0">${adrs}</a></div>`;
   
