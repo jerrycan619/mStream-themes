@@ -43,7 +43,7 @@ var MSTREAMPLAYER = (function () {
         if (!title) {
           const currentSong = MSTREAMPLAYER.getCurrentSong();
           const filepathArray = currentSong.filepath.split("/");
-          title = filepathArray[filepathArray.length - 1]
+          title = filepathArray[filepathArray.length - 1];
         }
 
         if (!artist) {artist = '';}
@@ -799,6 +799,23 @@ var MSTREAMPLAYER = (function () {
   function setMedia(song, player, play) {
     console.log("setmedia called");
 
+    if (song.url.includes("https")) {
+      //console.log("Online Stream");
+      const newURL = "https://" + song.url.split(":/").pop();
+      console.log("newURL: ", newURL);
+      song.url = newURL;
+      MSTREAMAPI.getMeta(newURL, function (response, error) {
+        mstreamModule.playerStats.metadata.title = response.title;
+      });
+    } else if (song.url.includes("http")) {
+      const newURL = "http://" + song.url.split(":/").pop();
+      console.log("newURL: ", newURL);
+      song.url = newURL;
+      MSTREAMAPI.getMeta(newURL, function (response, error) {
+        mstreamModule.playerStats.metadata.title = response.title;
+      });
+    }
+
     player.playerType = "howler";
 
     player.playerObject = new Howl({
@@ -806,6 +823,7 @@ var MSTREAMPLAYER = (function () {
       volume: mstreamModule.playerStats.volume / 100,
       rate: mstreamModule.playerStats.playbackRate,
       html5: true, // Force to HTML5.  Otherwise streaming will suck
+      format: ['mp3', 'aac'], //needed for web streams
       // onplay: function() {        },
       onload: function () {
         // TODO: Force cache to start
@@ -883,7 +901,9 @@ var MSTREAMPLAYER = (function () {
       howlPlayerPlay();
     }
 
-    player.songObject = song;
+    if (!song.url.includes("http")) {
+      player.songObject = song;
+    }
   }
 
   function callMeOnStreamEnd() {

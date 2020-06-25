@@ -1058,6 +1058,20 @@ input:focus {
 #directory_bar {
   margin-bottom: 0.5rem; }
 
+.header {
+  height: auto;
+  line-height: 2rem; }
+  .header .upload_progress {
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    background: transparent;
+    border-radius: 0; }
+    .header .upload_progress .upload_progress-bar {
+      background-color: #292929;
+      height: 100%; }
+
 .directoryName {
   display: block;
   line-height: 1.2rem; }

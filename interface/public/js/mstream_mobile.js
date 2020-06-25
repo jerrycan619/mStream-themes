@@ -162,7 +162,7 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
     // Dropzone
     const myDropzone = new Dropzone(document.body, {
       previewsContainer: false,
-      clickable: false,
+      clickable: "#uploadFile",
       url: '/upload',
       maxFilesize: null
     });
@@ -197,11 +197,9 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
     });
   
     myDropzone.on('totaluploadprogress', function (percent, uploaded, size) {
-      $('.upload-progress-inner').css('width', (percent) + '%');
-      $('#progress_bar').attr('aria-valuenow', percent).css('width', percent+'%');
+      $('#upload_progress_bar').attr('aria-valuenow', percent).css('width', percent+'%');
       if (percent === 100) {
-        $('.upload-progress-inner').css('width', '0%');
-        $('#progress_bar').attr('aria-valuenow', 0).css('width', 0);
+        $('#upload_progress_bar').attr('aria-valuenow', 0).css('width', 0);
       }
     });
   

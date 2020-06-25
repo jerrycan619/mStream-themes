@@ -76,7 +76,7 @@
     <script src="/public/js/lib/butterchurn-presets-extra.js"></script>
 
     <script src="/public/js/t.js"></script>
-    <script src="/public/js/lib/dropzone.js"></script>
+    <script src="/public/js/lib/dropzone.min.js"></script>
 
     <!-- iziToast -->
     <script src="/public/js/lib/izi-toast.min.js"></script>
@@ -275,8 +275,12 @@
 
         <div class="row m-0 flex-column flex-nowrap" id="panel1">
 
-            <div class="col-auto">
+            <div class="col-auto header">
                 <!-- Header -->
+                <div class="upload_progress">
+                    <div id="upload_progress_bar" class="upload_progress-bar" role="progressbar" aria-valuenow="0"
+                        aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                </div>
                 <div class="row mr-0 ml-0 flex-row flex-nowrap align-items-center contentHeader">
                     <div class="col pl-0">
                         <span id="contentHeader_text" class="mobileHeading1"></span>
@@ -290,6 +294,10 @@
                             <div class="col-auto">
                                 <span title="Add All Songs to Playlist" class="add mdi-set mdi-playlist-plus header_icon"
                                     id='addall'></span>
+                            </div>
+                            <div class="col-auto">
+                                <span title="Upload File" class="add mdi-set mdi-upload header_icon"
+                                    id='uploadFile'></span>
                             </div>
                         </div>
                     </div>

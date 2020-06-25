@@ -139,6 +139,8 @@ exports.serveIt = config => {
   require('./modules/download.js').setup(mstream, program);
   // File Explorer API
   require('./modules/file-explorer.js').setup(mstream, program);
+  // File System Manipulation API
+  require('./modules/fileSystemManipulation.js').setup(mstream, program);
   // Load database
   dbModule.setup(mstream, program);
   if (program.federation && program.federation.folder) {

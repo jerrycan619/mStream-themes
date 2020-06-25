@@ -109,6 +109,10 @@ var MSTREAMAPI = (function () {
     makeGETRequest("/db/recursive-scan", false, callback);
   }
 
+  // mstreamModule.dbScanDir = function (directory, callback) {
+  //   makeGETRequest("/db/dir-scan", {directory: directory}, callback);
+  // }
+
   mstreamModule.makeShared = function (playlist, shareTimeInDays, callback) {
     makePOSTRequest("/shared/make-shared", { time: shareTimeInDays, playlist: playlist }, callback);
   }
@@ -143,6 +147,32 @@ var MSTREAMAPI = (function () {
 
   mstreamModule.getFederationStats = function ( callback) {
     makeGETRequest("/federation/stats", false, callback);
+  }
+
+  //File system manipulation
+  mstreamModule.renameFile = function (currentPath, newPath, metadata, callback) {
+    makePOSTRequest("/file/rename", {currentPath: currentPath, newPath: newPath,  metadata: metadata}, callback);
+  }
+
+  mstreamModule.fileDelete = function (filepath, callback) {
+    makePOSTRequest("/file/delete", { filepath: filepath }, callback);
+  }
+
+  mstreamModule.createDir = function (filepath, name, callback) {
+    makePOSTRequest("/dir/create", { filepath: filepath, name: name }, callback);
+  }
+
+  mstreamModule.removeDir = function (filepath, callback) {
+    makePOSTRequest("/dir/remove", { filepath: filepath }, callback);
+  }
+
+  mstreamModule.renameDir = function (currentPath, newPath, callback) {
+    makePOSTRequest("/dir/rename", {currentPath: currentPath, newPath: newPath}, callback);
+  }
+
+  //Online Radio Stream
+  mstreamModule.getMeta = function (url, callback) {
+    makePOSTRequest("/radio/meta", {url: url}, callback);
   }
 
   // Lastfm - Scrobble

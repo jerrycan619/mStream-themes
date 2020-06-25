@@ -61,6 +61,8 @@
     <script src="/public/js/api2.js"></script>
     <!--<script type="text/javascript" src="/public/js/mstream.js"></script>-->
     <script type="module" src="/public/js/mstream_desktop.js"></script>
+    <!-- modal.js needs to be loaded AFTER mstream_desktop.js -->
+    <script type="module" src="/public/js/modal.js"></script>
     <script src="/public/js/mstream.jukebox.js"></script>
 
     <!-- Star Rating System -->
@@ -72,7 +74,7 @@
     <script src="/public/js/lib/butterchurn-presets-extra.js"></script>
 
     <script src="/public/js/t.js"></script>
-    <script src="/public/js/lib/dropzone.js"></script>
+    <script src="/public/js/lib/dropzone.min.js"></script>
 
     <!-- iziToast -->
     <script src="/public/js/lib/izi-toast.min.js"></script>
@@ -159,7 +161,7 @@
     </div>
 
     <!-- Save Playlist Modal -->
-    <div class="modal fade" id="savePlaylist" tabindex="-1" role="dialog" aria-labelledby="savePlaylist"
+    <!-- <div class="modal fade" id="savePlaylist" tabindex="-1" role="dialog" aria-labelledby="savePlaylist"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div id="flip-modal-front" class="modal-content modal--front">
@@ -195,56 +197,31 @@
                 <div class="modal-body"><span>Playist successfully saved!</span></div>
             </div>
         </div>
-    </div>
+    </div> -->
 
-    <!-- Share Playlist Modal -->
-    <div class="modal fade" id="sharePlaylist" tabindex="-1" role="dialog" aria-labelledby="sharePlaylist"
+    <!-- Modal Template // Filled and Controlled by modal.js -->
+    <div class="modal fade" id="ModalTemplate" tabindex="-1" role="dialog" aria-labelledby="editModal"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content modal--front">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Share Playlist</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span class="mdi-set mdi-close" aria-hidden="true"></span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="share_playlist_form" class="form">
-                        <div class="input-group form-group">
-                            <div class="input-group-prepend"><span class="input-group-text">DAYS</span></div> <input
-                                id="share_time" type="number" min="1" step="1" value="14" class="form-control">
-                        </div>
-                        <label for="share_time">Expiration Time</label>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" form="share_playlist_form" value="Share Playlist"
-                        class="form__btn btn btn-primary">Share<span
-                            class="form__btn__icon mdi-set mdi-share" /></button>
-                </div>
+            <div id="ModalTemplateMain" class="modal-content ModalTemplate--front">
+                <div class="modal-header flex-column"></div>
+                <div class="modal-body"></div>
+                <div class="modal-footer flex-row justify-content-around align-items-center flex-nowrap"></div>
             </div>
-            <div class="modal-content modal--back modal--back1">
-                <div class="modal-header bg-warning">
-                    <span>Error</span>
-                </div>
-                <div class="modal-body"><span>No playlist to share!</span></div>
+            <div id="ModalTemplateError" class="modal-content modal--back ModalTemplate--back1">
+                <div class="modal-header bg-error"></div>
+                <div class="modal-body"></div>
+                <div class="modal-footer flex-row justify-content-around align-items-center flex-nowrap"></div>
             </div>
-            <div class="modal-content modal--back modal--back2">
-                <div class="modal-header bg-success">
-                    <span>Success</span>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span class="mdi-set mdi-close" aria-hidden="true"></span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <span>Copy this link and share it!</span>
-                    <input id="copyShareLink" type="text" class="form-control" readonly>
-                </div>
-                <div class="modal-footer">
-                    <button id="copyShareLinkButton" title="Copy link to Clipboard"
-                        class="form__btn btn btn-primary">Copy link to Clipboard<span
-                            class="form__btn__icon mdi-set mdi-content-copy" /></button>
-                </div>
+            <div id="ModalTemplateInfo" class="modal-content modal--back ModalTemplate--back2">
+                <div class="modal-header bg-warning"></div>
+                <div class="modal-body"></div>
+                <div class="modal-footer flex-row justify-content-around align-items-center flex-nowrap"></div>
+            </div>
+            <div id="ModalTemplateSuccess" class="modal-content modal--back ModalTemplate--back3">
+                <div class="modal-header bg-success"></div>
+                <div class="modal-body"></div>
+                <div class="modal-footer flex-row justify-content-between align-items-center flex-nowrap"></div>
             </div>
         </div>
     </div>
@@ -437,13 +414,21 @@
                             </div>
                             <div class="col-auto pr-0">
                                 <div class="row m-0">
-                                    <div class="col">
+                                    <div class="col-auto">
                                         <span title="Search" id="search-explorer"
                                             class="mdi-set mdi-text-search navbar_icon"></span>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-auto">
                                         <span title="Add All Songs to Playlist"
                                             class="add mdi-set mdi-playlist-plus navbar_icon" id='addall'></span>
+                                    </div>
+                                    <div class="col-auto">
+                                        <span title="Upload File" class="add mdi-set mdi-upload navbar_icon"
+                                            id='uploadFile'></span>
+                                    </div>
+                                    <div class="col-auto">
+                                        <span title="Create Directory" class="add mdi-set mdi-folder-plus navbar_icon"
+                                            id='createDir'></span>
                                     </div>
                                 </div>
                             </div>
@@ -469,18 +454,16 @@
                             <div class="col-sm-auto">
                                 <div class="row align-items-center h-100">
                                     <div class="col">
-                                        <button type="button" title="Save Playlist"
-                                            class="mdi-set mdi-content-save navbar_icon iconBtn" data-toggle="modal"
-                                            data-target="#savePlaylist"></button>
+                                        <button type="button" title="Save Playlist" id="savePlaylist"
+                                            class="mdi-set mdi-content-save navbar_icon iconBtn"></button>
                                     </div>
                                     <div class="col">
                                         <button type="button" title="Download Playlist" id="downloadPlaylist"
                                             class="mdi-set mdi-download-multiple navbar_icon iconBtn"></button>
                                     </div>
                                     <div class="col">
-                                        <button type="button" title="Share Playlist"
-                                            class="mdi-set mdi-share navbar_icon iconBtn" data-toggle="modal"
-                                            data-target="#sharePlaylist"></button>
+                                        <button type="button" title="Share Playlist" id="sharePlaylist"
+                                            class="mdi-set mdi-share navbar_icon iconBtn"></button>
                                     </div>
                                     <div class="col">
                                         <button title="Clear Playlist" id="clear"
