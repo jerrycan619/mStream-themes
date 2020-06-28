@@ -149,6 +149,31 @@ var MSTREAMAPI = (function () {
     makeGETRequest("/federation/stats", false, callback);
   }
 
+  //Online Radio
+  mstreamModule.addRadioStation = function (stationUrl, stationName, callback) {
+    makePOSTRequest("/radio/add-station", { stationUrl: stationUrl, stationName: stationName }, callback);
+  }
+
+  mstreamModule.getRadioStations = function (callback) {
+    makeGETRequest("/radio/get-stations", false, callback);
+  }
+
+  mstreamModule.getRadioStationById = function (id, callback) {
+    makePOSTRequest("/radio/get-station-by-id", {id: id}, callback);
+  }
+
+  mstreamModule.getRadioMeta = function (url, callback) {
+    makePOSTRequest("/radio/meta", {url: url}, callback);
+  }
+
+  mstreamModule.editRadio = function (id, stationUrl, stationName, callback) {
+    makePOSTRequest("/radio/edit", { id: id, stationUrl: stationUrl, stationName: stationName }, callback);
+  }
+
+  mstreamModule.deleteRadio = function (id, stationUrl, stationName, callback) {
+    makePOSTRequest("/radio/delete", { id: id, stationUrl: stationUrl, stationName: stationName }, callback);
+  }
+
   //File system manipulation
   mstreamModule.renameFile = function (currentPath, newPath, metadata, callback) {
     makePOSTRequest("/file/rename", {currentPath: currentPath, newPath: newPath,  metadata: metadata}, callback);
@@ -168,11 +193,6 @@ var MSTREAMAPI = (function () {
 
   mstreamModule.renameDir = function (currentPath, newPath, callback) {
     makePOSTRequest("/dir/rename", {currentPath: currentPath, newPath: newPath}, callback);
-  }
-
-  //Online Radio Stream
-  mstreamModule.getMeta = function (url, callback) {
-    makePOSTRequest("/radio/meta", {url: url}, callback);
   }
 
   // Lastfm - Scrobble
@@ -247,6 +267,44 @@ var MSTREAMAPI = (function () {
         }
       });
     }
+  }
+
+  mstreamModule.addRadioWizard = function (radioUrl, radioName, metadata, lookupMetadata) {
+
+    var newRadio = {
+      url: radioUrl,
+      type: "stream",
+      metadata: metadata
+    };
+
+    newRadio.filepath = radioName;
+    console.log(newRadio.metadata);
+
+    MSTREAMPLAYER.addRadio(newRadio);
+
+    // perform lookup
+    // if (lookupMetadata === true) {
+    //   mstreamModule.getRadioMeta(radioUrl, function (response, error) {
+    //     if (error !== false || response.error || !response) {
+    //       return;
+    //     }
+    //     console.log(response);
+    //     if (response.metadata) {
+    //         newRadio.metadata.title = response.metadata.title;
+    //         MSTREAMPLAYER.resetCurrentMetadata();
+    //     }
+    //   });
+    //   mstreamModule.lookupMetadata(rawFilepath, function (response, error) {
+    //     if (error !== false || response.error || !response) {
+    //       return;
+    //     }
+
+    //     if (response.metadata) {
+    //       newSong.metadata = response.metadata;
+    //       MSTREAMPLAYER.resetCurrentMetadata();
+    //     }
+    //   });
+    //}
   }
 
   return mstreamModule;

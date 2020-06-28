@@ -482,6 +482,11 @@ $(document).ready(function () {
 
     $('#filelist').addClass(className);
     $('.panel_one_name').html(panelName);
+    $('#panel_one_header_button2').html("");
+    $('#panel_one_header_button3').html("");
+    $('#panel_one_header_button4').html("");
+    $('#panel_one_header_button5').html("");
+    $('#uploadFile').addClass("d-none");
   }
 
   function boilerplateFailure(res, err) {
@@ -687,6 +692,7 @@ $(document).ready(function () {
     // Post the html to the filelist div
     //$('#filelist').html(filelist);
     $('#filelist').html(`<div data-simplebar class='col h-100 mh-100 p-0'><div class='row m-0 flex-column flex-nowrap w-100'>${filelist.join("")}</div></div>`);
+    $('#uploadFile').removeClass("d-none");
 
     if (previousState && previousState.previousScroll) {
       $('#filelist').scrollTop(previousState.previousScroll);
@@ -973,6 +979,143 @@ $(document).ready(function () {
   //     });
   //   });
   // });
+
+  $('.get_radio').on('click', function () {
+    getAllRadioStations();
+  });
+
+  window.getAllRadioStations = function () {
+    $('ul.left-nav-menu li').removeClass('selected');
+    $('.get_all_playlists').addClass('selected');
+    resetPanel('Radio', 'scrollBoxHeight1');
+    $('#directory_bar').hide();
+    $('#filelist').html(spinner1_html);
+    currentBrowsingList = [];
+
+    programState = [{
+      state: 'allRadioStations'
+    }];
+
+    MSTREAMAPI.getRadioStations(function (response, error) {
+      console.log(response);
+      console.log(error);
+
+      var stations = [];
+      $.each(response, function () {
+        stations.push(`<div class="col-auto p-0">
+                          <div data-stationurl="${this.url}" class="playlist_row_container row mt-1 mb-1 ml-0 mr-0 overflow-hidden align-items-center">
+                            <div data-stationurl="${this.url}" data-stationname="${this.name}" class="stationz col p-0">
+                              <div class="row m-0 align-items-center">
+                                <div class="col-auto pl-0">
+                                  <span class="mdi-set mdi-radio icon_normal"></span>
+                                </div>
+                                <div class="col pl-0 d-flex flex-column">
+                                  <span class="col_track_title">
+                                    ${escapeHtml(this.name)}
+                                  </span>
+                                  <span class="col_track_artist"></span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-auto pr-0">
+                              <span data-stationid="${this.id}" class="editRadioStation mdi-set mdi-pencil icon_normal"></span>
+                            </div>
+                          </div>
+                        </div>`);
+        currentBrowsingList.push(this);
+      });
+      // Add playlists to the left panel // <div id='downloadAllStations'>Download</div>
+      $('#filelist').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + stations.join("") + "</div></div>");
+      $('#panel_one_header_button2').html("<span title='Add radio station' id='addRadioStation' class='mdi-set mdi-plus header_button'></span>");
+      $('#panel_one_header_button3').html("<span title='Import radio stations' id='importStations' class='mdi-set mdi-import header_button'></span>");
+      $('#panel_one_header_button4').html("<span title='Export radio stations' id='downloadAllStations' class='mdi-set mdi-export header_button'></span>");
+    });
+  }
+
+  // Play a Radio Station
+  $("#filelist").on('click', '.stationz', function () {
+    MSTREAMAPI.addRadioWizard($(this).data("stationurl"), $(this).data("stationname"), {}, true);
+  });
+
+  //Download .pls with all stations
+  $("#header_row").on('click', '#downloadAllStations', function () {
+    function download(filename, storageObj) {
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(storageObj));
+        element.setAttribute('download', filename);
+      
+        element.style.display = 'none';
+        document.body.appendChild(element);
+      
+        element.click();
+      
+        document.body.removeChild(element);
+      }
+  
+      MSTREAMAPI.getRadioStations(function (response, error) {
+        console.log(response);
+        console.log(error);
+  
+        var stations = [];
+        $.each(response, function () {
+          stations.push({name:this.name , url: this.url});
+        });
+  
+        console.log("downloadArray: ", stations);
+        //console.log("downloadArrayJson: ", JSON.stringify(stations));
+
+        if (stations.length > 0) {
+          let plsFile = "[playlist]\n"
+          plsFile += "NumberOfEntries=" + stations.length + "\n";
+          $.each(stations, function( index, value ) {
+            plsFile += `
+File${index+1}=${value.url}
+Title${index+1}=${value.name}
+Length${index+1}=-1\n`;
+          });
+          plsFile += "\nVersion=2";
+          console.log("downloadPls: ", plsFile);
+          // Start file download.
+          download("mStream_radios.pls", plsFile);
+        }
+        
+      });
+  });
+
+  // Donwload all Stations in JSON
+  //TODO: download(export works), upload/import is todo
+  // $("#filelist").on('click', '#downloadAllStations', function () {
+  //   function download(filename, storageObj) {
+  //     var element = document.createElement('a');
+  //     element.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(storageObj)));
+  //     element.setAttribute('download', filename);
+    
+  //     element.style.display = 'none';
+  //     document.body.appendChild(element);
+    
+  //     element.click();
+    
+  //     document.body.removeChild(element);
+  //   }
+
+  //   MSTREAMAPI.getRadioStations(function (response, error) {
+  //     console.log(response);
+  //     console.log(error);
+
+  //     var stations = [];
+  //     $.each(response, function () {
+  //       stations.push({name:this.name , url: this.url});
+  //     });
+
+  //     console.log("downloadArray: ", stations);
+  //     console.log("downloadArrayJson: ", JSON.stringify(stations));
+
+  //     // Start file download.
+  //     download("mStream_radios.json", stations); 
+  //   });
+       
+  // });
+
 
   // Get all playlists
   $('.get_all_playlists').on('click', function () {

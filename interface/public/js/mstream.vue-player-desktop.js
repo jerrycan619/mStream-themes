@@ -89,6 +89,10 @@ new Vue({
                 return '00:00';
             }
 
+            if (this.playerStats.duration == "Infinity") {
+                return '\u221e';
+            }
+
             this.$refs.progress_bar.noUiSlider.set(((this.playerStats.currentTime / this.playerStats.duration) * 100));
 
             var curr = this.playerStats.duration;
@@ -129,11 +133,41 @@ new Vue({
             // Call these vars so updates change whenever they do
             var playerStats = this.playerStats;
             var titleX = this.met.title;
+            //console.log(playerStats);
+
+            // if (playerStats.stream && playerStats.metadata.url) {
+            //     function updateMeta(interval) {
+            //         const metaUpdateTime = setTimeout(() => {
+            //             MSTREAMAPI.getRadioMeta(playerStats.metadata.url, function (response, error) {
+            //               if (error !== false || response.error || !response) {
+            //                 return;
+            //               }
+            //               console.log(response);
+            //               if (response.metadata) {
+            //                   playerStats.metadata.title = response.metadata.title;
+            //                   MSTREAMPLAYER.resetCurrentMetadata();
+            //               }
+            //               updateMeta(interval)
+            //             });
+                      
+            //         }, interval);
+            //     };
+            //     updateMeta(15000);
+            // } else {
+            //    // clearTimeout(metaUpdateTime);
+            // }
 
             var currentSong = MSTREAMPLAYER.getCurrentSong();
 
             if (currentSong === false) {
                 return '\u00A0\u00A0\u00A0Welcome To mStream!\u00A0\u00A0\u00A0';
+            }
+
+            //Disable Player Progress Slider if stream
+            if (playerStats.stream && playerStats.metadata.url) {
+                this.$refs.progress_bar.setAttribute('disabled', true);
+            } else {
+                this.$refs.progress_bar.removeAttribute('disabled');
             }
 
             // Auto-Scroll Playlist (current playing track always visible)

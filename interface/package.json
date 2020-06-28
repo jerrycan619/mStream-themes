@@ -10,7 +10,7 @@
     "node": ">=8.0.0"
   },
   "scripts": {
-    "start": "node cli-boot-wrapper.js -j default.json",
+    "start": "node cli-boot-wrapper.js",
     "wizard": "node cli-boot-wrapper.js --wizard",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",

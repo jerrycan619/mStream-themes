@@ -160,45 +160,6 @@
         </div>
     </div>
 
-    <!-- Save Playlist Modal -->
-    <!-- <div class="modal fade" id="savePlaylist" tabindex="-1" role="dialog" aria-labelledby="savePlaylist"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div id="flip-modal-front" class="modal-content modal--front">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Save Playlist</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span class="mdi-set mdi-close" aria-hidden="true"></span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="save_playlist_form" class="form">
-                        <input id="playlist_name" class="form__input-text" type="text" required
-                            placeholder="Enter your playlist name" pattern="[a-zA-Z0-9 _-]+">
-                        <label for="playlist_name" class="form__label">Playlist name</label>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" form="save_playlist_form" value="Save Playlist"
-                        class="form__btn btn btn-primary">Save<span
-                            class="form__btn__icon mdi-set mdi-playlist-music" /></button>
-                </div>
-            </div>
-            <div id="flip-modal-back1" class="modal-content modal--back">
-                <div class="modal-header bg-warning">
-                    <span>Error</span>
-                </div>
-                <div class="modal-body"><span>No playlist to save!</span></div>
-            </div>
-            <div id="flip-modal-back2" class="modal-content modal--back">
-                <div class="modal-header bg-success">
-                    <span>Success</span>
-                </div>
-                <div class="modal-body"><span>Playist successfully saved!</span></div>
-            </div>
-        </div>
-    </div> -->
-
     <!-- Modal Template // Filled and Controlled by modal.js -->
     <div class="modal fade" id="ModalTemplate" tabindex="-1" role="dialog" aria-labelledby="editModal"
         aria-hidden="true">
@@ -328,6 +289,12 @@
                                     <span class="menu-collapsed">Rated</span>
                                 </div>
                             </a>
+                            <a href="#" class="get_radio submenu_item">
+                                <div class="d-flex w-100 justify-content-start align-items-center">
+                                    <span class="mdi-set mdi-radio-tower mr-3 navbar_icon"></span>
+                                    <span class="menu-collapsed">Radio</span>
+                                </div>
+                            </a>
                         </div>
                         <a href="#" class="search_stuff main_item flex-column align-items-start collapsed">
                             <div class="d-flex w-100 justify-content-start align-items-center">
@@ -335,6 +302,7 @@
                                 <span class="menu-collapsed">Search</span>
                             </div>
                         </a>
+                        
                         <!-- Separator with title -->
                         <!--
                         <li
@@ -392,9 +360,21 @@
             <!-- MAIN -->
             <div id="panel1" class="col-auto p-0 h-100 mstream_col1 mstream_col">
                 <div class="row m-0 flex-column flex-nowrap h-100">
-                    <div class="col-auto">
-                        <!-- Header -->
-                        <h3 class="panel_one_name noselect hide-for-small">&nbsp</h3>
+                    <div class="col-auto mt-2">
+                        <div id="header_row" class="row m-0 flex-row flex-nowrap justify-content-between">
+                            <div class="col p-0">
+                                <!-- Header -->
+                                <h3 class="panel_one_name noselect hide-for-small">&nbsp</h3>
+                            </div>
+                            <div id="panel_one_header_button2" class="col-auto"></div>
+                            <div id="panel_one_header_button3" class="col-auto"></div>
+                            <div id="panel_one_header_button4" class="col-auto"></div>
+                            <div id="panel_one_header_button5" class="col-auto"></div>
+                            <div id="panel_one_header_button1" class="col-auto">
+                                <span title='Upload File' class='add mdi-set mdi-upload header_button d-none' id='uploadFile'></span>
+                            </div>
+                        </div>
+                        
                     </div>
                     <div class="col-auto">
                         <!-- Directory Bar -->
@@ -422,10 +402,10 @@
                                         <span title="Add All Songs to Playlist"
                                             class="add mdi-set mdi-playlist-plus navbar_icon" id='addall'></span>
                                     </div>
-                                    <div class="col-auto">
+                                    <!-- <div class="col-auto">
                                         <span title="Upload File" class="add mdi-set mdi-upload navbar_icon"
                                             id='uploadFile'></span>
-                                    </div>
+                                    </div> -->
                                     <div class="col-auto">
                                         <span title="Create Directory" class="add mdi-set mdi-folder-plus navbar_icon"
                                             id='createDir'></span>
@@ -446,12 +426,12 @@
 
             <div id="panel2" class="col-sm-auto p-0 h-100 mstream_col2 mstream_col">
                 <div class="large-12 columns playlistColumn" id="playlist_container">
-                    <div class="columnHeader noselect">
-                        <div class="row">
-                            <div class="col-sm">
+                    <div class="columnHeader noselect mt-2">
+                        <div class="row m-0 flex-row flex-nowrap justify-content-between">
+                            <div class="col p-0">
                                 <h3 class="hide-for-small">Playlist</h3>
                             </div>
-                            <div class="col-sm-auto">
+                            <div class="col-auto p-0">
                                 <div class="row align-items-center h-100">
                                     <div class="col">
                                         <button type="button" title="Save Playlist" id="savePlaylist"
@@ -478,7 +458,7 @@
 
                     <!-- This section is tied into the MSTREAMPLAYER module with Vue -->
                     <!-- see file: mstream.vue-player-controls.js -->
-
+                    <!--playlist_scrollBox no drag suport?-->
                     <div id="playlist_scrollBox" class="playlist_scrollBox" data-simplebar>
                         <draggable :list="playlist" :options="{handle:'.drag-handle'}" @end="checkMove" id="playlist">
                             <div v-for="(song, index) in playlist" is="playlist-item" :key="index" :index="index"

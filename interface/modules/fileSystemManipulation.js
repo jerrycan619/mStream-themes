@@ -1,23 +1,9 @@
 const fs = require("fs-extra");
 
-var internetradio = require('node-internet-radio');
-
 //To write id3 tags
 const NodeID3 = require('node-id3');
 
 exports.setup = function(mstream, program) {
-  mstream.post('/radio/meta', function(req, res){
-    console.log("getRadioMetadata");
-    const url = req.body.url;
-    internetradio.getStationInfo(url, function(error, station) {
-      console.log(station);
-      console.log(error);
-      if (station) {
-        res.json({ title: station.title });
-      }
-    });
-  });
-
 
   mstream.post('/file/rename', function(req, res){
     console.log("renameFile");

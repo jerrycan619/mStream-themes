@@ -963,6 +963,13 @@ input:focus {
 .panel_one_name {
   color: #fff; }
 
+.header_button {
+  font-size: 1.75rem;
+  color: #b3b3b3; }
+  .header_button:hover {
+    cursor: pointer;
+    color: #fff; }
+
 #sidebar-container {
   overflow-y: auto;
   background-color: rgba(0, 0, 0, 0.8);
@@ -1503,7 +1510,6 @@ input:focus {
   overflow-x: hidden; }
   .playlist_scrollBox .playlist-item {
     padding: 0;
-    height: 3rem;
     overflow: hidden; }
   .playlist_scrollBox .song-button-box {
     margin: 0;

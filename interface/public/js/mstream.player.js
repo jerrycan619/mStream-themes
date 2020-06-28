@@ -90,6 +90,29 @@ var MSTREAMPLAYER = (function () {
     }, 1000);
   }
 
+  let metaUpdateTimer = 0;
+  function autoUpdateStreamMeta(interval) {
+    metaUpdateTimer = setTimeout(() => {
+        MSTREAMAPI.getRadioMeta( mstreamModule.playerStats.metadata.url, function (response, error) {
+          if (error !== false || response.error || !response) {
+            return;
+          }
+          console.log(response);
+          if (response.metadata) {
+            if (response.metadata.title) { 
+              mstreamModule.playerStats.metadata.title = response.metadata.title; 
+              mstreamModule.playerStats.metadata.artist = response.metadata.artist;
+            } 
+            mstreamModule.playerStats.metadata.album = response.metadata.album;
+            //MSTREAMPLAYER.resetCurrentMetadata();
+            updateMediaSession();
+          }
+          autoUpdateStreamMeta(interval)
+        });
+      
+    }, interval);
+  }
+
   // Playlist variables
   mstreamModule.positionCache = { val: -1 };
   mstreamModule.playlist = [];
@@ -175,6 +198,16 @@ var MSTREAMPLAYER = (function () {
     }
 
     return addSongToPlaylist(audioData);
+  };
+
+  mstreamModule.addRadio = function (radioData) {
+    if (!radioData.url || radioData.url == false) {
+      return false;
+    }
+
+    radioData.error = false;
+
+    return addSongToPlaylist(radioData);
   };
 
   mstreamModule.getRandomSong = function (callback) {
@@ -580,12 +613,12 @@ var MSTREAMPLAYER = (function () {
 
     // Song is cached
     if (otherPlayerObject.songObject === mstreamModule.playlist[position]) {
-      // console.log('USING CACHED SONG');
+      console.log('USING CACHED SONG');
       flipFlop();
       // Play
       mstreamModule.playPause();
     } else {
-      // console.log('DID NOT USE CACHE');
+      console.log('DID NOT USE CACHE');
       setMedia(mstreamModule.playlist[position], localPlayerObject, true);
     }
 
@@ -595,24 +628,39 @@ var MSTREAMPLAYER = (function () {
       mstreamModule.resetCurrentMetadata();
     }
 
-    const currentSong = MSTREAMPLAYER.getCurrentSong();
-    mstreamModule.playerStats.metadata.filepath = currentSong.filepath;
+    //console.log("Playlistposition",mstreamModule.playlist[position]);
+    if (mstreamModule.playlist[position].type === "stream") {
+      mstreamModule.playerStats.stream = true;
+      mstreamModule.playerStats.metadata.url = mstreamModule.playlist[position].url;
+      if(metaUpdateTimer) {clearTimeout(metaUpdateTimer); console.log("Cleared streamMetaUpdate Timer");}
+      // Get every 15s metadata from stream
+      autoUpdateStreamMeta(15000);
+    } else {
+      if(metaUpdateTimer) {clearTimeout(metaUpdateTimer); console.log("Cleared streamMetaUpdate Timer");}
+      mstreamModule.playerStats.stream = false;
+      mstreamModule.playerStats.metadata.url = '';
+
+      //Start LastFM update (nowplaying + scrobble)
+      lPlayer.playerObject.once("play", function() {
+        updateLastfm();
+      })
+    }
+
+    //const currentSong = MSTREAMPLAYER.getCurrentSong();
+    //console.log(currentSong);
+    //mstreamModule.playerStats.metadata.filepath = currentSong.filepath;
 
     mstreamModule.playerStats.loading = true;
-    //updateMediaSession();
-
-    //Start LastFM update (nowplaying + scrobble)
-    lPlayer.playerObject.once("play", function() {
-      updateLastfm();
-    })
-    
     updateMediaSession();
-
-    // connect to visualizer
+  
+    //connect to visualizer
     if (VIZ) {
       var audioCtx = VIZ.get();
       try {
         var audioNode = lPlayer.playerObject._sounds[0]._node;
+        audioNode.crossOrigin = 'anonymous'; //Needed for webstreams (online radio) // TODO: some (e.g. BBC) not working with this
+        //console.log(audioNode);
+
         if (!audioNode.previouslyConnectedViz) {
           var analyser = audioCtx.createAnalyser();
           var source = audioCtx.createMediaElementSource(audioNode);
@@ -622,11 +670,9 @@ var MSTREAMPLAYER = (function () {
           audioNode.previouslyConnectedViz = true;
         }
       } catch (err) {
-        console.log(err);
-      }
+        console.log("catched:", err);
+      } 
     }
-
-    
 
     // TODO: This is a mess, figure out a better way
     var newOtherPlayerObject = getOtherPlayer();
@@ -769,6 +815,7 @@ var MSTREAMPLAYER = (function () {
     currentTime: 0,
     playing: false,
     loading: false,
+    stream: false,
     // repeat: false,
     shuffle: false,
     volume: 100,
@@ -780,6 +827,7 @@ var MSTREAMPLAYER = (function () {
       year: false,
       "album-art": false,
       filepath: false,
+      url: '',
     },
   };
 
@@ -798,23 +846,7 @@ var MSTREAMPLAYER = (function () {
 
   function setMedia(song, player, play) {
     console.log("setmedia called");
-
-    if (song.url.includes("https")) {
-      //console.log("Online Stream");
-      const newURL = "https://" + song.url.split(":/").pop();
-      console.log("newURL: ", newURL);
-      song.url = newURL;
-      MSTREAMAPI.getMeta(newURL, function (response, error) {
-        mstreamModule.playerStats.metadata.title = response.title;
-      });
-    } else if (song.url.includes("http")) {
-      const newURL = "http://" + song.url.split(":/").pop();
-      console.log("newURL: ", newURL);
-      song.url = newURL;
-      MSTREAMAPI.getMeta(newURL, function (response, error) {
-        mstreamModule.playerStats.metadata.title = response.title;
-      });
-    }
+    //console.log("song.url: ", song.url);
 
     player.playerType = "howler";
 
@@ -824,6 +856,12 @@ var MSTREAMPLAYER = (function () {
       rate: mstreamModule.playerStats.playbackRate,
       html5: true, // Force to HTML5.  Otherwise streaming will suck
       format: ['mp3', 'aac'], //needed for web streams
+      xhr: {
+        method: 'GET',
+        headers: {
+        },
+        withCredentials: true,
+      },
       // onplay: function() {        },
       onload: function () {
         // TODO: Force cache to start
@@ -871,9 +909,9 @@ var MSTREAMPLAYER = (function () {
         //   sound.play();
         // });
       },
-      onloaderror: function () {
+      onloaderror: function (id, err) {
         // Mark Song As Error
-        console.log("SONG ERROR");
+        console.log("SONG ERROR", err);
         song.error = true;
         if (iziToast) {
           iziToast.error({
@@ -895,15 +933,12 @@ var MSTREAMPLAYER = (function () {
         }
       },
     });
-    
 
     if (play == true) {
       howlPlayerPlay();
     }
 
-    if (!song.url.includes("http")) {
-      player.songObject = song;
-    }
+    player.songObject = song;
   }
 
   function callMeOnStreamEnd() {

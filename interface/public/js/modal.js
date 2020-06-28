@@ -672,7 +672,7 @@ $(document).ready(function () {
     </div>`;
 
     ModalTemplateMainSet("Save Playlist", "", body, footer);
-    $('#ModalTemplate').modal({show: true});
+    $('#ModalTemplate').modal('toggle');
   });
 
   $("#ModalTemplate").on("click", "#savePlaylist", function (e) {
@@ -734,5 +734,324 @@ $(document).ready(function () {
   //#####################################################################################
   //############################# Rate Song Modal (mobile only)##########################
   //#####################################################################################
+
+  //#####################################################################################
+  //################################### Radio Station ###################################
+  //#####################################################################################
+  $("#header_row").on('click', '#addRadioStation', function () {
+    const body = `
+    <form id="add_radio_form" class="form">
+      <div class="input-group form-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Name</span>
+        </div>
+        <input id="addRadio_name" type="text" class="form-control">
+      </div>
+      <div class="input-group form-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">URL</span>
+        </div>
+        <input id="addRadio_url" type="text" class="form-control">
+      </div>
+    </form>`;
+    const footer = `
+    <div class="col p-0">
+      <button id="saveRadio" type="submit" form="add_radio_form" value="saveRadio" class="form__btn btn btn-primary">
+        Add Radio
+        <span class="form__btn__icon mdi-set mdi-radio" />
+      </button>
+    </div>`;
+
+    ModalTemplateMainSet("Add Radio Stream", "", body, footer);
+    $('#ModalTemplate').modal('toggle');
+  });
+
+  $("#ModalTemplate").on("click", "#saveRadio", function (e) {
+    e.preventDefault();
+    //Double check
+    if($(this).val() === "saveRadio") {
+      const radioName = $('#addRadio_name').val();
+      const radioUrl = $('#addRadio_url').val();
+      console.log("add radioName:", radioName);
+      console.log("add radioUrl:", radioUrl);
+
+      MSTREAMAPI.addRadioStation(radioUrl, radioName, function (response, error) {
+        console.log(response);
+        console.log(error);
+        if(response.status === "success") {
+          const body = `
+            <span>Radio name: ${response.name}</span>
+            <span>Radio url: ${response.url}</span>`;
+
+          const footer = `
+          <button id="cancel" type="submit" form="editDir_form" value="cancel"
+          class="form__btn btn btn-secondary" data-dismiss="modal">Close<span
+              class="form__btn__icon mdi-set mdi-close"></span>
+          </button> `;
+
+          ModalTemplateSuccessSet("Success",body,footer);
+
+          //Refresh
+          getAllRadioStations();
+        }
+        if(response.status === "info") {
+          const body = `<span>${response.info}</span>`;
+          ModalTemplateInfoSet("Info",body,"", 3000);
+        }
+        if(response.status === "error") {
+          const body = `<span>${response.error}</span>`;
+          ModalTemplateErrorSet("Error",body,"");
+        }
+      });
+    }
+  });
+
+  $("#filelist").on('click', '.editRadioStation', function () {
+    const stationID = $(this).data("stationid");
+
+    MSTREAMAPI.getRadioStationById(stationID, function (response, error) {
+      console.log(response);
+      console.log(error);
+
+      if (error === false) {
+        const stationName = response.stationName;
+        const stationURL = response.stationUrl;
+      
+        const body = `
+        <form id="edit_radio_form" class="form">
+        <input id="editRadio_id" value="${stationID}" type="hidden" >
+          <div class="input-group form-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Name</span>
+            </div>
+            <input id="editRadio_name" value="${stationName}" type="text" class="form-control">
+          </div>
+          <div class="input-group form-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">URL</span>
+            </div>
+            <input id="editRadio_url" value="${stationURL}" type="text" class="form-control">
+          </div>
+        </form>`;
+        const footer = `
+        <div class="col-auto p-0">
+          <button id="deleteRadio" type="submit" form="edit_radio_form" value="deleteRadio"
+              class="form__btn btn btn-danger mdi-set mdi-delete">
+          </button>
+        </div>
+        <div class="col p-0"></div>
+        <div class="col-auto p-0">
+          <button id="cancel" type="submit" form="edit_radio_form" value="cancel"
+            class="form__btn btn btn-secondary" data-dismiss="modal">
+            Cancel
+            <span class="form__btn__icon mdi-set mdi-cancel"></span>
+          </button>  
+        </div>
+        <div class="col-auto p-0">
+          <button id="editRadio" type="submit" form="edit_radio_form" value="editRadio"
+              class="form__btn btn btn-primary">
+              Save
+              <span class="form__btn__icon mdi-set mdi-content-save"></span>
+          </button>
+        </div>`;
+
+        ModalTemplateMainSet("Edit Radio Stream", "", body, footer);
+        $('#ModalTemplate').modal('toggle');
+      }
+    
+    });
+  });
+
+  $("#ModalTemplate").on("click", "#editRadio", function (e) {
+    e.preventDefault();
+    //Double check
+    if($(this).val() === "editRadio") {
+      const stationID = $('#editRadio_id').val();
+      const stationName = $('#editRadio_name').val();
+      const stationUrl = $('#editRadio_url').val();
+      MSTREAMAPI.editRadio(stationID, stationUrl, stationName, function (response, error) {
+        console.log(response);
+        console.log(error);
+        if(response.status === "success") {
+          const body = `
+            <span>Updated Radio name: ${response.name}</span>
+            <span>Updated Radio url: ${response.url}</span>`;
+
+          const footer = `
+          <button id="cancel" type="submit" form="edit_radio_form" value="cancel"
+          class="form__btn btn btn-secondary" data-dismiss="modal">Close<span
+              class="form__btn__icon mdi-set mdi-close"></span>
+          </button> `;
+
+          ModalTemplateSuccessSet("Success",body,footer);
+
+          //Refresh
+          getAllRadioStations();
+        }
+        if(response.status === "info") {
+          const body = `<span>${response.info}</span>`;
+          ModalTemplateInfoSet("Info",body,"", 3000);
+        }
+        if(response.status === "error") {
+          const body = `<span>${response.error}</span>`;
+          ModalTemplateErrorSet("Error",body,"");
+        }
+      });
+    }
+  });
+
+  $("#ModalTemplate").on("click", "#deleteRadio", function (e) {
+    e.preventDefault();
+    //Double check
+    if($(this).val() === "deleteRadio") {
+      const stationName = $('#editRadio_name').val();
+      const stationUrl = $('#editRadio_url').val();
+
+      const body = `<span>Delete: ${stationName}</span> <br> <span>${stationUrl} ?</span>`;
+      const footer = `
+      <div class="col p-0">
+        <button id="cancel" type="submit" form="edit_radio_form" value="cancel"
+          class="form__btn btn btn-secondary" data-dismiss="modal">
+          Cancel
+          <span class="form__btn__icon mdi-set mdi-cancel"></span>
+        </button>  
+      </div>
+      <div class="col p-0">
+        <button id="confirmDeleteRadio" type="submit" form="edit_radio_form" value="confirmDeleteRadio"
+            class="form__btn btn btn-danger mdi-set mdi-delete">
+            Delete
+        </button>
+      </div>`;
+
+      ModalTemplateInfoSet("Confirm",body,footer);
+    }
+  });
+      
+  $("#ModalTemplate").on("click", "#confirmDeleteRadio", function (e) {
+    e.preventDefault();
+    //Double check
+    if($(this).val() === "confirmDeleteRadio") {
+      const stationID = $('#editRadio_id').val();
+      const stationName = $('#editRadio_name').val();
+      const stationUrl = $('#editRadio_url').val();
+
+      MSTREAMAPI.deleteRadio(stationID, stationUrl, stationName, function (response, error) {
+        if(response.status === "success") {
+          const body = `<span>Successfully deleted: ${response.name}</span><br><span>${response.url}</span>`;
+          const footer = `
+          <div class="col p-0">
+            <button id="cancel" type="submit" form="edit_radio_form" value="cancel"
+              class="form__btn btn btn-secondary" data-dismiss="modal">
+              Close
+              <span class="form__btn__icon mdi-set mdi-close"></span>
+            </button>  
+          </div>`;
+          ModalTemplateSuccessSet("Success",body,footer);
+          ModalTemplateRotate("info", 180);
+          
+          //Refresh
+          getAllRadioStations();
+        }
+        if(response.status === "info") {
+          const body = `<span>${response.info}</span>`;
+          ModalTemplateInfoSet("Info",body,"");
+        }
+        if(response.status === "error") {
+          const body = `<span>${response.error}</span>`;
+          ModalTemplateErrorSet("Error",body,"");
+        }
+      });
+    }
+  });
+
+  $("#header_row").on('click', '#importStations', function () {
+    const body = `
+      <form id="edit_radio_form" class="form">
+        <input type="file" accept=".pls" id="importRadioFile" value="importRadioFile" />
+      </form>`;
+    const footer = `
+      <div class="col-auto p-0">
+        <button id="cancel" type="submit" form="edit_radio_form" value="cancel"
+          class="form__btn btn btn-secondary" data-dismiss="modal">
+          Cancel
+          <span class="form__btn__icon mdi-set mdi-cancel"></span>
+        </button>  
+      </div>
+      <div class="col-auto p-0">
+        <button id="importRadios" class="form__btn btn btn-primary" value="importRadios">
+          Import
+          <span class="form__btn__icon mdi-set mdi-import"></span>
+        </button>
+      </div>`;
+
+    ModalTemplateMainSet("Import Stations", "", body, footer);
+    $('#ModalTemplate').modal('toggle');
+  });
+
+  $("#ModalTemplate").on("click", "#importRadios", function (e) {
+    e.preventDefault();
+    //Double check
+    if($(this).val() === "importRadios") {
+      var files = document.getElementById('importRadioFile').files;
+      //console.log(files);
+      if (files.length <= 0) {
+        return false;
+      }
+
+      var fr = new FileReader();
+
+      fr.onload = function(e) { 
+        //console.log(e);
+        const lines = e.target.result.split("\n");
+        //console.log("lines: ", lines);
+        if (lines[0] !== "[playlist]") {
+          console.log("Unable to parse file");
+          return;
+        }
+        const numberOfEntrys = lines[1].split("=").pop();
+        console.log("numberOfEntrys: ", numberOfEntrys);
+        if (!numberOfEntrys) {
+          console.log("Unable to parse file");
+          return;
+        }
+
+        for (let i = 1; i <= numberOfEntrys; i++) {        
+          let stationName = '';
+          let stationUrl = '';
+          $.each(lines, function(index, value) {
+            if (value.indexOf("Title" + i) >= 0) {
+              stationName = lines[index].substring(lines[index].indexOf('=')+1); //split-string-only-on-first-instance-of-specified-character (because url can contain multiple "=")
+            }
+            if (value.indexOf("File" + i) >= 0) {
+              stationUrl = lines[index].substring(lines[index].indexOf('=')+1);
+            }
+          });
+          //console.log("add name: ", stationName);
+          //console.log("add url: ", stationUrl);
+          MSTREAMAPI.addRadioStation(stationUrl, stationName, function (response, error) {
+            //console.log(response);
+            //console.log(error);
+          });
+        }
+        //TODO: Error handleing
+        const body = `<span>Successfully Imported!</span>`;
+        const footer = `
+        <div class="col p-0">
+          <button id="cancel" type="submit" form="edit_radio_form" value="cancel"
+            class="form__btn btn btn-secondary" data-dismiss="modal">
+            Close
+            <span class="form__btn__icon mdi-set mdi-close"></span>
+          </button>  
+        </div>`;
+        ModalTemplateSuccessSet("Success",body,footer);
+        
+        //Refresh
+        getAllRadioStations();
+
+      }
+
+      fr.readAsText(files.item(0));
+    }
+  });
 
 });
