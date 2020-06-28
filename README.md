@@ -15,6 +15,7 @@ Please visit: https://github.com/IrosTheBeggar/mStream/
 ### Install:
 copy the content of the interface directory into mStream root folder and replace all files if you get asked.<br/>
 Your existing config / database remain untouched, but to be 100% sure just copy your mStream folder to a different backup location.
+and then run: "npm install"
 
 <br/><br/>
 # ---------------------------------------------
