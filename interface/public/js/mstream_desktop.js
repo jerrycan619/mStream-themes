@@ -57,7 +57,7 @@ function createMusicfileHtml(fileLocation, title, titleClass, showEdit) {
   if (showEdit) {
     editButton = `
     <div class="col">
-      <span data-file_location="${fileLocation}" class="mdi-set mdi-pencil editSong"></span>
+      <span onclick="editSongModal('${fileLocation}');" class="mdi-set mdi-pencil editSong"></span>
     </div>`;
   }
   
@@ -465,28 +465,28 @@ $(document).ready(function () {
 
   ////////////////////////////////   Administrative stuff
   // when you click an mp3, add it to now playing
-  $("#filelist").on('click', 'div.filez', function () {
+  $("#fillContent").on('click', 'div.filez', function () {
     MSTREAMAPI.addSongWizard($(this).data("file_location"), {}, true);
   });
 
   // Handle panel stuff
   function resetPanel(panelName, className) {
-    $('#filelist').empty();
+    $('#fillContent').empty();
     $('#directory_bar').show();
 
     $('#search_folders').val('');
     $('.directoryName').html('');
 
-    $('#filelist').removeClass('scrollBoxHeight1');
-    $('#filelist').removeClass('scrollBoxHeight2');
+    $('#fillContent').removeClass('scrollBoxHeight1');
+    $('#fillContent').removeClass('scrollBoxHeight2');
 
-    $('#filelist').addClass(className);
+    $('#fillContent').addClass(className);
     $('.panel_one_name').html(panelName);
     $('#panel_one_header_button2').html("");
     $('#panel_one_header_button3').html("");
     $('#panel_one_header_button4').html("");
     $('#panel_one_header_button5').html("");
-    $('#uploadFile').addClass("d-none");
+    $('#uploadFile').parent().addClass("d-none");
   }
 
   function boilerplateFailure(res, err) {
@@ -538,28 +538,28 @@ $(document).ready(function () {
   $('.get_file_explorer').on('click', loadFileExplorer);
 
   // when you click on a directory, go to that directory
-  $("#filelist").on('click', 'div.dirz', function () {
+  $("#fillContent").on('click', 'div.dirz', function () {
     fileExplorerArray.push($(this).data("directory"));
     programState.push({
       state: 'fileExplorer',
-      previousScroll: document.getElementById('filelist').scrollTop,
+      previousScroll: document.getElementById('fillContent').scrollTop,
       previousSearch: $('#search_folders').val()
     });
     senddir();
   });
 
   // when you click on a playlist, go to that playlist
-  $("#filelist").on('click', 'div.fileplaylistz', function () {
+  $("#fillContent").on('click', 'div.fileplaylistz', function () {
     fileExplorerArray.push($(this).data("directory"));
     programState.push({
       state: 'fileExplorer',
-      previousScroll: document.getElementById('filelist').scrollTop,
+      previousScroll: document.getElementById('fillContent').scrollTop,
       previousSearch: $('#search_folders').val()
     });
     var directoryString = getFileExplorerPath();
 
     $('.directoryName').html('/' + directoryString.substring(0, directoryString.length - 1));
-    $('#filelist').html(spinner1_html);
+    $('#fillContent').html(spinner1_html);
 
     MSTREAMAPI.loadFileplaylist(directoryString, function (response, error) {
       if (error !== false) {
@@ -611,8 +611,8 @@ $(document).ready(function () {
     }
 
     $('.directoryName').html(displayString);
-    //$('#filelist').html('<div class="loading-screen"><svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="spinner-path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle></svg></div>');
-    $('#filelist').html(spinner1_html);
+    //$('#fillContent').html('<div class="loading-screen"><svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="spinner-path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle></svg></div>');
+    $('#fillContent').html(spinner1_html);
 
     MSTREAMAPI.dirparser(directoryString, false, function (response, error) {
       if (error !== false) {
@@ -640,7 +640,7 @@ $(document).ready(function () {
     $.each(currentBrowsingList, function () {
       const fileLocation = this.path || response.path + this.name;
 
-      //if in vpath root don't display dir create / edit buttons
+      //in vpath root don't display dir create / edit buttons
       let hideButtonClass = '';
       if(fileLocation.startsWith("/")) {
         $('#createDir').parent().addClass('d-none');
@@ -673,7 +673,7 @@ $(document).ready(function () {
                                 <span data-directory="${this.name}" title="Download Directory" class="downloadDir mdi-set mdi-download"></span>
                               </div>
                               <div class="col ${hideButtonClass}">
-                                <span data-directory="${this.name}" title="Edit Directory" class="editDir mdi-set mdi-pencil"></span>
+                                <span onclick="editDirModal(this);" data-directory="${this.name}" title="Edit Directory" class="editDir mdi-set mdi-pencil"></span>
                               </div>
                             </div>
                           </div>
@@ -690,12 +690,12 @@ $(document).ready(function () {
     });
 
     // Post the html to the filelist div
-    //$('#filelist').html(filelist);
-    $('#filelist').html(`<div data-simplebar class='col h-100 mh-100 p-0'><div class='row m-0 flex-column flex-nowrap w-100'>${filelist.join("")}</div></div>`);
-    $('#uploadFile').removeClass("d-none");
+    //$('#fillContent').html(filelist);
+    $('#fillContent').html(`<div data-simplebar class='col h-100 mh-100 p-0'><div class='row m-0 flex-column flex-nowrap w-100'>${filelist.join("")}</div></div>`);
+    $('#uploadFile').parent().removeClass("d-none");
 
     if (previousState && previousState.previousScroll) {
-      $('#filelist').scrollTop(previousState.previousScroll);
+      $('#fillContent').scrollTop(previousState.previousScroll);
     }
 
     if (previousState && previousState.previousSearch) {
@@ -824,7 +824,7 @@ $(document).ready(function () {
     });
 
     // Post the html to the filelist div
-    $('#filelist').html("<div data-simplebar class='col p-0 h-100 mh-100'><div class='row m-0 flex-column flex-nowrap w-100'>" + filelist.join("") + "</div></div>");
+    $('#fillContent').html("<div data-simplebar class='col p-0 h-100 mh-100'><div class='row m-0 flex-column flex-nowrap w-100'>" + filelist.join("") + "</div></div>");
     ll.update();
   });
 
@@ -865,7 +865,7 @@ $(document).ready(function () {
     }
   }
 
-  $("#filelist").on('click', '.recursiveAddDir', function () {
+  $("#fillContent").on('click', '.recursiveAddDir', function () {
     var directoryString = getDirectoryString($(this));
     MSTREAMAPI.recursiveScan(directoryString, function (res, err) {
       if (err !== false) {
@@ -875,7 +875,7 @@ $(document).ready(function () {
     });
   });
 
-  $("#filelist").on('click', '.addFileplaylist', function () {
+  $("#fillContent").on('click', '.addFileplaylist', function () {
     var playlistPath = getDirectoryString($(this));
     MSTREAMAPI.loadFileplaylistPaths(playlistPath, function (res, err) {
       if (err !== false) {
@@ -885,7 +885,7 @@ $(document).ready(function () {
     });
   });
 
-  $("#filelist").on('click', '.downloadDir', function () {
+  $("#fillContent").on('click', '.downloadDir', function () {
     var directoryString = getDirectoryString($(this));
 
     // Use key if necessary
@@ -903,7 +903,7 @@ $(document).ready(function () {
     $('#downform').empty();
   });
 
-  $("#filelist").on('click', '.downloadFileplaylist', function () {
+  $("#fillContent").on('click', '.downloadFileplaylist', function () {
     var playlistPath = getDirectoryString($(this));
 
     // Use key if necessary
@@ -989,7 +989,7 @@ $(document).ready(function () {
     $('.get_all_playlists').addClass('selected');
     resetPanel('Radio', 'scrollBoxHeight1');
     $('#directory_bar').hide();
-    $('#filelist').html(spinner1_html);
+    $('#fillContent').html(spinner1_html);
     currentBrowsingList = [];
 
     programState = [{
@@ -1025,7 +1025,7 @@ $(document).ready(function () {
         currentBrowsingList.push(this);
       });
       // Add playlists to the left panel // <div id='downloadAllStations'>Download</div>
-      $('#filelist').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + stations.join("") + "</div></div>");
+      $('#fillContent').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + stations.join("") + "</div></div>");
       $('#panel_one_header_button2').html("<span title='Add radio station' id='addRadioStation' class='mdi-set mdi-plus header_button'></span>");
       $('#panel_one_header_button3').html("<span title='Import radio stations' id='importStations' class='mdi-set mdi-import header_button'></span>");
       $('#panel_one_header_button4').html("<span title='Export radio stations' id='downloadAllStations' class='mdi-set mdi-export header_button'></span>");
@@ -1033,7 +1033,7 @@ $(document).ready(function () {
   }
 
   // Play a Radio Station
-  $("#filelist").on('click', '.stationz', function () {
+  $("#fillContent").on('click', '.stationz', function () {
     MSTREAMAPI.addRadioWizard($(this).data("stationurl"), $(this).data("stationname"), {}, true);
   });
 
@@ -1084,7 +1084,7 @@ Length${index+1}=-1\n`;
 
   // Donwload all Stations in JSON
   //TODO: download(export works), upload/import is todo
-  // $("#filelist").on('click', '#downloadAllStations', function () {
+  // $("#fillContent").on('click', '#downloadAllStations', function () {
   //   function download(filename, storageObj) {
   //     var element = document.createElement('a');
   //     element.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(storageObj)));
@@ -1126,7 +1126,7 @@ Length${index+1}=-1\n`;
     $('ul.left-nav-menu li').removeClass('selected');
     $('.get_all_playlists').addClass('selected');
     resetPanel('Playlists', 'scrollBoxHeight1');
-    $('#filelist').html(spinner1_html);
+    $('#fillContent').html(spinner1_html);
     currentBrowsingList = [];
 
     programState = [{
@@ -1135,7 +1135,7 @@ Length${index+1}=-1\n`;
 
     MSTREAMAPI.getAllPlaylists(function (response, error) {
       if (error !== false) {
-        $('#filelist').html('<div>Server call failed</div>');
+        $('#fillContent').html('<div>Server call failed</div>');
         return boilerplateFailure(response, error);
       }
 
@@ -1169,10 +1169,10 @@ Length${index+1}=-1\n`;
         VUEPLAYER.playlists.push(this);
       });
       // Add playlists to the left panel
-      $('#filelist').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + playlists.join("") + "</div></div>");
+      $('#fillContent').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + playlists.join("") + "</div></div>");
 
       if (previousState && previousState.previousScroll) {
-        $('#filelist').scrollTop(previousState.previousScroll);
+        $('#fillContent').scrollTop(previousState.previousScroll);
       }
 
       if (previousState && previousState.previousSearch) {
@@ -1182,7 +1182,7 @@ Length${index+1}=-1\n`;
   }
 
   // delete playlist
-  $("#filelist").on('click', '.deletePlaylist', function () {
+  $("#fillContent").on('click', '.deletePlaylist', function () {
     var playlistname = decodeURIComponent($(this).data('playlistname'));
 
     iziToast.question({
@@ -1216,7 +1216,7 @@ Length${index+1}=-1\n`;
     });
   });
 
-  $("#filelist").on('click', '.removePlaylistSong', function () {
+  $("#fillContent").on('click', '.removePlaylistSong', function () {
     var lokiId = $(this).data('lokiid');
     MSTREAMAPI.removePlaylistSong(lokiId, function (response, error) {
       if (error !== false) {
@@ -1227,17 +1227,17 @@ Length${index+1}=-1\n`;
   });
 
   // load up a playlist
-  $("#filelist").on('click', '.playlistz', function () {
+  $("#fillContent").on('click', '.playlistz', function () {
     var playlistname = decodeURIComponent($(this).data('playlistname'));
     var name = $('.col_track_title', this).html();
     $('.directoryName').html('Playlist: ' + name);
-    $('#filelist').html(spinner1_html);
+    $('#fillContent').html(spinner1_html);
     currentBrowsingList = [];
 
     programState.push({
       state: 'playlist',
       name: playlistname,
-      previousScroll: document.getElementById('filelist').scrollTop,
+      previousScroll: document.getElementById('fillContent').scrollTop,
       previousSearch: $('#search_folders').val()
     });
     $('#search_folders').val('');
@@ -1245,7 +1245,7 @@ Length${index+1}=-1\n`;
 
     MSTREAMAPI.loadPlaylist(playlistname, function (response, error) {
       if (error !== false) {
-        $('#filelist').html('<div>Server call failed</div>');
+        $('#fillContent').html('<div>Server call failed</div>');
         return boilerplateFailure(response, error);
       }
 
@@ -1313,7 +1313,7 @@ Length${index+1}=-1\n`;
 
       });
 
-      $('#filelist').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + files.join("") + "</div></div>");
+      $('#fillContent').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + files.join("") + "</div></div>");
       // update lazy load plugin
       ll.update();
     });
@@ -1355,7 +1355,7 @@ Length${index+1}=-1\n`;
     resetPanel('Mobile Apps', 'scrollBoxHeight2');
     $('#directory_bar').hide();
 
-    $('#filelist').html("\
+    $('#fillContent').html("\
       <div class='mobile-links'>\
         <a target='_blank' href='https://play.google.com/store/apps/details?id=mstream.music&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>\
         <div class='mobile-placeholder'>&nbsp;</div>\
@@ -1377,29 +1377,29 @@ Length${index+1}=-1\n`;
     $('ul.left-nav-menu li').removeClass('selected');
     $('.db-panel').addClass('selected');
     resetPanel('Database', 'scrollBoxHeight2');
-    $('#filelist').html('<div class="loading-screen"><svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="spinner-path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle></svg></div>');
+    $('#fillContent').html('<div class="loading-screen"><svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="spinner-path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle></svg></div>');
     $('#directory_bar').hide();
     currentBrowsingList = [];
 
     MSTREAMAPI.dbStatus(function (response, error) {
       if (error !== false) {
-        $('#filelist').html('<div>Server call failed</div>');
+        $('#fillContent').html('<div>Server call failed</div>');
         return boilerplateFailure(response, error);
       }
 
       // If there is an error
       if (response.error) {
-        $('#filelist').html('<p>The database returned the following error:</p><p>' + response.error + '</p>');
+        $('#fillContent').html('<p>The database returned the following error:</p><p>' + response.error + '</p>');
         return;
       }
 
       // if the DB is locked
       if (response.locked) {
-        $('#filelist').html('<p class="scan-status">Scan In Progress</p><p class="scan-status-files">' + response.totalFileCount + ' files in DB</p>');
+        $('#fillContent').html('<p class="scan-status">Scan In Progress</p><p class="scan-status-files">' + response.totalFileCount + ' files in DB</p>');
         return;
       }
       // If you got this far the db is made and working
-      $('#filelist').html('<p>Your DB has ' + response.totalFileCount + ' files</p><input type="button" value="Build Database" id="build_database">');
+      $('#fillContent').html('<p>Your DB has ' + response.totalFileCount + ' files</p><input type="button" value="Build Database" id="build_database">');
     });
   });
 
@@ -1412,7 +1412,7 @@ Length${index+1}=-1\n`;
         return boilerplateFailure(response, error);
       }
 
-      $('#filelist').append('  <p class="scan-status">Scan In Progress</p><p class="scan-status-files"></p>');
+      $('#fillContent').append('  <p class="scan-status">Scan In Progress</p><p class="scan-status-files"></p>');
       callOnStart();
     });
   });
@@ -1436,7 +1436,7 @@ Length${index+1}=-1\n`;
     $('ul.left-nav-menu li').removeClass('selected');
     $('.get_recent_songs').addClass('selected');
     resetPanel('Recently Added', 'scrollBoxHeight1');
-    $('#filelist').html(spinner1_html);
+    $('#fillContent').html(spinner1_html);
     $('.directoryName').html('Get last &nbsp;&nbsp;<input id="recently-added-limit" class="recently-added-input" type="number" min="1" step="1" value="100">&nbsp;&nbsp; songs');
 
     redoRecentlyAdded();
@@ -1451,7 +1451,7 @@ Length${index+1}=-1\n`;
 
     MSTREAMAPI.getRecentlyAdded($('#recently-added-limit').val(), function (response, error) {
       if (error !== false) {
-        $('#filelist').html('<div>Server call failed</div>');
+        $('#fillContent').html('<div>Server call failed</div>');
         return boilerplateFailure(response, error);
       }
 
@@ -1479,7 +1479,7 @@ Length${index+1}=-1\n`;
         }
       });
 
-      $('#filelist').html(filelist);
+      $('#fillContent').html(filelist);
     });
   }
 
@@ -1493,7 +1493,7 @@ Length${index+1}=-1\n`;
     $('ul.left-nav-menu li').removeClass('selected');
     $('.get_all_albums').addClass('selected');
     resetPanel('Albums', 'scrollBoxHeight1');
-    $('#filelist').html(spinner1_html);
+    $('#fillContent').html(spinner1_html);
     currentBrowsingList = [];
 
     programState = [{
@@ -1502,7 +1502,7 @@ Length${index+1}=-1\n`;
 
     MSTREAMAPI.albums(function (response, error) {
       if (error !== false) {
-        $('#filelist').html('<div>Server call failed</div>');
+        $('#fillContent').html('<div>Server call failed</div>');
         return boilerplateFailure(response, error);
       }
 
@@ -1536,9 +1536,9 @@ Length${index+1}=-1\n`;
                     </div>`)
       });
 
-      $('#filelist').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + albums.join("") + "</div></div>");
+      $('#fillContent').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + albums.join("") + "</div></div>");
       if (previousState && previousState.previousScroll) {
-        $('#filelist').scrollTop(previousState.previousScroll);
+        $('#fillContent').scrollTop(previousState.previousScroll);
       }
 
       if (previousState && previousState.previousSearch) {
@@ -1551,7 +1551,7 @@ Length${index+1}=-1\n`;
   }
 
   // Load up album-songs
-  $("#filelist").on('click', '.albumz', function () {
+  $("#fillContent").on('click', '.albumz', function () {
     var album = $(this).data('album');
     var artist = $(this).data('artist');
 
@@ -1561,13 +1561,13 @@ Length${index+1}=-1\n`;
   function getAlbumSongs(album, artist) {
     $('.directoryName').html('Album: ' + album);
     //clear the list
-    $('#filelist').html(spinner1_html);
+    $('#fillContent').html(spinner1_html);
     currentBrowsingList = [];
 
     programState.push({
       state: 'album',
       name: album,
-      previousScroll: document.getElementById('filelist').scrollTop,
+      previousScroll: document.getElementById('fillContent').scrollTop,
       previousSearch: $('#search_folders').val()
     });
 
@@ -1575,7 +1575,7 @@ Length${index+1}=-1\n`;
 
     MSTREAMAPI.albumSongs(album, artist, function (response, error) {
       if (error !== false) {
-        $('#filelist').html('<div>Server call failed</div>');
+        $('#fillContent').html('<div>Server call failed</div>');
         return boilerplateFailure(response, error);
       }
 
@@ -1622,7 +1622,7 @@ Length${index+1}=-1\n`;
 
       });
 
-      $('#filelist').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + filelist.join("") + "</div></div>");
+      $('#fillContent').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + filelist.join("") + "</div></div>");
     });
   }
 
@@ -1635,7 +1635,7 @@ Length${index+1}=-1\n`;
     $('ul.left-nav-menu li').removeClass('selected');
     $('.get_all_artists').addClass('selected');
     resetPanel('Artists', 'scrollBoxHeight1');
-    $('#filelist').html(spinner1_html);
+    $('#fillContent').html(spinner1_html);
     currentBrowsingList = [];
 
     programState = [{
@@ -1644,7 +1644,7 @@ Length${index+1}=-1\n`;
 
     MSTREAMAPI.artists(function (response, error) {
       if (error !== false) {
-        $('#filelist').html('<div>Server call failed</div>');
+        $('#fillContent').html('<div>Server call failed</div>');
         return boilerplateFailure(response, error);
       }
 
@@ -1667,9 +1667,9 @@ Length${index+1}=-1\n`;
         });
       });
 
-      $('#filelist').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + artists.join("") + "</div></div>");
+      $('#fillContent').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + artists.join("") + "</div></div>");
       if (previousState && previousState.previousScroll) {
-        $('#filelist').scrollTop(previousState.previousScroll);
+        $('#fillContent').scrollTop(previousState.previousScroll);
       }
 
       if (previousState && previousState.previousSearch) {
@@ -1678,12 +1678,12 @@ Length${index+1}=-1\n`;
     });
   }
 
-  $("#filelist").on('click', '.artistz', function () {
+  $("#fillContent").on('click', '.artistz', function () {
     var artist = $(this).data('artist');
     programState.push({
       state: 'artist',
       name: artist,
-      previousScroll: document.getElementById('filelist').scrollTop,
+      previousScroll: document.getElementById('fillContent').scrollTop,
       previousSearch: $('#search_folders').val()
     });
 
@@ -1693,13 +1693,13 @@ Length${index+1}=-1\n`;
   function getArtistsAlbums(artist, previousState) {
     resetPanel('Albums', 'scrollBoxHeight1');
     $('.directoryName').html('Artist: ' + artist);
-    $('#filelist').html(spinner1_html);
+    $('#fillContent').html(spinner1_html);
     $('#search_folders').val('');
     currentBrowsingList = [];
 
     MSTREAMAPI.artistAlbums(artist, function (response, error) {
       if (error !== false) {
-        $('#filelist').html('<div>Server call failed</div>');
+        $('#fillContent').html('<div>Server call failed</div>');
         return boilerplateFailure(response, error);
       }
 
@@ -1738,10 +1738,10 @@ Length${index+1}=-1\n`;
         })
       });
 
-      $('#filelist').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + albums.join("") + "</div></div>");
+      $('#fillContent').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + albums.join("") + "</div></div>");
 
       if (previousState && previousState.previousScroll) {
-        $('#filelist').scrollTop(previousState.previousScroll);
+        $('#fillContent').scrollTop(previousState.previousScroll);
       }
 
       if (previousState && previousState.previousSearch) {
@@ -1761,7 +1761,7 @@ Length${index+1}=-1\n`;
     $('ul.left-nav-menu li').removeClass('selected');
     $('.get_rated_songs').addClass('selected');
     resetPanel('Starred', 'scrollBoxHeight1');
-    $('#filelist').html(spinner1_html);
+    $('#fillContent').html(spinner1_html);
     $('#search_folders').val('');
     currentBrowsingList = [];
 
@@ -1771,7 +1771,7 @@ Length${index+1}=-1\n`;
 
     MSTREAMAPI.getRated(function (response, error) {
       if (error !== false) {
-        $('#filelist').html('<div>Server call failed</div>');
+        $('#fillContent').html('<div>Server call failed</div>');
         return boilerplateFailure(response, error);
       }
 
@@ -1837,7 +1837,7 @@ Length${index+1}=-1\n`;
 
       });
 
-      $('#filelist').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + files.join("") + "</div></div>");
+      $('#fillContent').html("<div data-simplebar class='col h-100 mh-100'><div class='row flex-column flex-nowrap w-100'>" + files.join("") + "</div></div>");
       // update lazy load plugin
       ll.update();
     });
@@ -1910,7 +1910,7 @@ Length${index+1}=-1\n`;
       `); 
     }
 
-    $('#filelist').html(newHtml);
+    $('#fillContent').html(newHtml);
     $('#search_folders').val('').trigger('change');
     
     //Initial Call
@@ -2016,7 +2016,7 @@ Length${index+1}=-1\n`;
     }
   };
 
-  $('#filelist').on('submit', '#db-search', function (e) {
+  $('#fillContent').on('submit', '#db-search', function (e) {
     $("#filterSearch").popover('hide')
     $('#search-results').html('');
     $('#search-results').append(spinner1_html);
@@ -2278,7 +2278,7 @@ Length${index+1}=-1\n`;
       $('#dbStatus').html(db_html);
     });
 
-    $('#filelist').html(newHtml);
+    $('#fillContent').html(newHtml);
     setupJukeboxPanel();
 
     //Initial Call
@@ -2398,11 +2398,11 @@ Length${index+1}=-1\n`;
     newHtml += '<h3>Autoplay</h3>';
     newHtml += '<select id="autoplay"><option value="true">On</option><option value="false">Off</option></select><label for="autoplay">Autoplay</label><br>';
 
-    $('#filelist').html(newHtml);
+    $('#fillContent').html(newHtml);
   });
 
   let autodjIgnorePaths = [];
-  $('#filelist').on('click', 'input[name="autodj-folders"]', function () {
+  $('#fillContent').on('click', 'input[name="autodj-folders"]', function () {
     const input = this;
     // Don't allow user to deselct all options
     if ($('input[name="autodj-folders"]:checked').length < 1) {
@@ -2429,12 +2429,12 @@ Length${index+1}=-1\n`;
     localStorage.setItem("autoDJ-ignorePaths", autodjIgnorePaths);
   });
 
-  $('#filelist').on('change', '#autodj-ratings', function () {
+  $('#fillContent').on('change', '#autodj-ratings', function () {
     MSTREAMPLAYER.minRating = $(this).val(); //0 - 11
     localStorage.setItem("autoDJ-minRating", $(this).val());
   });
 
-  $('#filelist').on('change', '#autoplay', function (e) {
+  $('#fillContent').on('change', '#autoplay', function (e) {
     const autoPlay = e.target.checked
     
     //MSTREAMPLAYER.autoPlay = $(this).val();
@@ -2455,7 +2455,7 @@ Length${index+1}=-1\n`;
 
     if (!MSTREAMAPI.transcodeOptions.serverEnabled) {
       newHtml += '<p>Transcoding is disabled on this server</p>';
-      $('#filelist').html(newHtml);
+      $('#fillContent').html(newHtml);
       return;
     }
 
@@ -2468,10 +2468,10 @@ Length${index+1}=-1\n`;
       newHtml += '<p><input id="enable_transcoding_locally" type="checkbox" value="transcode"><label for="enable_transcoding_locally">Enable Transcoding</label></p>';
     }
 
-    $('#filelist').html(newHtml);
+    $('#fillContent').html(newHtml);
   });
 
-  $('#filelist').on('change', '#enable_transcoding_locally', function () {
+  $('#fillContent').on('change', '#enable_transcoding_locally', function () {
     var a = '/media/';
     var b = '/transcode/';
 
@@ -2524,10 +2524,10 @@ Length${index+1}=-1\n`;
       newHtml += '<p><b>Federation is Disabled</b></p>';
     }
 
-    $('#filelist').html(newHtml);
+    $('#fillContent').html(newHtml);
   });
 
-  $('#filelist').on('click', '.trigger-generate-invite-private', function () {
+  $('#fillContent').on('click', '.trigger-generate-invite-private', function () {
     $('.invite-federation-url').addClass('super-hide');
     $('.invite-federation-id').removeClass('super-hide');
 
@@ -2535,7 +2535,7 @@ Length${index+1}=-1\n`;
     $('#invite-federation-id').prop('disabled', false);
   });
 
-  $('#filelist').on('click', '.trigger-generate-invite-public', function () {
+  $('#fillContent').on('click', '.trigger-generate-invite-public', function () {
     $('.invite-federation-id').addClass('super-hide');
     $('.invite-federation-url').removeClass('super-hide');
 

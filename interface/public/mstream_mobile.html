@@ -65,6 +65,8 @@
     <!-- <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script> -->
     <script src="/public/js/lib/slick.min.js"></script>
     <script type="text/javascript" src="/public/js/mstream_mobile.js"></script>
+    <!-- modal.js needs to be loaded AFTER mstream_mobile.js -->
+    <script type="module" src="/public/js/modal.js"></script>
     <script src="/public/js/mstream.jukebox.js"></script>
 
     <!-- Star Rating System -->
@@ -261,6 +263,33 @@
         </div>
     </div>
 
+    <!-- Modal Template // Filled and Controlled by modal.js -->
+    <div class="modal fade" id="ModalTemplate" tabindex="-1" role="dialog" aria-labelledby="editModal"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div id="ModalTemplateMain" class="modal-content ModalTemplate--front">
+                <div class="modal-header flex-column"></div>
+                <div class="modal-body"></div>
+                <div class="modal-footer flex-row justify-content-around align-items-center flex-nowrap"></div>
+            </div>
+            <div id="ModalTemplateError" class="modal-content modal--back ModalTemplate--back1">
+                <div class="modal-header bg-error"></div>
+                <div class="modal-body"></div>
+                <div class="modal-footer flex-row justify-content-around align-items-center flex-nowrap"></div>
+            </div>
+            <div id="ModalTemplateInfo" class="modal-content modal--back ModalTemplate--back2">
+                <div class="modal-header bg-warning"></div>
+                <div class="modal-body"></div>
+                <div class="modal-footer flex-row justify-content-around align-items-center flex-nowrap"></div>
+            </div>
+            <div id="ModalTemplateSuccess" class="modal-content modal--back ModalTemplate--back3">
+                <div class="modal-header bg-success"></div>
+                <div class="modal-body"></div>
+                <div class="modal-footer flex-row justify-content-between align-items-center flex-nowrap"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Download iFrame -->
     <form id="downform" action="" target="frameframe" method="POST"></form>
     <iframe id="downframe" src="" width="0" height="0" tabindex="-1" title="empty" hidden name="frameframe"></iframe>
@@ -281,23 +310,18 @@
                     <div id="upload_progress_bar" class="upload_progress-bar" role="progressbar" aria-valuenow="0"
                         aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
                 </div>
-                <div class="row mr-0 ml-0 flex-row flex-nowrap align-items-center contentHeader">
-                    <div class="col pl-0">
+                <div id="header_row" class="row mr-0 ml-0 flex-row flex-nowrap align-items-center contentHeader">
+                    <div class="col p-0">
                         <span id="contentHeader_text" class="mobileHeading1"></span>
                     </div>
                     <div id="header_btns" class="col-auto pr-0">
                         <div class="row flex-nowrap">
-                            <div class="col-auto">
-                                <span title="Search" id="search-explorer"
-                                    class="mdi-set mdi-text-search header_icon"></span>
-                            </div>
-                            <div class="col-auto">
-                                <span title="Add All Songs to Playlist" class="add mdi-set mdi-playlist-plus header_icon"
-                                    id='addall'></span>
-                            </div>
-                            <div class="col-auto">
-                                <span title="Upload File" class="add mdi-set mdi-upload header_icon"
-                                    id='uploadFile'></span>
+                            <div id="panel_one_header_button2" class="col-auto"></div>
+                            <div id="panel_one_header_button3" class="col-auto"></div>
+                            <div id="panel_one_header_button4" class="col-auto"></div>
+                            <div id="panel_one_header_button5" class="col-auto"></div>
+                            <div id="panel_one_header_button1" class="col-auto d-none">
+                                <span title='Upload File' class='add mdi-set mdi-upload header_icon' id='uploadFile'></span>
                             </div>
                         </div>
                     </div>
@@ -316,7 +340,7 @@
                         <input id="search_folders" class="hide" placeholder="Search List">
                     </div>
                     <div class="col-auto">
-                        <!-- <div class="row flex-nowrap">
+                        <div class="row flex-nowrap">
                             <div class="col-auto">
                                 <span title="Search" id="search-explorer"
                                     class="mdi-set mdi-text-search navbar_icon"></span>
@@ -325,7 +349,7 @@
                                 <span title="Add All Songs to Playlist" class="add mdi-set mdi-playlist-plus navbar_icon"
                                     id='addall'></span>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -417,9 +441,13 @@
                         <span class="mdi-set mdi-folder-music iconBtn navbar_icon"></span>
                         <span class="navbar_text">Files</span>
                     </div>
-                    <div id="get_library"" class=" navbar_item" title="Library">
+                    <div id="get_library" class=" navbar_item" title="Library">
                         <span class="mdi-set mdi-bookshelf iconBtn navbar_icon"></span>
                         <span class="navbar_text">Library</span>
+                    </div>
+                    <div id="get_radio" class="navbar_item d-none" title="Library">
+                        <span class="mdi-set mdi-radio-tower iconBtn navbar_icon"></span>
+                        <span class="navbar_text">Radio</span>
                     </div>
                     <div id="get_search" class="navbar_item" title="Search">
                         <span class="mdi-set mdi-magnify iconBtn navbar_icon"></span>

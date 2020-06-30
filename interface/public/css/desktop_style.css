@@ -873,6 +873,9 @@ input:focus {
 
 .navbar_icon {
   font-size: 1.5rem !important; }
+  .navbar_icon:hover {
+    cursor: pointer;
+    color: #fff; }
 
 .icon_normal {
   font-size: 1.5rem !important; }

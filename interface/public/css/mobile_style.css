@@ -1108,7 +1108,6 @@ input:focus {
   left: 0;
   top: 0;
   backface-visibility: hidden;
-  height: 20rem;
   transition: all .3s ease; }
   .modal-content .modal-header {
     background: #222;
@@ -1134,12 +1133,13 @@ input:focus {
 
 .modal--back {
   transform: rotateY(180deg); }
-  .modal--back .modal-header span {
-    font-size: 1.5rem;
-    margin: 0 auto;
-    font-weight: 700; }
+  .modal--back .modal-header {
+    color: #000; }
+    .modal--back .modal-header span {
+      font-size: 1.5rem;
+      margin: 0 auto;
+      font-weight: 700; }
   .modal--back .modal-body span {
-    font-size: 1.5rem;
     display: block;
     text-align: center; }
 
@@ -1181,11 +1181,8 @@ input:focus {
   text-align: center;
   display: block;
   margin: 0 auto;
-  width: 50%;
   font-size: 1.5rem;
   font-weight: 700; }
-  .form__btn__icon {
-    padding-left: 1rem; }
 
 .clusterize-scroll {
   max-height: calc(100vh - 13rem) !important; }

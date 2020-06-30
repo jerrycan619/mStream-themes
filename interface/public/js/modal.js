@@ -126,8 +126,8 @@ $(document).ready(function () {
   //########################## File/Folder Manipulation Modals ##########################
   //############ Data Path: from here -> api2.js -> fileSystemManipulation.js ###########
   //#####################################################################################
-  $("#filelist").on("click", ".editSong", function (event) {
-    const currentPath = $(this).data("file_location");
+  window.editSongModal = function (currentPath) {
+    //const currentPath = $(this).data("file_location");
 
     const footer = `
     <div class="col-auto p-0">
@@ -196,7 +196,7 @@ $(document).ready(function () {
     }
     
     
-  });
+  }
 
   $("#ModalTemplate").on("click", "#deleteFile", function (e) {
     e.preventDefault();
@@ -215,8 +215,9 @@ $(document).ready(function () {
       <div class="col"></div>
       <div class="col-auto p-0">
         <button id="confirmDeleteDir" type="submit" form="editDir_form" value="confirmDeleteDir"
-            class="form__btn btn btn-danger mdi-set mdi-delete">
+            class="form__btn btn btn-danger">
             Delete
+            <span class="form__btn__icon mdi-set mdi-delete"></span>
         </button>
       </div>`;
 
@@ -329,8 +330,7 @@ $(document).ready(function () {
 
   //###################################################################
   //###################### Create New Folder ##########################
-  $("#directory_bar").on("click", "#createDir", function (event) {
-
+  window.createDirModal = function () {
     console.log($('.directoryName').html());
     const currentPath = $('.directoryName').html();
     if (currentPath && currentPath !== "/") {
@@ -362,7 +362,7 @@ $(document).ready(function () {
       ModalTemplateMainSet("Create Directory", expWarning, body, footer);
       $('#ModalTemplate').modal({show: true});
     }
-  });
+  }
 
   $("#ModalTemplate").on("click", "#createDir", function (e) {
     e.preventDefault();
@@ -409,8 +409,8 @@ $(document).ready(function () {
 
   //###################################################################
   //######################### Edit Folder #############################
-  $("#filelist").on("click", ".editDir", function (event) {
-    const currentPath = getDirectoryString($(this));
+  window.editDirModal = function (button) {
+    const currentPath = getDirectoryString($(button));
     console.log(currentPath);
     if (currentPath && currentPath !== "/") {
       const body = `
@@ -450,7 +450,7 @@ $(document).ready(function () {
       ModalTemplateMainSet("Edit Directory", expWarning, body, footer);
       $('#ModalTemplate').modal({show: true});
     }
-  });
+  };
 
   $("#ModalTemplate").on("click", "#deleteDir", function (e) {
     e.preventDefault();
@@ -806,7 +806,7 @@ $(document).ready(function () {
     }
   });
 
-  $("#filelist").on('click', '.editRadioStation', function () {
+  $("#fillContent").on('click', '.editRadioStation', function () {
     const stationID = $(this).data("stationid");
 
     MSTREAMAPI.getRadioStationById(stationID, function (response, error) {

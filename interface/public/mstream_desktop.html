@@ -289,17 +289,18 @@
                                     <span class="menu-collapsed">Rated</span>
                                 </div>
                             </a>
-                            <a href="#" class="get_radio submenu_item">
-                                <div class="d-flex w-100 justify-content-start align-items-center">
-                                    <span class="mdi-set mdi-radio-tower mr-3 navbar_icon"></span>
-                                    <span class="menu-collapsed">Radio</span>
-                                </div>
-                            </a>
                         </div>
                         <a href="#" class="search_stuff main_item flex-column align-items-start collapsed">
                             <div class="d-flex w-100 justify-content-start align-items-center">
                                 <span class="mdi-set mdi-magnify mr-3 navbar_icon"></span>
                                 <span class="menu-collapsed">Search</span>
+                            </div>
+                        </a>
+
+                        <a href="#" class="get_radio main_item flex-column align-items-start collapsed">
+                            <div class="d-flex w-100 justify-content-start align-items-center">
+                                <span class="mdi-set mdi-radio-tower mr-3 navbar_icon"></span>
+                                <span class="menu-collapsed">Radio</span>
                             </div>
                         </a>
                         
@@ -370,8 +371,8 @@
                             <div id="panel_one_header_button3" class="col-auto"></div>
                             <div id="panel_one_header_button4" class="col-auto"></div>
                             <div id="panel_one_header_button5" class="col-auto"></div>
-                            <div id="panel_one_header_button1" class="col-auto">
-                                <span title='Upload File' class='add mdi-set mdi-upload header_button d-none' id='uploadFile'></span>
+                            <div id="panel_one_header_button1" class="col-auto d-none">
+                                <span title='Upload File' class='add mdi-set mdi-upload header_button' id='uploadFile'></span>
                             </div>
                         </div>
                         
@@ -407,7 +408,7 @@
                                             id='uploadFile'></span>
                                     </div> -->
                                     <div class="col-auto">
-                                        <span title="Create Directory" class="add mdi-set mdi-folder-plus navbar_icon"
+                                        <span onclick="createDirModal();" title="Create Directory" class="add mdi-set mdi-folder-plus navbar_icon"
                                             id='createDir'></span>
                                     </div>
                                 </div>
@@ -417,7 +418,7 @@
                     <div class="col filelist_wrapper overflow-hidden">
                         <!-- Content filled by page -->
                         <!-- data-simplebar -->
-                        <div class='noselect row m-0 flex-column flex-nowrap overflow-hidden h-100' id='filelist'>
+                        <div class='noselect row m-0 flex-column flex-nowrap overflow-hidden h-100' id='fillContent'>
                             <div class="filez">Loading...</div>
                         </div>
                     </div>

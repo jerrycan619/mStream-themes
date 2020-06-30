@@ -73,6 +73,11 @@ new Vue({
             if (this.playerStats.duration === 0) {
                 return '00:00';
             }
+
+            if (this.playerStats.duration == "Infinity") {
+                return '\u221e';
+            }
+
             /* progress_bar_handle */
             //this.$refs.progress_bar.noUiSlider.set(((this.playerStats.currentTime / this.playerStats.duration) * 100));
 
@@ -129,6 +134,13 @@ new Vue({
 
             if (currentSong === false) {
                 return '\u00A0\u00A0\u00A0Welcome To mStream!\u00A0\u00A0\u00A0';
+            }
+
+            //Disable Player Progress Slider if stream
+            if (playerStats.stream && playerStats.metadata.url) {
+                this.$refs.progress_bar.setAttribute('disabled', true);
+            } else {
+                this.$refs.progress_bar.removeAttribute('disabled');
             }
 
             //console.log(currentSong.metadata.rating);

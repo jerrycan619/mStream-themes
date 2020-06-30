@@ -207,7 +207,8 @@ $(document).ready(function (e) {
 /* Delegated events - for elements that gets dynamically renderd */
 /* Attach event-hanlder to parent which is present on document render (#filelist) */
 /* get its childs which are dynamically added or removed (.song-button-box) */
-$("#filelist").on("click", ".fold", function (event) {
+
+$("#fillContent").on("click", ".fold", function (event) {
     //console.log($(this).attr('class'));
     //$(this).css("width", "auto");
     $(this).closest(".song-button-box").toggleClass('sbb_fold sbb_unfold');

@@ -49,23 +49,40 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
             </div>`;
   }
   
-  function createMusicfileHtml(fileLocation, title, titleClass) {
-    return '<div class="row mt-1 mb-1 ml-0 mr-0 overflow-hidden align-items-center">' +  
-              '<div class="col p-0">' +
-                '<div data-file_location="' + fileLocation + '" class="filez row m-0 align-items-center">' + 
-                  '<div class="col-auto pl-0">' +
-                    '<span class="mdi-set mdi-music-note dir_icon" />' + 
-                  '</div>' +
-                  '<div class="col p-0">' +
-                    '<span class="' + titleClass + '">' + title + '</span>' +
-                  '</div>' +
-                '</div>' + 
-              '</div>' +
-            '</div>';
+  function createMusicfileHtml(fileLocation, title, titleClass, showEdit) {
+    let editButton = '';
+    if (showEdit) {
+      editButton = `
+      <div class="col">
+        <span onclick="editSongModal('${fileLocation}');" class="mdi-set mdi-pencil editSong"></span>
+      </div>`;
+    }
+
+    return `<div class="col-auto p-0 file_wrapper">
+              <div class="row mt-1 mb-1 ml-0 mr-0 overflow-hidden align-items-center">  
+                <div class="col p-0">
+                  <div data-file_location="${fileLocation}" class="filez row m-0 align-items-center"> 
+                    <div class="col-auto pl-0">
+                      <span class="mdi-set mdi-music-note dir_icon"></span> 
+                    </div>
+                    <div class="col p-0">
+                      <span class="${titleClass}">${title}</span>
+                    </div>
+                  </div> 
+                </div>
+                <div class="song-button-box row align-items-center flex-nowrap">
+                  ${editButton}
+                </div>
+              </div>
+            </div>`;
   }
   
   $(document).ready(function () {
     new ClipboardJS('.fed-copy-button');
+
+    if(localStorage.getItem("enableRadio") === "true") {
+      $('#get_radio').removeClass('d-none');
+    }
   
     // Responsive active content
     $(document).on('click', '.activate-panel-1', function (event) {
@@ -441,7 +458,18 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
       MSTREAMAPI.addSongWizard($(this).data("file_location"), {}, true);
     });
   
-    
+
+    // Clear header buttons
+    function clearHeaderBtns() {
+      $('#panel_one_header_button2').html("");
+      $('#panel_one_header_button2').addClass("d-none");
+      $('#panel_one_header_button3').html("");
+      $('#panel_one_header_button3').addClass("d-none");
+      $('#panel_one_header_button4').html("");
+      $('#panel_one_header_button4').addClass("d-none");
+      $('#panel_one_header_button5').html("");
+      $('#panel_one_header_button5').addClass("d-none");
+    }
 
     // Handle panel stuff
     function resetPanel(panelName) {
@@ -453,6 +481,8 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
       $('.directoryName').html('');
 
       $('#contentHeader_text').html(panelName);
+      clearHeaderBtns();
+      $('#uploadFile').parent().addClass("d-none");
     }
   
     function boilerplateFailure(res, err) {
@@ -537,7 +567,7 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
           return;
         }
   
-        printdir(response);
+        printdir(response, '', false);
       });
     });
   
@@ -573,7 +603,7 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
     });
   
     // send a new directory to be parsed.
-    function senddir(previousState) {
+    window.senddir = function (previousState) {
       // Construct the directory string
       var directoryString = getFileExplorerPath();
   
@@ -600,7 +630,7 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
   
   
     // function that will receive JSON array of a directory listing.  It will then make a list of the directory and tack on classes for functionality
-    function printdir(response, previousState) {
+    function printdir(response, previousState, showEdit = true) {
       currentBrowsingList = response.contents;
   
       // clear the list
@@ -610,6 +640,17 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
       var filelist = [];
       $.each(currentBrowsingList, function () {
         const fileLocation = this.path || response.path + this.name;
+
+        //in vpath root don't display dir create / edit buttons
+        let hideButtonClass = '';
+        if(fileLocation.startsWith("/")) {
+          $('#createDir').parent().addClass('d-none');
+          hideButtonClass = 'd-none';
+        } else {
+          $('#createDir').parent().removeClass('d-none');
+          $('.editDir').parent().removeClass('d-none');
+        }
+
         if (this.type == 'directory') {
           filelist.push(`<div class="col-auto p-0">
                           <div class="row mt-1 mb-1 ml-0 mr-0 align-items-center overflow-hidden">
@@ -632,6 +673,9 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
                                 <div class="col">
                                   <span data-directory="${this.name}" title="Download Directory" class="downloadDir mdi-set mdi-download"></span>
                                 </div>
+                                <div class="col ${hideButtonClass}">
+                                  <span data-directory="${this.name}" title="Edit Directory" class="editDir mdi-set mdi-pencil"></span>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -641,14 +685,15 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
             filelist.push(createFileplaylistHtml(this.name));
           } else {
             const title = this.artist != null || this.title != null ? this.artist + ' - ' + this.title : this.name;
-            filelist.push(createMusicfileHtml(fileLocation, title, "item-text"));
+            filelist.push(createMusicfileHtml(fileLocation, title, "item-text", showEdit));
           }
         }
       });
   
       // Post the html to the filelist div
       $('#fillContent').html("<div data-simplebar class='col p-0 h-100 mh-100'><div class='row m-0 flex-column flex-nowrap w-100'>" + filelist.join("") + "</div></div>");
-      
+      $('#uploadFile').parent().removeClass("d-none");
+      $('#panel_one_header_button5').html("<span onclick='createDirModal();' title='Create Directory' class='add mdi-set mdi-folder-plus header_icon' id='createDir'></span>");
   
       if (previousState && previousState.previousScroll) {
         $('#fillContent').scrollTop(previousState.previousScroll);
@@ -802,7 +847,7 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
       return fileExplorerArray.join("/") + "/";
     }
   
-    function getDirectoryString(component) {
+    window.getDirectoryString = function (component) {
       var newString = getFileExplorerPath() + component.data("directory");
       if (newString.substring(0, 1) !== '/') {
         newString = "/" + newString
@@ -1315,43 +1360,43 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
         //for spacing between slick slides remove wrapper spacing and add padding in slides
         $('.filelist_wrapper').addClass("p-0");
 
-        $('#fillContent').html(
-            '<div class="col-auto slides_lib_nav">' +
-                '<div>Albums</div>' +
-                '<div>Artists</div>' +
-                '<div>Playlists</div>' +
-                '<div>Rated</div>' +
-            '</div>' +
-            '<div class="col p-0 overflow-hidden slides_lib">' +
-                '<div id="getAlbums" class="h-100 pl-3 pr-3">' +
-                  '<div id="scrollAlbums" class="clusterize-scroll">' +
-                    '<div id="contentAlbums" class="clusterize-content">' +
-                      '<div class="clusterize-no-data">' + spinner1_html + '</div>' +
-                    '</div>' +
-                  '</div>' +
-                '</div>' +
-                '<div id="getArtists" class="h-100 pl-3 pr-3">'+
-                  '<div id="scrollArtists" class="clusterize-scroll">' +
-                    '<div id="contentArtists" class="clusterize-content">' +
-                      '<div class="clusterize-no-data">' + spinner1_html + '</div>' +
-                    '</div>' +
-                  '</div>' +
-                '</div>' +
-                '<div id="getPlaylists" class="h-100 pl-3 pr-3">' +
-                  '<div id="scrollPlaylists" class="clusterize-scroll">' +
-                    '<div id="contentPlaylists" class="clusterize-content">' +
-                      '<div class="clusterize-no-data">' + spinner1_html + '</div>' +
-                    '</div>' +
-                  '</div>' +
-                '</div>' +
-                '<div id="getRated" class="h-100 pl-3 pr-3">' +
-                  '<div id="scrollRated" class="clusterize-scroll">' +
-                    '<div id="contentRated" class="clusterize-content">' +
-                      '<div class="clusterize-no-data">' + spinner1_html + '</div>' +
-                    '</div>' +
-                  '</div>' +
-                '</div>' +
-            '</div>');
+        $('#fillContent').html(`
+            <div class="col-auto slides_lib_nav">
+                <div>Albums</div>
+                <div>Artists</div>
+                <div>Playlists</div>
+                <div>Rated</div>
+            </div>
+            <div class="col p-0 overflow-hidden slides_lib">
+                <div id="getAlbums" class="h-100 pl-3 pr-3">
+                  <div id="scrollAlbums" class="clusterize-scroll">
+                    <div id="contentAlbums" class="clusterize-content">
+                      <div class="clusterize-no-data">${spinner1_html}</div>
+                    </div>
+                  </div>
+                </div>
+                <div id="getArtists" class="h-100 pl-3 pr-3">
+                  <div id="scrollArtists" class="clusterize-scroll">
+                    <div id="contentArtists" class="clusterize-content">
+                      <div class="clusterize-no-data">${spinner1_html}</div>
+                    </div>
+                  </div>
+                </div>
+                <div id="getPlaylists" class="h-100 pl-3 pr-3">
+                  <div id="scrollPlaylists" class="clusterize-scroll">
+                    <div id="contentPlaylists" class="clusterize-content">
+                      <div class="clusterize-no-data">${spinner1_html}</div>
+                    </div>
+                  </div>
+                </div>
+                <div id="getRated" class="h-100 pl-3 pr-3">
+                  <div id="scrollRated" class="clusterize-scroll">
+                    <div id="contentRated" class="clusterize-content">
+                      <div class="clusterize-no-data">${spinner1_html}</div>
+                    </div>
+                  </div>
+                </div>
+            </div>`);
       
 
         $('.slides_lib').slick({
@@ -1381,15 +1426,17 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
         $('.slides_lib').on('beforeChange', function(event, slick, currentSlide, nextSlide){
             
             if (nextSlide === 1) {
+              clearHeaderBtns();
               getAllArtists();
             }
             if (nextSlide === 2) {
+              clearHeaderBtns();
               getAllPlaylists();
             }
-            if (nextSlide === 3) {;
+            if (nextSlide === 3) {
+              clearHeaderBtns();
               getRatedSongs();
             }
-
             
             console.log("current: ", currentSlide);
             //if (nextSlide)
@@ -1400,9 +1447,117 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
         
     });
 
+    // ###########################################################################################
+    // ############################### online Radio ##############################################
+    
+    window.getAllRadioStations = function () {
+      $('ul.left-nav-menu li').removeClass('selected');
+      $('.get_all_playlists').addClass('selected');
+      resetPanel('Radio', 'scrollBoxHeight1');
+      $('#directory_bar').hide();
+      $('#filelist').html(spinner1_html);
+      currentBrowsingList = [];
+  
+      programState = [{
+        state: 'allRadioStations'
+      }];
+  
+      MSTREAMAPI.getRadioStations(function (response, error) {
+        console.log(response);
+        console.log(error);
+  
+        var stations = [];
+        $.each(response, function () {
+          stations.push(`<div class="col-auto p-0">
+                            <div data-stationurl="${this.url}" class="playlist_row_container row mt-1 mb-1 ml-0 mr-0 overflow-hidden align-items-center">
+                              <div data-stationurl="${this.url}" data-stationname="${this.name}" class="stationz col p-0">
+                                <div class="row m-0 align-items-center">
+                                  <div class="col-auto pl-0">
+                                    <span class="mdi-set mdi-radio dir_icon"></span>
+                                  </div>
+                                  <div class="col pl-0 d-flex flex-column">
+                                    <span class="col_track_title">
+                                      ${escapeHtml(this.name)}
+                                    </span>
+                                    <span class="col_track_artist"></span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-auto pr-0">
+                                <span data-stationid="${this.id}" class="editRadioStation mdi-set mdi-pencil dir_icon"></span>
+                              </div>
+                            </div>
+                          </div>`);
+          currentBrowsingList.push(this);
+        });
+        // Add playlists to the left panel // <div id='downloadAllStations'>Download</div>
+        $('#fillContent').html("<div data-simplebar class='col p-0 h-100 mh-100'><div class='row m-0 flex-column flex-nowrap w-100'>" + stations.join("") + "</div></div>");
+        $('#panel_one_header_button3').html("<span title='Add radio station' id='addRadioStation' class='mdi-set mdi-plus header_icon'></span>");
+        $('#panel_one_header_button4').html("<span title='Import radio stations' id='importStations' class='mdi-set mdi-import header_icon'></span>");
+        $('#panel_one_header_button5').html("<span title='Export radio stations' id='downloadAllStations' class='mdi-set mdi-export header_icon'></span>");
+        $('#panel_one_header_button3').removeClass("d-none");
+        $('#panel_one_header_button4').removeClass("d-none");
+        $('#panel_one_header_button5').removeClass("d-none");
+      });
+    }
+
+    $('#get_radio').on('click', function () {
+      getAllRadioStations();
+    });
+
+    // Play a Radio Station
+    $("#fillContent").on('click', '.stationz', function () {
+      MSTREAMAPI.addRadioWizard($(this).data("stationurl"), $(this).data("stationname"), {}, true);
+    });
+
+    //Download .pls with all stations
+    $("#header_row").on('click', '#downloadAllStations', function () {
+      function download(filename, storageObj) {
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(storageObj));
+        element.setAttribute('download', filename);
+      
+        element.style.display = 'none';
+        document.body.appendChild(element);
+      
+        element.click();
+      
+        document.body.removeChild(element);
+      }
+  
+      MSTREAMAPI.getRadioStations(function (response, error) {
+        console.log(response);
+        console.log(error);
+  
+        var stations = [];
+        $.each(response, function () {
+          stations.push({name:this.name , url: this.url});
+        });
+  
+        console.log("downloadArray: ", stations);
+        //console.log("downloadArrayJson: ", JSON.stringify(stations));
+
+        if (stations.length > 0) {
+          let plsFile = "[playlist]\n"
+          plsFile += "NumberOfEntries=" + stations.length + "\n";
+          $.each(stations, function( index, value ) {
+            plsFile += `
+File${index+1}=${value.url}
+Title${index+1}=${value.name}
+Length${index+1}=-1\n`;
+          });
+          plsFile += "\nVersion=2";
+          console.log("downloadPls: ", plsFile);
+          // Start file download.
+          download("mStream_radios.pls", plsFile);
+        }
+        
+      });
+  });
     
   
-    ////////////////////////////////////  Sort by Albums
+    // ###########################################################################################
+    // ################################ Albums View ##############################################
     //Load up album explorer
     $('.get_all_albums').on('click', function () {
       getAllAlbums();
@@ -1550,7 +1705,8 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
       });
     }
   
-    /////////////////////////////////////// Artists
+    // ###########################################################################################
+    // ############################### Artists View ##############################################
     $('.get_all_artists').on('click', function () {
       getAllArtists();
     });
@@ -1690,6 +1846,8 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
       });
     }
   
+    // ###########################################################################################
+    // ################################# Rated View ##############################################
     $('.get_rated_songs').on('click', function () {
       getRatedSongs();
     });
@@ -1790,7 +1948,8 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
       });
     }
   
-    //////////////////////// Search
+    // ###########################################################################################
+    // ############################### Search Panel ##############################################
     var searchToggles = {
       albums: true,
       artists: true,
@@ -2145,6 +2304,11 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
         autoDJ_checked = 'checked';
       }
 
+      let radio_checked = '';
+      if(localStorage.getItem("enableRadio") === "true") {
+        radio_checked = 'checked';
+      }
+
   
       const newHtml = `
         <div class="row m-0 flex-column flex-nowrap w-100 overflow-hidden">
@@ -2182,23 +2346,42 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
             </div>
           </div>
           <div class="col-auto p-0">
-            <div class="row mt-4">\
-              <div class="col">\
-                <div class="row m-0 align-items-center justify-content-between">\
-                  <div class="col pl-0">\
-                    <span class="heading">Autoplay</span>\
-                    <span class="sub_heading">Start Playing on Track Add</span>\
-                  </div>\
-                  <div class="col-auto pr-0">\
-                    <label class="switch">\
-                      <input id="autoplay" type="checkbox" class="switch-input" ${autoDJ_checked}>\
-                      <span class="switch-label" data-on="On" data-off="Off"></span>\
-                      <span class="switch-handle"></span>\
-                    </label>\
-                  </div>\
-                </div>\
-              </div>\
-            </div>\
+            <div class="row mt-4">
+              <div class="col">
+                <div class="row m-0 align-items-center justify-content-between">
+                  <div class="col pl-0">
+                    <span class="heading">Autoplay</span>
+                    <span class="sub_heading">Start Playing on Track Add</span>
+                  </div>
+                  <div class="col-auto pr-0">
+                    <label class="switch">
+                      <input id="autoplay" type="checkbox" class="switch-input" ${autoDJ_checked}>
+                      <span class="switch-label" data-on="On" data-off="Off"></span>
+                      <span class="switch-handle"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-auto p-0">
+            <div class="row mt-4">
+              <div class="col">
+                <div class="row m-0 align-items-center justify-content-between">
+                  <div class="col pl-0">
+                    <span class="heading">Radio Stations</span>
+                    <span class="sub_heading">Play livestream URLs</span>
+                  </div>
+                  <div class="col-auto pr-0">
+                    <label class="switch">
+                      <input id="enableRadio" type="checkbox" class="switch-input" ${radio_checked}>
+                      <span class="switch-label" data-on="On" data-off="Off"></span>
+                      <span class="switch-handle"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="col-auto p-0">
             <div class="row mt-4">\
@@ -2426,6 +2609,16 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
       //MSTREAMPLAYER.autoPlay = $(this).val();
       localStorage.setItem("autoPlay", autoPlay);
       
+    });
+
+    $('#fillContent').on('change', '#enableRadio', function (e) {
+      const enableRadio = e.target.checked
+      localStorage.setItem("enableRadio", enableRadio);
+      if(enableRadio) {
+        $('#get_radio').removeClass('d-none');
+      } else {
+        $('#get_radio').addClass('d-none');
+      }
     });
 
     // Build the database
