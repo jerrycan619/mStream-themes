@@ -10,6 +10,7 @@ $(document).ready(function (e) {
 
     //#################### PlayerBar Swipe Up #############################
     const panel = document.getElementById("vert_resize");
+    const handle = document.getElementById("player");
 
     panel.style.maxHeight = "calc(" + window.innerHeight + "px - 4rem)";
     panel.style.minHeight = "4rem";
@@ -30,28 +31,28 @@ $(document).ready(function (e) {
         panel.style.height = (parseInt(getComputedStyle(panel, '').height) + dx) + "px";
     }
 
-    panel.addEventListener("mousedown", function(e){
+    handle.addEventListener("mousedown", function(e){
         //Recalc max height if Fullscreen change
         panel.style.maxHeight = "calc(" + window.innerHeight + "px - 4rem)";
         maxHeight = parseInt(getComputedStyle(panel, '').maxHeight, 10);
         minHeight = parseInt(getComputedStyle(panel, '').minHeight, 10);
 
         m_pos = e.clientY;
-        document.addEventListener("mousemove", resize_mouse, false);
+        handle.addEventListener("mousemove", resize_mouse, false);
     }, false);
 
-    panel.addEventListener("touchstart", function(e){
+    handle.addEventListener("touchstart", function(e){
         //Recalc max height if Fullscreen change
         panel.style.maxHeight = "calc(" + window.innerHeight + "px - 4rem)";
         maxHeight = parseInt(getComputedStyle(panel, '').maxHeight, 10);
         minHeight = parseInt(getComputedStyle(panel, '').minHeight, 10);
 
         m_pos = e.touches[0].clientY;
-        document.addEventListener("touchmove", resize_touch, false);
+        handle.addEventListener("touchmove", resize_touch, false);
     }, false);
 
-    document.addEventListener("mouseup", function(){
-        document.removeEventListener("mousemove", resize_mouse, false);
+    handle.addEventListener("mouseup", function(){
+        handle.removeEventListener("mousemove", resize_mouse, false);
         const actualHeight = parseInt(getComputedStyle(panel, '').height, 10);
         
         
@@ -72,8 +73,8 @@ $(document).ready(function (e) {
     }, false);
 
     //for touchcancel too???
-    document.addEventListener("touchend", function(){
-        document.removeEventListener("touchmove", resize_touch, false);
+    handle.addEventListener("touchend", function(){
+        handle.removeEventListener("touchmove", resize_touch, false);
         const actualHeight = parseInt(getComputedStyle(panel, '').height, 10);
         if ($( "#vert_resize" ).hasClass("playlist_expanded")) {
             if (actualHeight >= maxHeight*(3/4)) {

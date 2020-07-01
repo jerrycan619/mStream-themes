@@ -149,4 +149,49 @@ exports.setup = function(mstream, program) {
       }
     }); 
   });
+
+  mstream.post('/fileplaylist/get-content', function(req, res){
+    const path = req.body.path;
+    const fullPath = program.getVPathInfo(path, req.user);
+    //console.log(fullPath);
+
+    if (!fullPath.relativePath) {
+      res.json({status: "info", info: "not possible on root (vpath) level!" });
+      return;
+    }
+
+    fs.readFile(fullPath.fullPath, 'utf8', function(err, data) {
+      if (err) {
+        console.log("Error: ", err);
+        res.json({status: "error", error: err });
+      } else {
+        res.json({ status: "success", content: data}); 
+        //console.log('OK: ' + fullPath.fullPath);
+        //console.log(data)
+      }
+    });
+  });
+
+  mstream.post('/fileplaylist/write-content', function(req, res){
+    const path = req.body.path;
+    const content = req.body.content;
+    const fullPath = program.getVPathInfo(path, req.user);
+    //console.log(fullPath);
+
+    if (!fullPath.relativePath) {
+      res.json({status: "info", info: "not possible on root (vpath) level!" });
+      return;
+    }
+
+    fs.writeFile(fullPath.fullPath, content, 'utf8', function(err, data) {
+      if (err) {
+        console.log("Error: ", err);
+        res.json({status: "error", error: err });
+      } else {
+        res.json({ status: "success", content: content}); 
+        //console.log('OK: ' + fullPath.fullPath);
+        //console.log(data)
+      }
+    });
+  });
 };

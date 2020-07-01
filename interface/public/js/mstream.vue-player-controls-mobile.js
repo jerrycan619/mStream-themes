@@ -73,7 +73,7 @@ var VUEPLAYER = (function () {
                     </span>\
                   </div>\
                   <div class="col p-0 overflow-hidden">\
-                    <span title="Rate Song" v-on:click="createPopper($event)" class="mdi-set mdi-star icon_normal songDropdown pop-c">\
+                    <span title="Rate Song" v-on:click="call_rateSongMobileModal()" class="mdi-set mdi-star icon_normal songDropdown pop-c">\
                     </span>\
                     <span style="position: absolute;top: 0.8rem;color: #000;width: 2rem;text-align: center;left: 0;">{{ratingNumber}}</span>\
                   </div><div class="col p-0 overflow-hidden">\
@@ -166,6 +166,11 @@ var VUEPLAYER = (function () {
               }
             }
           });
+        },
+
+        call_rateSongMobileModal: function () {
+          console.log("thisSong: ", this.song);
+          rateSongMobileModal(this.song);
         },
       },
       computed: {

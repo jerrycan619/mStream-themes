@@ -44,7 +44,7 @@ function createFileplaylistHtml(dataDirectory, fileLocation = '') {
                     <span data-directory="${dataDirectory}" title="Download Playlist" class="downloadFileplaylist mdi-set mdi-download"></span>
                   </div>
                   <div class="col">
-                    <span data-file_location="${fileLocation}" class="mdi-set mdi-pencil editSong"></span>
+                    <span onclick="editSongModal('${fileLocation}');" class="mdi-set mdi-pencil editSong"></span>
                   </div>
                 </div>
               </div>
@@ -550,13 +550,19 @@ $(document).ready(function () {
 
   // when you click on a playlist, go to that playlist
   $("#fillContent").on('click', 'div.fileplaylistz', function () {
-    fileExplorerArray.push($(this).data("directory"));
+    listFileplaylist($(this).data("directory"));
+  });
+
+  window.listFileplaylist = function (file, refresh = false) {
+    console.log("directory", file);
+    if (!refresh) {fileExplorerArray.push(file);}
     programState.push({
       state: 'fileExplorer',
       previousScroll: document.getElementById('fillContent').scrollTop,
       previousSearch: $('#search_folders').val()
     });
     var directoryString = getFileExplorerPath();
+    console.log("dirstring: ", directoryString);
 
     $('.directoryName').html('/' + directoryString.substring(0, directoryString.length - 1));
     $('#fillContent').html(spinner1_html);
@@ -567,8 +573,11 @@ $(document).ready(function () {
         return;
       }
       printdir(response, '', false);
+      const directoryString2 = directoryString.replace(/\/$/, ''); //remove tailing "/"
+      $('#panel_one_header_button5').html(`<span onclick="editM3uModal('${directoryString2}','${file}');" title="Edit Playlist" id="editM3u" class="mdi-set mdi-pencil header_button"></span>`);
+      $('#uploadFile').parent().addClass("d-none");
     });
-  });
+  };
 
   // when you click the back directory
   $(".backButton").on('click', function () {
@@ -650,7 +659,7 @@ $(document).ready(function () {
         $('.editDir').parent().removeClass('d-none');
       }
       
-      if (this.type == 'directory') {
+      if (this.type == 'directory' || this.type == 'symLink') {
         filelist.push(`<div class="col-auto p-0">
                         <div class="row mt-1 mb-1 ml-0 mr-0 overflow-hidden align-items-center">
                           <div class="col p-0 file_wrapper">
@@ -659,7 +668,7 @@ $(document).ready(function () {
                                 <span class="mdi-set mdi-folder-music dir_icon"></span>
                               </div>
                               <div class="col pl-0">
-                                <span class="item-text">${this.name}</span>
+                                <span class="item-text ${this.type}">${this.name}</span>
                               </div>
                             </div>
                             <div class="song-button-box row m-0 align-items-center flex-nowrap sbb_fold ">
@@ -1552,13 +1561,28 @@ Length${index+1}=-1\n`;
 
   // Load up album-songs
   $("#fillContent").on('click', '.albumz', function () {
-    var album = $(this).data('album');
-    var artist = $(this).data('artist');
+    const album = $(this).data('album');
+    const artist = $(this).data('artist');
 
+    $('#panel_one_header_button5').html(`<span data-album="${album}" data-artist="${artist}" id="viewFullAlbum" title='View full Album' class='mdi-set mdi-notification-clear-all header_button'></span>`);
     getAlbumSongs(album, artist);
   });
 
-  function getAlbumSongs(album, artist) {
+  $("#header_row").on('click', '#viewFullAlbum', function () {
+    const album = $(this).data('album');
+    const artist = $(this).data('artist');
+    getAlbumSongs(album, '', artist);
+    $('#panel_one_header_button5').html(`<span data-album="${album}" data-artist="${artist}" id="viewArtistAlbum" title='View artists songs' class='mdi-set mdi-minus header_button'></span>`);
+  });
+
+  $("#header_row").on('click', '#viewArtistAlbum', function () {
+    const album = $(this).data('album');
+    const artist = $(this).data('artist');
+    getAlbumSongs(album, artist);
+    $('#panel_one_header_button5').html(`<span data-album="${album}" data-artist="${artist}" id="viewFullAlbum" title='View full Album' class='mdi-set mdi-notification-clear-all header_button'></span>`);
+  });
+
+  function getAlbumSongs(album, artist, markArtist) {
     $('.directoryName').html('Album: ' + album);
     //clear the list
     $('#fillContent').html(spinner1_html);
@@ -1604,10 +1628,13 @@ Length${index+1}=-1\n`;
           info[1] = this.metadata.filename;
         }
 
+        let markArtistClass = ''
+        if (info[0] === markArtist) {markArtistClass = 'markArtist';}
+
         filelist.push(`<div class="col-auto p-0">
                         <div data-file_location="${this.filepath}" class="filez row mt-1 mb-1 ml-0 mr-0 overflow-hidden align-items-center">
                           <div class="col p-0">
-                            <div class="row m-0 align-items-center">
+                            <div class="row m-0 align-items-center ${markArtistClass}">
                               <div class="col-auto pl-0">
                                 ${type_icon}
                               </div>

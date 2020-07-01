@@ -40,6 +40,8 @@ $(document).ready(function () {
   
       //On Error flip modal to Error, close after 3s
       $('#ModalTemplate .ModalTemplate--front').css('transform','rotateY(180deg)');
+      // Fix for texteare which stays visible even with backface-visibility: hidden!!!
+      $('#ModalTemplate .ModalTemplate--front textarea').css('opacity','0');
       $('#ModalTemplate .ModalTemplate--back1').css('transform','rotateY(0deg)');
   
       if (timeout > 0) {
@@ -63,6 +65,8 @@ $(document).ready(function () {
   
       //On Error flip modal to Error, close after 3s
       $('#ModalTemplate .ModalTemplate--front').css('transform','rotateY(180deg)');
+      // Fix for texteare which stays visible even with backface-visibility: hidden!!!
+      $('#ModalTemplate .ModalTemplate--front textarea').css('opacity','0');
       $('#ModalTemplate .ModalTemplate--back2').css('transform','rotateY(0deg)');
   
       if (timeout > 0) {
@@ -86,6 +90,8 @@ $(document).ready(function () {
   
       //On Error flip modal to Error, close after 3s
       $('#ModalTemplate .ModalTemplate--front').css('transform','rotateY(180deg)');
+      // Fix for texteare which stays visible even with backface-visibility: hidden!!!
+      $('#ModalTemplate .ModalTemplate--front textarea').css('opacity','0');
       $('#ModalTemplate .ModalTemplate--back3').css('transform','rotateY(0deg)');
   
       if (timeout > 0) {
@@ -126,6 +132,98 @@ $(document).ready(function () {
   //########################## File/Folder Manipulation Modals ##########################
   //############ Data Path: from here -> api2.js -> fileSystemManipulation.js ###########
   //#####################################################################################
+  window.editM3uModal = function (currentPath, file) {
+    const footer = `
+    <div class="col-auto p-0">
+      <button id="deleteFile" type="submit" form="edit_form" value="remove"
+          class="form__btn btn btn-danger mdi-set mdi-delete">
+      </button>
+    </div>
+    <div class="col p-0"></div>  
+    <div class="col-auto p-0">
+      <button id="cancelFile" type="submit" form="edit_form" value="cancel"
+      class="form__btn btn btn-secondary" data-dismiss="modal">
+        Cancel 
+        <span class="form__btn__icon mdi-set mdi-cancel"></span>
+      </button>
+    </div>  
+    <div class="col-auto p-0">
+      <button id="saveM3u" type="submit" form="edit_form" value="saveM3u"
+          class="form__btn btn btn-primary">
+          Save
+          <span class="form__btn__icon mdi-set mdi-content-save"></span>
+      </button>
+    </div>`;
+
+    console.log("File:", file);
+
+    let body = `<form id="edit_form" class="form">
+                  <input value="${currentPath}" id="editForm_currentPath" type="hidden">
+                  <input value="${file}" id="editForm_M3uFile" type="hidden">`;
+
+    const fileType = currentPath.split('.').pop();
+    if (fileType === "m3u") {
+      MSTREAMAPI.getM3uContent(currentPath, function (response, error) {
+        console.log(response);
+        console.log(error);
+        //const textLines = response.content.split("\n");
+        //console.log(textLines);
+        body += `<textarea id="editM3uContent" name="editM3uContent" class="form__textarea">${response.content}</textarea>`;
+
+        body += `</form>`;
+        ModalTemplateMainSet("Edit m3u", expWarning, body, footer);
+        $('#ModalTemplate').modal('toggle');
+      });
+
+    } else {
+      body += `</form>`;
+      ModalTemplateMainSet("Edit Playlist", expWarning, body, footer);
+      $('#ModalTemplate').modal('toggle');
+    }
+  }
+
+  $("#ModalTemplate").on("click", "#saveM3u", function (e) {
+    e.preventDefault();
+    //Double check
+    if($(this).val() === "saveM3u") {
+
+      const currentPath = $('#editForm_currentPath').val();
+      const content = $('#editM3uContent').val();
+      const file = $('#editForm_M3uFile').val();
+
+      const footer = `
+          <div class="col p-0">
+            <button id="cancel" type="submit" form="editDir_form" value="cancel"
+              class="form__btn btn btn-secondary" data-dismiss="modal">
+              Close
+              <span class="form__btn__icon mdi-set mdi-close"></span>
+            </button>  
+          </div>`;
+
+      MSTREAMAPI.writeM3uContent(currentPath, content, function (response, error) {
+        //console.log(response);
+        //console.log(error);
+        if(response.status === "success") {
+          const body = `<span>${currentPath} successfully edited!"</span>`;
+
+          ModalTemplateSuccessSet("Success",body,footer);
+
+          //Refresh
+          listFileplaylist(file, true);
+        }
+        if(response.status === "info") {
+          const body = `<span>${response.info}</span>`;
+          ModalTemplateInfoSet("Info",body,"");
+        }
+        if(response.status === "error") {
+          const body = `<span>${response.error}</span>`;
+          ModalTemplateErrorSet("Error",body,"");
+        }
+      });
+    }
+  });
+
+
   window.editSongModal = function (currentPath) {
     //const currentPath = $(this).data("file_location");
 
@@ -194,8 +292,6 @@ $(document).ready(function () {
       ModalTemplateMainSet("Edit File", expWarning, body, footer);
       $('#ModalTemplate').modal('toggle');
     }
-    
-    
   }
 
   $("#ModalTemplate").on("click", "#deleteFile", function (e) {
@@ -734,6 +830,39 @@ $(document).ready(function () {
   //#####################################################################################
   //############################# Rate Song Modal (mobile only)##########################
   //#####################################################################################
+  window.rateSongMobileModal = function (song) {
+    console.log("rateSong: ", song);
+    const footer = `  
+    <div class="col-auto p-0">
+      <button id="cancelFile" type="submit" form="edit_form" value="cancel"
+      class="form__btn btn btn-secondary" data-dismiss="modal">
+        Cancel 
+        <span class="form__btn__icon mdi-set mdi-cancel"></span>
+      </button>
+    </div>  
+    <div class="col-auto p-0">
+      <button id="saveFile" type="submit" form="edit_form" value="save"
+          class="form__btn btn btn-primary">
+          Save
+          <span class="form__btn__icon mdi-set mdi-content-save"></span>
+      </button>
+    </div>`;
+
+    // let body = `
+    // <form id="edit_form" class="form">
+    //   <div class="input-group flex-column mb-3">
+    //       <label for="editForm_currentPath">Current Path</label>
+    //       <input value="${currentPath}" id="editForm_currentPath" type="text" class="form-control w-100" readonly>
+    //   </div>
+    //   <div class="input-group flex-column mb-3">
+    //       <label for="editForm_newPath">New Path</label>
+    //       <input value="${currentPath}" id="editForm_newPath" type="text" class="form-control w-100">
+    //   </div>`;
+
+    // body += `</form>`;
+    // ModalTemplateMainSet("Edit File", expWarning, body, footer);
+    // $('#ModalTemplate').modal('toggle');
+  }
 
   //#####################################################################################
   //################################### Radio Station ###################################

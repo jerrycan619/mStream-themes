@@ -173,7 +173,7 @@
     </div>
 
     <!-- Save Playlist Modal -->
-    <div class="modal fade" id="savePlaylist" tabindex="-1" role="dialog" aria-labelledby="savePlaylist"
+    <!-- <div class="modal fade" id="savePlaylist" tabindex="-1" role="dialog" aria-labelledby="savePlaylist"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div id="flip-modal-front" class="modal-content modal--front">
@@ -209,10 +209,10 @@
                 <div class="modal-body"><span>Playist successfully saved!</span></div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Share Playlist Modal -->
-    <div class="modal fade" id="sharePlaylist" tabindex="-1" role="dialog" aria-labelledby="sharePlaylist"
+    <!-- <div class="modal fade" id="sharePlaylist" tabindex="-1" role="dialog" aria-labelledby="sharePlaylist"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content modal--front">
@@ -261,7 +261,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Modal Template // Filled and Controlled by modal.js -->
     <div class="modal fade" id="ModalTemplate" tabindex="-1" role="dialog" aria-labelledby="editModal"
@@ -328,10 +328,10 @@
                 </div>
             </div>
             
-            <div class="col-auto p-0">
+            <div class="col-auto">
                 <!-- Directory Bar -->
                 <div id="directory_bar" class="row mr-0 ml-0 flex-nowrap align-items-center" style="display: none;">
-                    <div class="col-auto">
+                    <div class="col-auto pl-0 pr-1">
                         <span title="Previous Directory" class="backButton mdi-set mdi-arrow-left navbar_icon"></span>
                     </div>
                     <div class="col p-0">
@@ -339,13 +339,13 @@
                         <!-- Current Directory -->
                         <input id="search_folders" class="hide" placeholder="Search List">
                     </div>
-                    <div class="col-auto">
-                        <div class="row flex-nowrap">
-                            <div class="col-auto">
+                    <div class="col-auto pl-1 pr-0">
+                        <div class="row m-0 flex-nowrap">
+                            <div class="col-auto pl-0">
                                 <span title="Search" id="search-explorer"
                                     class="mdi-set mdi-text-search navbar_icon"></span>
                             </div>
-                            <div class="col-auto">
+                            <div class="col-auto pr-0">
                                 <span title="Add All Songs to Playlist" class="add mdi-set mdi-playlist-plus navbar_icon"
                                     id='addall'></span>
                             </div>
@@ -387,8 +387,7 @@
                                     <div class="row align-items-center h-100">
                                         <div class="col">
                                             <button type="button" title="Save Playlist"
-                                                class="mdi-set mdi-content-save navbar_icon iconBtn" data-toggle="modal"
-                                                data-target="#savePlaylist"></button>
+                                                class="mdi-set mdi-content-save navbar_icon iconBtn" id="savePlaylist"></button>
                                         </div>
                                         <div class="col">
                                             <button type="button" title="Download Playlist" id="downloadPlaylist"
@@ -396,8 +395,7 @@
                                         </div>
                                         <div class="col">
                                             <button type="button" title="Share Playlist"
-                                                class="mdi-set mdi-share navbar_icon iconBtn" data-toggle="modal"
-                                                data-target="#sharePlaylist"></button>
+                                                class="mdi-set mdi-share-all navbar_icon iconBtn" id="sharePlaylist"></button>
                                         </div>
                                         <div class="col">
                                             <button title="Clear Playlist" id="clear"

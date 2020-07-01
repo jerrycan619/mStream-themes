@@ -195,6 +195,14 @@ var MSTREAMAPI = (function () {
     makePOSTRequest("/dir/rename", {currentPath: currentPath, newPath: newPath}, callback);
   }
 
+  mstreamModule.getM3uContent = function (path, callback) {
+    makePOSTRequest('/fileplaylist/get-content', { path: path }, callback);
+  }
+
+  mstreamModule.writeM3uContent = function (path, content, callback) {
+    makePOSTRequest('/fileplaylist/write-content', { path: path, content: content }, callback);
+  }
+
   // Lastfm - Scrobble
   mstreamModule.scrobbleByMetadata = function (artist, album, trackName, callback) {
     makePOSTRequest("/lastfm/scrobble-by-metadata", { artist: artist, album: album, track: trackName }, callback);

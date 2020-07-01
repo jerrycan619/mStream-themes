@@ -973,6 +973,13 @@ input:focus {
     cursor: pointer;
     color: #fff; }
 
+.markArtist .dir_icon {
+  background: rgba(134, 176, 255, 0.4); }
+
+.markArtist .col_track_title,
+.markArtist .col_track_artist {
+  color: #86b0ff; }
+
 #sidebar-container {
   overflow-y: auto;
   background-color: rgba(0, 0, 0, 0.8);
@@ -1151,6 +1158,12 @@ input:focus {
     display: block;
     text-align: center; }
 
+.form__textarea {
+  width: 100%;
+  min-height: 10rem;
+  white-space: nowrap;
+  overflow: auto; }
+
 .form__input-text {
   font-size: 1.5rem;
   font-family: inherit;
@@ -1191,6 +1204,18 @@ input:focus {
   margin: 0 auto;
   font-size: 1.5rem;
   font-weight: 700; }
+  @media (max-width: 330px) {
+    .form__btn {
+      font-size: 1rem; } }
+  @media (min-width: 331px) and (max-width: 400px) {
+    .form__btn {
+      font-size: 1.2rem; } }
+  @media (min-width: 401px) and (max-width: 600px) {
+    .form__btn {
+      font-size: 1.3rem; } }
+  @media (min-width: 601px) and (max-width: 800px) {
+    .form__btn {
+      font-size: 1.4rem; } }
 
 .alert_overlay {
   position: absolute;
