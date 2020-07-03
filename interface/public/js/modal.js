@@ -27,7 +27,7 @@ $(document).ready(function () {
       $('#ModalTemplateMain .modal-footer').html(footer);
     }
   
-    function ModalTemplateErrorSet(header,body,footer, timeout = 0) {
+    function ModalTemplateErrorSet(header,body,footer, timeout = 0, autoHide = false) {
       $('#ModalTemplateError .modal-header').html(`
         <h5 class="modal-title" id="exampleModalLabel">${header}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -46,13 +46,13 @@ $(document).ready(function () {
   
       if (timeout > 0) {
         setTimeout(function() {
-          //$('#ModalTemplate').modal('hide');
+          if (autoHide) {$('#ModalTemplate').modal('hide');}
           $('#ModalTemplate .ModalTemplate--front').css('transform','rotateY(0deg)');
           $('#ModalTemplate .ModalTemplate--back1').css('transform','rotateY(180deg)');
         }, timeout);
       }
     }
-    function ModalTemplateInfoSet(header,body,footer, timeout = 0) {
+    function ModalTemplateInfoSet(header,body,footer, timeout = 0, autoHide = false) {
       $('#ModalTemplateInfo .modal-header').html(`
         <h5 class="modal-title" id="exampleModalLabel">${header}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -71,13 +71,13 @@ $(document).ready(function () {
   
       if (timeout > 0) {
         setTimeout(function() {
-          //$('#ModalTemplate').modal('hide');
+          if (autoHide) {$('#ModalTemplate').modal('hide');}
           $('#ModalTemplate .ModalTemplate--front').css('transform','rotateY(0deg)');
           $('#ModalTemplate .ModalTemplate--back2').css('transform','rotateY(180deg)');
         }, timeout);
       }
     }
-    function ModalTemplateSuccessSet(header, body, footer, timeout = 0) {
+    function ModalTemplateSuccessSet(header, body, footer, timeout = 0, autoHide = false) {
       $('#ModalTemplateSuccess .modal-header').html(`
         <h5 class="modal-title" id="exampleModalLabel">${header}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -96,7 +96,7 @@ $(document).ready(function () {
   
       if (timeout > 0) {
         setTimeout(function() {
-          //$('#ModalTemplate').modal('hide');
+          if (autoHide) {$('#ModalTemplate').modal('hide');}
           $('#ModalTemplate .ModalTemplate--front').css('transform','rotateY(0deg)');
           $('#ModalTemplate .ModalTemplate--back3').css('transform','rotateY(180deg)');
         }, timeout);
@@ -253,7 +253,7 @@ $(document).ready(function () {
     <form id="edit_form" class="form">
       <div class="input-group flex-column mb-3">
           <label for="editForm_currentPath">Current Path</label>
-          <input value="${currentPath}" id="editForm_currentPath" type="text" class="form-control w-100" readonly>
+          <input value="${currentPath}" id="editForm_currentPath" type="text" class="form-control form-control-sm w-100" readonly>
       </div>
       <div class="input-group flex-column mb-3">
           <label for="editForm_newPath">New Path</label>
@@ -513,7 +513,7 @@ $(document).ready(function () {
         <form id="editDir_form" class="form">
             <div class="input-group flex-column mb-3">
                 <label for="editDir_currentPath">Directory Path</label>
-                <input id="editDir_currentPath" type="text" value="${currentPath}" class="form-control w-100" readonly>
+                <input id="editDir_currentPath" type="text" value="${currentPath}" class="form-control form-control-sm w-100" readonly>
             </div>
             <div class="input-group flex-column mb-3">
                 <label for="editDir_newPath">New directory Path</label>
@@ -826,6 +826,81 @@ $(document).ready(function () {
   //#####################################################################################
   //########################## Add to Playlist Modal (mobile only)#######################
   //#####################################################################################
+  window.addSongToPlaylistModal = function (song, playlists) {
+    console.log("song: ", song);
+    if (song.type === "stream") {
+      const body = `<span>Cannot add stream to playlist!</span>`;
+      ModalTemplateInfoSet("Info",body,"", 2000, true);
+      //ModalTemplateRotate("info", 0);
+      $('#ModalTemplate').modal('toggle');
+    } else {
+      const footer = `  
+      <div class="col-auto p-0">
+        <button id="cancelFile" type="submit" form="addToPlaylist_form" value="cancel"
+        class="form__btn btn btn-secondary" data-dismiss="modal">
+          Cancel 
+          <span class="form__btn__icon mdi-set mdi-cancel"></span>
+        </button>
+      </div>  
+      <div class="col-auto p-0">
+        <button id="addSongToPlaylist" type="submit" form="addToPlaylist_form" value="addSongToPlaylist"
+            class="form__btn btn btn-primary">
+            Save
+            <span class="form__btn__icon mdi-set mdi-content-save"></span>
+        </button>
+      </div>`;
+
+      let body = `<form id="addToPlaylist_form" class="form">
+                    <input type="hidden" value="${song.filepath}" id="songPath" />
+                    <div class="form-group col-md-4">
+                      <label for="playlists">Choose a playlist</label>
+                      <select id="playlists" class="form-control">
+                        <option value="choosePlaylist" selected>Choose...</option>`;
+
+      $.each(playlists, function( index, playlist ) {
+        body += `<option>${playlist.name}</option>`;
+      });
+
+      body += "</select></div></form>"
+
+      ModalTemplateMainSet("Add to playlist", song.filepath, body, footer);
+      $('#ModalTemplate').modal('toggle');
+    }
+  }
+
+  $("#ModalTemplate").on("click", "#addSongToPlaylist", function (e) {
+    e.preventDefault();
+    //Double check
+    if($(this).val() === "addSongToPlaylist") {
+      //console.log("filepath", $('#songPath').val());
+      //console.log("playlist", $('#playlists').val());
+      const songPath = $('#songPath').val();
+      const playlist = $('#playlists').val();
+      if (playlist === "choosePlaylist") {
+        const body = `<span>Choose a Playlist!</span>`;
+        ModalTemplateInfoSet("Info",body,"", 2000);
+      } else {
+        MSTREAMAPI.addToPlaylist(playlist, songPath, function (res, err) {
+          //console.log(res);
+          //console.log(err);
+          if (err) {
+            const body = `<span>Failed to add Song to Playlist!</span>`;
+            ModalTemplateErrorSet("Error",body,"", 2000);
+          } else {
+            const body = `<span>Song added to Playlist ${playlist}!</span>`;
+  
+            const footer = `
+            <button id="cancel" type="submit" form="" value="cancel"
+            class="form__btn btn btn-secondary" data-dismiss="modal">Close<span
+                class="form__btn__icon mdi-set mdi-close"></span>
+            </button> `;
+  
+            ModalTemplateSuccessSet("Success",body,footer);
+          }
+        });
+      }
+    }
+  });
 
   //#####################################################################################
   //############################# Rate Song Modal (mobile only)##########################
@@ -848,20 +923,14 @@ $(document).ready(function () {
       </button>
     </div>`;
 
-    // let body = `
-    // <form id="edit_form" class="form">
-    //   <div class="input-group flex-column mb-3">
-    //       <label for="editForm_currentPath">Current Path</label>
-    //       <input value="${currentPath}" id="editForm_currentPath" type="text" class="form-control w-100" readonly>
-    //   </div>
-    //   <div class="input-group flex-column mb-3">
-    //       <label for="editForm_newPath">New Path</label>
-    //       <input value="${currentPath}" id="editForm_newPath" type="text" class="form-control w-100">
-    //   </div>`;
+    let body = `
+      <star-rating class="" @rating-selected="overlay_setRating" v-model="rating"
+      v-bind:increment="0.5" v-bind:clearable="true" v-bind:star-size="25" v-bind:padding="8"
+      v-bind:border-color="000">
+  </star-rating>`;
 
-    // body += `</form>`;
-    // ModalTemplateMainSet("Edit File", expWarning, body, footer);
-    // $('#ModalTemplate').modal('toggle');
+    ModalTemplateMainSet("Rate Song", "TODO", body, footer);
+    $('#ModalTemplate').modal('toggle');
   }
 
   //#####################################################################################
