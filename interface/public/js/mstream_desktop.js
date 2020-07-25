@@ -72,7 +72,13 @@ function createMusicfileHtml(fileLocation, title, titleClass, showEdit) {
                   <span class="${titleClass}">${title}</span>
                 </div>
               </div>
-              <div class="song-button-box row align-items-center flex-nowrap">
+              <div class="song-button-box row m-0 align-items-center flex-nowrap sbb_fold ">
+                <div class="col">
+                  <span class="fold mdi-set mdi-chevron-left"></span>
+                </div>
+                <div class="col">
+                  <span onclick="addPathToAutoDj(this);" data-directory="${fileLocation}" data-type="file" title="Add to AutoDJ" class="mdi-set mdi-plus"></span>
+                </div>
                 ${editButton}
               </div>
             </div>
@@ -639,7 +645,7 @@ $(document).ready(function () {
   // function that will receive JSON array of a directory listing.  It will then make a list of the directory and tack on classes for functionality
   function printdir(response, previousState, showEdit = true) {
     currentBrowsingList = response.contents;
-    console.log(currentBrowsingList);
+    //console.log(currentBrowsingList);
 
     // clear the list
     $('#search_folders').val('');
@@ -674,6 +680,9 @@ $(document).ready(function () {
                             <div class="song-button-box row m-0 align-items-center flex-nowrap sbb_fold ">
                               <div class="col">
                                 <span class="fold mdi-set mdi-chevron-left"></span>
+                              </div>
+                              <div class="col">
+                                <span onclick="addPathToAutoDj(this);" data-directory="${this.name}" title="Add to AutoDJ" class="mdi-set mdi-plus"></span>
                               </div>
                               <div class="col">
                                 <span title="Add All To Queue" class="recursiveAddDir mdi-set mdi-playlist-plus" data-directory="${this.name}"></span>
@@ -992,6 +1001,140 @@ $(document).ready(function () {
   $('.get_radio').on('click', function () {
     getAllRadioStations();
   });
+
+  $('.get_autoDj').on('click', function () {
+    getAutoDjView();
+  });
+
+  window.getAutoDjView = function () {
+    $('ul.left-nav-menu li').removeClass('selected');
+    $('.get_all_playlists').addClass('selected');
+    resetPanel('Auto Dj', 'scrollBoxHeight1');
+    $('#directory_bar').hide();
+    $('#fillContent').html(spinner1_html);
+    currentBrowsingList = [];
+
+    programState = [{
+      state: 'autoDjView'
+    }];
+
+    MSTREAMAPI.getAllAutoDj(function (response, error) {
+      console.log(response);
+      console.log(error);
+      let categories = [];
+      let paths = [];
+      let output = [];
+      
+      $.each(response, function () {
+        if (this.type === "category") {
+          categories.push({cat_id: this.id, cat_title: this.title, cat_subtitle: this.subtitle});
+        } else if (this.type === "path") {
+          paths.push({path_id: this.id, cat_id: this.category, path: this.path});
+        }
+        
+        currentBrowsingList.push(this);
+      });
+      //console.log("categoriesA", categories);
+      //console.log("pathsA", paths);
+
+      let count = 0;
+
+      categories.forEach(function(category){
+        count++;
+        let outputHtml = `<div class="card w-100">
+                          <div class="card-header pt-0 pb-0" id="heading${count}">
+                            <div class="row m-0 overflow-hidden align-items-center">
+                              <div class="col p-0">
+                                <button class="btn" data-toggle="collapse" data-target="#collapse${count}" aria-expanded="true" aria-controls="collapse${count}">
+                                  <div class="row m-0 align-items-center">
+                                    <div class="col-auto pl-0">
+                                      <span class="mdi-set mdi-music-circle icon_normal"></span>
+                                    </div>
+                                    <div class="col pl-0 d-flex flex-column">
+                                      <span class="col_track_title">
+                                        ${escapeHtml(category.cat_title)}
+                                      </span>
+                                      <span class="col_track_artist">${escapeHtml(category.cat_subtitle)}</span>
+                                    </div>
+                                  </div>
+                                </button>
+                              </div>
+                              <div class="col-auto pr-0">
+                                <span data-stationid="${category.cat_id}" onclick="editAudoDjCat('${category.cat_id}');" class="mdi-set mdi-pencil icon_normal"></span>
+                              </div>
+                            </div>
+                          </div>
+                          <div id="collapse${count}" class="collapse" aria-labelledby="heading${count}" data-parent="#accordion">
+                            <div class="card-body">`;
+        paths.forEach(function(path){
+          if (path.cat_id === category.cat_id) {
+            outputHtml += `     <div class="row flex-nowrap m-0">
+                                    <div class="col p-0 vert_text_scroll">${path.path}</div>
+                                    <div class="col-auto p-0">
+                                      <span onclick="deleteAutoDjPath('${path.path_id}');" class="mdi-set mdi-delete smallIcon"></span>
+                                    </div>
+                                </div>`;
+          }
+        });
+        outputHtml += `     </div>
+                          </div>
+                          </div>`;
+        output.push(outputHtml);
+      });
+
+      // Add playlists to the left panel // <div id='downloadAllStations'>Download</div>
+      $('#fillContent').html("<div data-simplebar class='col h-100 mh-100 p-0'><div class='row m-0 flex-column flex-nowrap w-100 autoDjCatRow'><div id='accordion' class='autoDjViewList'>" + output.join("") + "</div></div></div>");
+    });
+
+    $('#panel_one_header_button2').html("<span title='Add Category' onclick='addAutoDjCategory();' class='mdi-set mdi-plus-circle-outline header_button'></span>");
+    $('#panel_one_header_button3').html("<span title='Import radio stations' onclick='importAutoDjList();' class='mdi-set mdi-import header_button'></span>");
+    $('#panel_one_header_button4').html(`<span title='Export AutoDj List' onclick="exportAutoDjList();" class='mdi-set mdi-export header_button'></span>`);
+    $('#panel_one_header_button5').html("<span title='AutoDJ settings' onclick='autoDjSettings();' class='mdi-set mdi-cogs header_button'></span>");
+  }
+
+  window.exportAutoDjList = function () {
+    
+    function download(filename, storageObj) {
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(storageObj));
+      element.setAttribute('download', filename);
+    
+      element.style.display = 'none';
+      document.body.appendChild(element);
+    
+      element.click();
+    
+      document.body.removeChild(element);
+    }
+    
+    let exportList = [];
+
+    MSTREAMAPI.getAllAutoDj(function (response, error) {
+      let categories = [];
+      let paths = [];
+      
+      $.each(response, function () {
+        if (this.type === "category") {
+          categories.push({cat_id: this.id, cat_title: this.title, cat_subtitle: this.subtitle});
+        } else if (this.type === "path") {
+          paths.push({path_id: this.id, cat_id: this.category, path: this.path});
+        }
+      });
+
+      categories.forEach(function(category){
+        let exportItem = {cat_title: category.cat_title, cat_subtitle: category.cat_subtitle};
+        exportItem.pathList = [];
+        paths.forEach(function(path){
+          if (path.cat_id === category.cat_id) {
+            exportItem.pathList.push(path.path);
+          }
+        });
+        exportList.push(exportItem);
+      });
+
+      download("mStream_autoDj.json", JSON.stringify(exportList));
+    });
+  }
 
   window.getAllRadioStations = function () {
     $('ul.left-nav-menu li').removeClass('selected');
@@ -1797,6 +1940,8 @@ Length${index+1}=-1\n`;
     }];
 
     MSTREAMAPI.getRated(function (response, error) {
+      //console.log(response);
+      //console.log(error);
       if (error !== false) {
         $('#fillContent').html('<div>Server call failed</div>');
         return boilerplateFailure(response, error);
@@ -1882,7 +2027,7 @@ Length${index+1}=-1\n`;
     setupSearchPanel();
   });
 
-  function setupSearchPanel(searchTerm) {
+  window.setupSearchPanel = function (searchTerm, filter = false) {
     $('ul.left-nav-menu li').removeClass('selected');
     $('.search_stuff').addClass('selected');
     resetPanel('Search DB', 'scrollBoxHeight1');
@@ -2012,7 +2157,24 @@ Length${index+1}=-1\n`;
         //Update the filter string (Search in: ... )
         updateFilterHtml();
       }
-  });
+    });
+
+    if (filter) {
+      if (filter === "title") {
+        searchToggles.titles = true;
+        searchToggles.files = false;
+        searchToggles.albums = false;
+        searchToggles.artists = false;
+        updateFilterHtml();
+      }
+      if (filter === "artist") {
+        searchToggles.titles = false;
+        searchToggles.files = false;
+        searchToggles.albums = false;
+        searchToggles.artists = true;
+        updateFilterHtml();
+      }
+    }
 
     if (searchTerm) {
       // $('#search-term').val(searchTerm);
@@ -2165,7 +2327,7 @@ Length${index+1}=-1\n`;
     const newHtml = `
     <div data-simplebar class="col p-0 h-100 mh-100" style="overflow-x:hidden;">
       <div class="row m-0 flex-column flex-nowrap w-100">
-        <div class="col-auto p-0">
+        <!-- <div class="col-auto p-0">
           <div class="row mt-2 mb-2 settings_box">\
             <div class="col">\
               <div class="row m-0 align-items-center justify-content-between">
@@ -2197,7 +2359,7 @@ Length${index+1}=-1\n`;
               ${autodjRating_html}
             </select>
           </div>
-        </div>
+        </div> -->
         <div class="col-auto p-0">
           <div class="row mt-4">\
             <div class="col">\

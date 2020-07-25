@@ -135,28 +135,6 @@ new Vue({
             var titleX = this.met.title;
             //console.log(playerStats);
 
-            // if (playerStats.stream && playerStats.metadata.url) {
-            //     function updateMeta(interval) {
-            //         const metaUpdateTime = setTimeout(() => {
-            //             MSTREAMAPI.getRadioMeta(playerStats.metadata.url, function (response, error) {
-            //               if (error !== false || response.error || !response) {
-            //                 return;
-            //               }
-            //               console.log(response);
-            //               if (response.metadata) {
-            //                   playerStats.metadata.title = response.metadata.title;
-            //                   MSTREAMPLAYER.resetCurrentMetadata();
-            //               }
-            //               updateMeta(interval)
-            //             });
-                      
-            //         }, interval);
-            //     };
-            //     updateMeta(15000);
-            // } else {
-            //    // clearTimeout(metaUpdateTime);
-            // }
-
             var currentSong = MSTREAMPLAYER.getCurrentSong();
 
             if (currentSong === false) {
@@ -294,66 +272,13 @@ new Vue({
         forward30: function () {
             MSTREAMPLAYER.goForwardSeek(30);
         },
-        searchTitle: function () {
-            setupSearchPanel();
-            let post = {
-                search: "test"
-            }
+        searchArtist: function () {
             var playerStats = this.playerStats;
-            const searchMap = {
-                albums: {
-                    name: 'Album',
-                    class: 'albumz',
-                    data: 'album'
-                },
-                artists: {
-                    name: 'Artist',
-                    class: 'artistz',
-                    data: 'artist'
-                },
-                files: {
-                    name: 'File',
-                    class: 'filez',
-                    data: 'file_location'
-                },
-                title: {
-                    name: 'Song',
-                    class: 'filez',
-                    data: 'file_location'
-                }
-            };
-
-            if (playerStats.metadata.title) {
-                post.search = playerStats.metadata.title;
-                console.log("Suche:", post.search)
-                MSTREAMAPI.search(post, function (res, error) {
-                    if (error !== false) {
-                        $('#search-results').html('<div>Server call failed</div>');
-                        return boilerplateFailure(res, error);
-                    }
-                    // Populate list
-                    var searchList = ['<div class="clear flatline"></div>'];
-                    Object.keys(res).forEach(function (key) {
-                        res[key].forEach(function (value, i) {
-                            // perform some operation on a value;
-                            if (value.filepath) {
-                                searchList.push(`<div data-${searchMap[key].data}="${value.filepath}" class="${searchMap[key].class}"><b>${searchMap[key].name}:</b> ${value.name}</div>`);
-                            } else {
-                                searchList.push(`<div data-${searchMap[key].data}="${value.name}" class="${searchMap[key].class}"><b>${searchMap[key].name}:</b> ${value.name}</div>`);
-                            }
-                        });
-                    });
-
-                    if (searchList.length < 2) {
-                        searchList.push('<h5>No Results Found</h5>');
-                    }
-
-                    $('#search-results').html(searchList);
-                    console.log(res);
-                    console.log(error);
-                });
-            }
-
+            setupSearchPanel(playerStats.metadata.artist, "artist");
+        },
+        searchTitle: function () {
+            var titleX = this.met.title;
+            if (titleX) {setupSearchPanel(titleX, "title");}
         }
     },
     mounted: function() {

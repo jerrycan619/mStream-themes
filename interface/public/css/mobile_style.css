@@ -970,7 +970,7 @@ input:focus {
     transform: translate3d(0px, 0px, 0px) !important;
     display: flex !important;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: space-between;
     width: 100% !important; }
   .slides_system_nav .slick-current,
@@ -1039,12 +1039,12 @@ input:focus {
 .file_wrapper .song-button-box {
   font-size: 2rem;
   margin: 0;
-  width: 12rem;
+  width: 14rem;
   height: 100%;
   overflow: hidden;
   background: #121212;
   position: absolute;
-  right: -9rem;
+  right: -11rem;
   top: 0;
   transition: right .3s ease; }
 
@@ -1073,11 +1073,6 @@ input:focus {
       height: 100%; }
 
 .directoryName {
-  white-space: nowrap;
-  overflow-x: auto;
-  overflow-y: hidden;
-  direction: rtl;
-  display: block;
   line-height: 1.2rem; }
 
 .scroll_vert {
@@ -1100,6 +1095,13 @@ input:focus {
 .markArtist .col_track_title,
 .markArtist .col_track_artist {
   color: #86b0ff; }
+
+.vert_text_scroll {
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  direction: rtl;
+  display: block; }
 
 .navbar {
   height: 4rem;
@@ -1138,7 +1140,7 @@ input:focus {
   perspective: 50rem;
   -moz-perspective: 50rem; }
   .modal-dialog .modal-body .input-group-text {
-    width: 4rem;
+    width: 100%;
     font-weight: bold;
     font-size: 0.9rem; }
 
@@ -1552,6 +1554,31 @@ input:focus {
   .switch-input:checked ~ .switch-handle {
     left: 2.7rem;
     box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2); }
+
+.autoDjViewList .card {
+  background: transparent; }
+  .autoDjViewList .card .card-header {
+    background: #2b2b2b; }
+    .autoDjViewList .card .card-header button {
+      color: #b3b3b3;
+      text-align: left; }
+      .autoDjViewList .card .card-header button:hover {
+        color: #fff; }
+  .autoDjViewList .card .card-body > .row {
+    height: 2.2rem;
+    line-height: 2.2rem; }
+    .autoDjViewList .card .card-body > .row:nth-child(even) {
+      background: #212121; }
+
+#includeAutoDjCatUl {
+  background: rgba(18, 18, 18, 0.5);
+  margin-bottom: 1rem; }
+  #includeAutoDjCatUl .list-group-item {
+    font-size: 1.2rem;
+    border-color: rgba(255, 255, 255, 0.5); }
+    #includeAutoDjCatUl .list-group-item .removeCatFromIncludedCats:hover {
+      cursor: pointer;
+      color: #fff; }
 
 .shared_content::after {
   content: "";

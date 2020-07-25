@@ -1,7 +1,7 @@
 $(document).ready(function () {
   
     //#####################################################################################
-    //# Setup Modal Functions to fill the template und control the functions of the modal #
+    //# Setup Modal Functions to fill the template and control the functions of the modal #
     //#####################################################################################
     function ModalTemplateMainSet(header, headerSubtext, body, footer) {
       $('#ModalTemplateMain .modal-header').html(`
@@ -414,7 +414,7 @@ $(document).ready(function () {
         }
         if(response.status === "info") {
           const body = `<span>${response.info}</span>`;
-          ModalTemplateInfoSet("Info",body,"");
+          ModalTemplateInfoSet("Info",body,"", 2000);
         }
         if(response.status === "error") {
           const body = `<span>${response.error}</span>`;
@@ -826,7 +826,7 @@ $(document).ready(function () {
   //#####################################################################################
   //########################## Add to Playlist Modal (mobile only)#######################
   //#####################################################################################
-  window.addSongToPlaylistModal = function (song, playlists) {
+  window.addSongToPlaylistMobileModal = function (song, playlists) {
     console.log("song: ", song);
     if (song.type === "stream") {
       const body = `<span>Cannot add stream to playlist!</span>`;
@@ -855,7 +855,7 @@ $(document).ready(function () {
                     <div class="form-group col-md-4">
                       <label for="playlists">Choose a playlist</label>
                       <select id="playlists" class="form-control">
-                        <option value="choosePlaylist" selected>Choose...</option>`;
+                        <option selected>Choose...</option>`;
 
       $.each(playlists, function( index, playlist ) {
         body += `<option>${playlist.name}</option>`;
@@ -876,30 +876,27 @@ $(document).ready(function () {
       //console.log("playlist", $('#playlists').val());
       const songPath = $('#songPath').val();
       const playlist = $('#playlists').val();
-      if (playlist === "choosePlaylist") {
-        const body = `<span>Choose a Playlist!</span>`;
-        ModalTemplateInfoSet("Info",body,"", 2000);
-      } else {
-        MSTREAMAPI.addToPlaylist(playlist, songPath, function (res, err) {
-          //console.log(res);
-          //console.log(err);
-          if (err) {
-            const body = `<span>Failed to add Song to Playlist!</span>`;
-            ModalTemplateErrorSet("Error",body,"", 2000);
-          } else {
-            const body = `<span>Song added to Playlist ${playlist}!</span>`;
-  
-            const footer = `
-            <button id="cancel" type="submit" form="" value="cancel"
-            class="form__btn btn btn-secondary" data-dismiss="modal">Close<span
-                class="form__btn__icon mdi-set mdi-close"></span>
-            </button> `;
-  
-            ModalTemplateSuccessSet("Success",body,footer);
-          }
-        });
-      }
+      MSTREAMAPI.addToPlaylist(playlist, songPath, function (res, err) {
+        //console.log(res);
+        //console.log(err);
+        if (err) {
+          const body = `<span>Failed to add Song to Playlist!</span>`;
+          ModalTemplateErrorSet("Error",body,"", 2000);
+        } else {
+          const body = `<span>Song added to Playlist ${playlist}!</span>`;
+
+          const footer = `
+          <button id="cancel" type="submit" form="" value="cancel"
+          class="form__btn btn btn-secondary" data-dismiss="modal">Close<span
+              class="form__btn__icon mdi-set mdi-close"></span>
+          </button> `;
+
+          ModalTemplateSuccessSet("Success",body,footer);
+        }
+        
+      });
     }
+  
   });
 
   //#####################################################################################
@@ -1251,5 +1248,442 @@ $(document).ready(function () {
       fr.readAsText(files.item(0));
     }
   });
+
+  //#####################################################################################
+  //#################################### AutoDJ #########################################
+  //#####################################################################################
+  window.addAutoDjCategory = function () {
+    const body = `
+    <form id="add_autoDjCat_form" class="form">
+      <div class="input-group form-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Title</span>
+        </div>
+        <input id="addAutoDjCat_title" type="text" class="form-control">
+      </div>
+      <div class="input-group form-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Sub Title</span>
+        </div>
+        <input id="addAutoDjCat_subtitle" type="text" class="form-control">
+      </div>
+    </form>`;
+    const footer = `
+    <div class="col p-0">
+      <button id="saveAutoDjCategory" type="submit" form="add_autoDjCat_form" value="saveAutoDjCategory" class="form__btn btn btn-primary">
+        Add Category
+        <span class="form__btn__icon mdi-set mdi-plus-circle-outline" />
+      </button>
+    </div>`;
+
+    ModalTemplateMainSet("Add AutoDj Category", "", body, footer);
+    $('#ModalTemplate').modal('toggle');
+  }
+
+  $("#ModalTemplate").on("click", "#saveAutoDjCategory", function (e) {
+    e.preventDefault();
+    //Double check
+    if($(this).val() === "saveAutoDjCategory") {
+      const title = $('#addAutoDjCat_title').val();
+      const subTitle = $('#addAutoDjCat_subtitle').val();
+      console.log("Add Title: ", title);
+      console.log("Add subTitle: ", subTitle);
+      MSTREAMAPI.addCat(title, subTitle, function (response, error) {
+        console.log(response);
+        console.log(error);
+        if(response.status === "success") {
+          const body = `<span>Successfully added: ${response.title}</span><br><span>${response.subtitle}</span>`;
+          const footer = `
+          <div class="col p-0">
+            <button id="cancel" type="submit" form="add_autoDjCat_form" value="cancel"
+              class="form__btn btn btn-secondary" data-dismiss="modal">
+              Close
+              <span class="form__btn__icon mdi-set mdi-close"></span>
+            </button>  
+          </div>`;
+          ModalTemplateSuccessSet("Success",body,footer);
+          ModalTemplateRotate("info", 180);
+          
+          //Refresh
+          getAutoDjView();
+        }
+        if(response.status === "info") {
+          const body = `<span>${response.info}</span>`;
+          ModalTemplateInfoSet("Info",body,"");
+        }
+        if(response.status === "error") {
+          const body = `<span>${response.error}</span>`;
+          ModalTemplateErrorSet("Error",body,"");
+        }
+      });
+    } 
+  });
+  
+  window.addPathToAutoDj = function (path) {
+    //console.log("addToAutoDj: ", path);
+    let pathStr = $(path).data("directory");
+    if ($(path).data("type") !== "file") {
+      pathStr = getDirectoryString($(path));
+    } 
+
+    MSTREAMAPI.getAllAutoDj(function (response, error) {
+      let body = `<form id="add_to_autodjcat">
+                    <input id="addAutoDjPath" type="hidden" value="${pathStr}" />
+                    <select id="autoDjCatList" class="form-control">
+                      <option value="undefined" selected>Choose...</option>`;
+
+      $.each(response, function () {
+        if (this.type === "category") {
+          body += `<option value="${this.id}">${this.title}</option>`;
+        }
+      });
+      body += "</select></div></form>";
+
+      const footer = `
+      <div class="col p-0">
+        <button id="cancel" type="submit" form="add_to_autodjcat" value="cancel"
+          class="form__btn btn btn-secondary" data-dismiss="modal">
+          Close
+          <span class="form__btn__icon mdi-set mdi-close"></span>
+        </button>  
+      </div>
+      <div class="col p-0">
+        <button id="addToCategory" type="submit" form="add_to_autodjcat" value="addToCategory" class="form__btn btn btn-primary">
+          Add
+          <span class="form__btn__icon mdi-set mdi-plus-circle-multiple-outline" />
+        </button>
+      </div>`;
+
+      ModalTemplateMainSet("Add to AutoDj", "", body, footer);
+      $('#ModalTemplate').modal('toggle');
+    });
+  }
+
+  $("#ModalTemplate").on("click", "#addToCategory", function (e) {
+    e.preventDefault();
+    //Double check
+    if($(this).val() === "addToCategory") {
+      const path = $('#addAutoDjPath').val();
+      const catId = $('#autoDjCatList').val();
+      const catTitle = $('#autoDjCatList option:selected').text();
+
+      if (catId === "undefined") {
+        const body = `<span>No category selected!</span>`;
+        ModalTemplateInfoSet("Info",body,"", 2000);
+      } else {
+        console.log("Add Path: ", path);
+        console.log("to catId: ", catId);
+
+        MSTREAMAPI.addPath(path, catId, function (response, error) {
+          console.log(response);
+          console.log(error);
+          if(response.status === "success") {
+            const body = `<span>Successfully added: ${path} to ${catTitle}</span>`;
+            const footer = `
+            <div class="col p-0">
+              <button id="cancel" type="submit" form="add_to_autodjcat" value="cancel"
+                class="form__btn btn btn-secondary" data-dismiss="modal">
+                Close
+                <span class="form__btn__icon mdi-set mdi-close"></span>
+              </button>  
+            </div>`;
+            ModalTemplateSuccessSet("Success",body,footer);
+            ModalTemplateRotate("info", 180);
+            
+          }
+          if(response.status === "info") {
+            const body = `<span>${response.info}</span>`;
+            ModalTemplateInfoSet("Info",body,"");
+          }
+          if(response.status === "error") {
+            const body = `<span>${response.error}</span>`;
+            ModalTemplateErrorSet("Error",body,"");
+          }
+        });
+      }
+      
+    } 
+  });
+
+  window.editAudoDjCat = function (cat_id) {
+    MSTREAMAPI.getCat(cat_id, function (response, error) {
+      console.log(response);
+      console.log(error);
+      const body = `
+      <form id="edit_autoDjCat_form" class="form">
+      <input id="editAutoDjCat_id" type="hidden" value="${response.category_id}" />
+        <div class="input-group form-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Title</span>
+          </div>
+          <input id="editAutoDjCat_title" type="text" value="${response.title}" class="form-control">
+        </div>
+        <div class="input-group form-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Sub Title</span>
+          </div>
+          <input id="editAutoDjCat_subtitle" type="text" value="${response.subtitle}" class="form-control">
+        </div>
+      </form>`;
+      const footer = `
+      <div class="col-auto p-0">
+            <button id="deleteAutoDjCat" type="submit" form="edit_autoDjCat_form" value="deleteAutoDjCat"
+                class="form__btn btn btn-danger mdi-set mdi-delete">
+            </button>
+      </div>
+      <div class="col p-0"></div>
+      <div class="col-auto p-0">
+        <button id="cancel" type="submit" form="edit_autoDjCat_form" value="cancel"
+          class="form__btn btn btn-secondary" data-dismiss="modal">
+          Cancel
+          <span class="form__btn__icon mdi-set mdi-cancel"></span>
+        </button>  
+      </div>
+      <div class="col-auto p-0">
+        <button id="editAutoDjCategory" type="submit" form="edit_autoDjCat_form" value="editAutoDjCategory" class="form__btn btn btn-primary">
+          Edit Category
+          <span class="form__btn__icon mdi-set mdi-pencil" />
+        </button>
+      </div>`;
+
+      ModalTemplateMainSet("Edit AutoDj Category", "", body, footer);
+      $('#ModalTemplate').modal('toggle');
+    });
+  }
+
+  $("#ModalTemplate").on("click", "#deleteAutoDjCat", function (e) {
+    e.preventDefault();
+    //Double check
+    if($(this).val() === "deleteAutoDjCat") {
+      const title = $('#editAutoDjCat_title').val();
+      const subtitle = $('#editAutoDjCat_subtitle').val();
+      const id = $('#editAutoDjCat_id').val();
+
+      const body = `<span>Delete: ${title}</span> <br> <span>${subtitle} ?</span>`;
+      const footer = `
+      <div class="col p-0">
+        <button id="cancel" type="submit" form="edit_autoDjCat_form" value="cancel"
+          class="form__btn btn btn-secondary" data-dismiss="modal">
+          Cancel
+          <span class="form__btn__icon mdi-set mdi-cancel"></span>
+        </button>  
+      </div>
+      <div class="col p-0">
+        <button id="confirmDeleteAutoDjCat" type="submit" form="edit_autoDjCat_form" value="confirmDeleteAutoDjCat"
+            class="form__btn btn btn-danger mdi-set mdi-delete">
+            Delete
+        </button>
+      </div>`;
+
+      ModalTemplateInfoSet("Confirm",body,footer);
+    }
+  });
+      
+  $("#ModalTemplate").on("click", "#confirmDeleteAutoDjCat", function (e) {
+    e.preventDefault();
+    //Double check
+    if($(this).val() === "confirmDeleteAutoDjCat") {
+      const title = $('#editAutoDjCat_title').val();
+      const subtitle = $('#editAutoDjCat_subtitle').val();
+      const id = $('#editAutoDjCat_id').val();
+
+      MSTREAMAPI.deleteCat(id, function (response, error) {
+        if(response.status === "success") {
+          const body = `<span>Successfully deleted: ${title}</span><br><span>${subtitle}</span>`;
+          const footer = `
+          <div class="col p-0">
+            <button id="cancel" type="submit" form="edit_autoDjCat_form" value="cancel"
+              class="form__btn btn btn-secondary" data-dismiss="modal">
+              Close
+              <span class="form__btn__icon mdi-set mdi-close"></span>
+            </button>  
+          </div>`;
+          ModalTemplateSuccessSet("Success",body,footer);
+          ModalTemplateRotate("info", 180);
+          
+          //Refresh
+          getAutoDjView();
+        }
+        if(response.status === "info") {
+          const body = `<span>${response.info}</span>`;
+          ModalTemplateInfoSet("Info",body,"");
+        }
+        if(response.status === "error") {
+          const body = `<span>${response.error}</span>`;
+          ModalTemplateErrorSet("Error",body,"");
+        }
+      });
+    }
+  });
+
+  $("#ModalTemplate").on("click", "#editAutoDjCategory", function (e) {
+    e.preventDefault();
+    //Double check
+    if($(this).val() === "editAutoDjCategory") {
+      const title = $('#editAutoDjCat_title').val();
+      const subtitle = $('#editAutoDjCat_subtitle').val();
+      const id = $('#editAutoDjCat_id').val(); 
+      MSTREAMAPI.editCat(id, title, subtitle, function (response, error) {
+        if(response.status === "success") {
+          const body = `<span>Successfully edited: ${title}</span><br><span>${subtitle}</span>`;
+          const footer = `
+          <div class="col p-0">
+            <button id="cancel" type="submit" form="edit_autoDjCat_form" value="cancel"
+              class="form__btn btn btn-secondary" data-dismiss="modal">
+              Close
+              <span class="form__btn__icon mdi-set mdi-close"></span>
+            </button>  
+          </div>`;
+          ModalTemplateSuccessSet("Success",body,footer);
+          ModalTemplateRotate("info", 180);
+          
+          //Refresh
+          getAutoDjView();
+        }
+        if(response.status === "info") {
+          const body = `<span>${response.info}</span>`;
+          ModalTemplateInfoSet("Info",body,"");
+        }
+        if(response.status === "error") {
+          const body = `<span>${response.error}</span>`;
+          ModalTemplateErrorSet("Error",body,"");
+        }
+      });
+    }
+  });
+
+  window.deleteAutoDjPath = function (path_id) {
+    console.log("Delete Path_ID: ", path_id);
+    MSTREAMAPI.deletePath(path_id, function (response, error) {
+      if(response.status === "success") {
+        const body = `<span>Successfully deleted!</span>`;
+        const footer = `
+        <div class="col p-0">
+          <button id="cancel" type="submit" form="edit_autoDjCat_form" value="cancel"
+            class="form__btn btn btn-secondary" data-dismiss="modal">
+            Close
+            <span class="form__btn__icon mdi-set mdi-close"></span>
+          </button>  
+        </div>`;
+        ModalTemplateMainSet("Deleted Path", "", body, footer);
+        $('#ModalTemplate').modal('toggle');
+        ModalTemplateSuccessSet("Success",body,footer);
+        ModalTemplateRotate("info", 180);
+        
+        //Refresh
+        getAutoDjView();
+      }
+      if(response.status === "info") {
+        const body = `<span>${response.info}</span>`;
+        ModalTemplateInfoSet("Info",body,"");
+      }
+      if(response.status === "error") {
+        const body = `<span>${response.error}</span>`;
+        ModalTemplateErrorSet("Error",body,"");
+      }
+    });
+  }
+
+  window.autoDjSettings = function () {
+    const includedCats = JSON.parse(localStorage.getItem("autoDJ-Cats"));
+    console.log("includedCats: ", includedCats);
+    let body = `<div>Get random song from: </div>
+                   <ul id="includeAutoDjCatUl" class="list-group">`;
+
+    $.each(includedCats, function (key, val) {
+      body += `<li class="list-group-item">
+        <div class="row m-0 flex-nowrap">
+          <div class="col p-0">${val}</div>
+          <div class="col-auto p-0"><span data-value="${key}" class="removeCatFromIncludedCats mdi-set mdi-delete"></span></div>
+        </div>
+      </li>`;
+    });
+    body += `</ul>`;
+
+    MSTREAMAPI.getAllAutoDj(function (response, error) {
+      body += `<form id="edit_autoDjSettings">
+                    <select id="includeAutoDjCatList" class="form-control">
+                      <option value="undefined" selected>Choose...</option>`;
+
+      $.each(response, function () {
+        if (this.type === "category") {
+          body += `<option value="${this.id}">${this.title}</option>`;
+        }
+      });
+      body += `</select></div><hr>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">min. Rating</span>
+        </div>
+        <input type="number" min="0" max="5" step="0.5" class="form-control" value="0" aria-label="minimum star rating">
+        <div class="input-group-append">
+          <span class="input-group-text mdi-set mdi-star"></span>
+        </div>
+      </div>  
+      </form>`;
+
+      const footer = `
+      <div class="col p-0">
+        <button id="cancel" type="submit" form="edit_autoDjSettings" value="cancel"
+          class="form__btn btn btn-secondary" data-dismiss="modal">
+          Close
+          <span class="form__btn__icon mdi-set mdi-close"></span>
+        </button>  
+      </div>`;
+
+      ModalTemplateMainSet("AutoDJ Settings", "", body, footer);
+      $('#ModalTemplate').modal('toggle');
+    });
+  }
+
+  $("#ModalTemplate").on("change", "#includeAutoDjCatList", function () {
+    let includedCats = JSON.parse(localStorage.getItem("autoDJ-Cats"));
+    if (!includedCats) {
+      includedCats = {};
+    }
+    const catId = $('#includeAutoDjCatList').val();
+    const catTitle = $('#includeAutoDjCatList option:selected').text();
+    console.log("includedCats: ", includedCats);
+
+    let autoDJPaths = {}; 
+    includedCats[catId] = catTitle;
+
+    autoDJPaths = JSON.stringify(includedCats);
+    localStorage.setItem("autoDJ-Cats", autoDJPaths);
+
+    $("#includeAutoDjCatUl").append(`<li class="list-group-item">
+    <div class="row m-0 flex-nowrap">
+      <div class="col p-0">${catTitle}</div>
+      <div class="col-auto p-0"><span data-value="${catId}" class="removeCatFromIncludedCats mdi-set mdi-delete"></span></div>
+    </div>
+    </li>`);
+  });
+
+  $("#ModalTemplate").on("click", ".removeCatFromIncludedCats", function (e) {
+    e.preventDefault();
+    let includedCats = JSON.parse(localStorage.getItem("autoDJ-Cats"));
+    const deleteCat = $(this).data("value");
+    console.log("removeCat: ", deleteCat);
+    delete includedCats[deleteCat];
+    includedCats = JSON.stringify(includedCats);
+    localStorage.setItem("autoDJ-Cats", includedCats);
+
+    $(this).closest("li").remove();
+  });
+
+  window.importAutoDjList = function () {
+    const body = `<span>TODO!</span>`;
+    const footer = `
+      <div class="col p-0">
+        <button id="cancel" type="submit" form="edit_autoDjSettings" value="cancel"
+          class="form__btn btn btn-secondary" data-dismiss="modal">
+          Close
+          <span class="form__btn__icon mdi-set mdi-close"></span>
+        </button>  
+      </div>`;
+
+    ModalTemplateMainSet("AutoDJ import list", "", body, footer);
+    $('#ModalTemplate').modal('toggle');
+  }
 
 });

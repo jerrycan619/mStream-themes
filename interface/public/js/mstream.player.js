@@ -231,7 +231,19 @@ var MSTREAMPLAYER = (function () {
 
   function autoDJ() {
     // Call mStream API for random song
-    mstreamModule.getRandomSong(function (res, err) {
+    // mstreamModule.getRandomSong(function (res, err) {
+    //   if (err) {
+    //     mstreamModule.playerStats.autoDJ = false;
+    //     iziToast.warning({
+    //       title: "Auto DJ Failed",
+    //       message: err.responseJSON.error ? err.responseJSON.error : "",
+    //       position: "topCenter",
+    //       timeout: 3500,
+    //     });
+    //     return;
+    //   }
+    const includedPaths = localStorage.getItem("autoDJ-Cats");
+    MSTREAMAPI.getRndSong(includedPaths, function (res, err) {
       if (err) {
         mstreamModule.playerStats.autoDJ = false;
         iziToast.warning({
@@ -244,7 +256,7 @@ var MSTREAMPLAYER = (function () {
       }
 
       // Add song to playlist
-      MSTREAMAPI.addSongWizard(res.filepath, res.metadata);
+      MSTREAMAPI.addSongWizard(res.songs[0].filepath, res.songs[0].metadata);
     });
   }
 
@@ -646,9 +658,9 @@ var MSTREAMPLAYER = (function () {
       })
     }
 
-    //const currentSong = MSTREAMPLAYER.getCurrentSong();
+    const currentSong = MSTREAMPLAYER.getCurrentSong();
     //console.log(currentSong);
-    //mstreamModule.playerStats.metadata.filepath = currentSong.filepath;
+    mstreamModule.playerStats.metadata.filepath = currentSong.filepath;
 
     mstreamModule.playerStats.loading = true;
     updateMediaSession();
@@ -857,7 +869,7 @@ var MSTREAMPLAYER = (function () {
       html5: true, // Force to HTML5.  Otherwise streaming will suck
       format: ['mp3', 'aac'], //needed for web streams
       xhr: {
-        method: 'GET',
+        method: 'POST',
         headers: {
         },
         withCredentials: true,

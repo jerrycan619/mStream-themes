@@ -471,11 +471,15 @@ exports.setup = function (mstream, program) {
       return;
     }
 
-    const result = fileCollection.findOne({ '$and':[{ 'filepath': pathInfo.relativePath}, { 'vpath': pathInfo.vpath }] });
+    //console.log("decodeURIComponent(pathInfo.relativePath): ", decodeURIComponent(pathInfo.relativePath));
+    //decodeURIComponent to support special chars in path
+
+    const result = fileCollection.findOne({ '$and':[{ 'filepath': decodeURIComponent(pathInfo.relativePath)}, { 'vpath': pathInfo.vpath }] });
     if (!result) {
       res.status(500).json({ error: 'File not found in DB' });
       return;
     }
+
 
     const result2 = userMetadataCollection.findOne({ '$and':[{ 'hash': result.hash}, { 'user': req.user.username }] });
     if (!result2) {
@@ -488,6 +492,8 @@ exports.setup = function (mstream, program) {
       result2.rating = req.body.rating;
       userMetadataCollection.update(result2);
     }
+
+    //console.log("rateResult2: ", result2);
 
     res.json({});
 
@@ -537,6 +543,8 @@ exports.setup = function (mstream, program) {
     const leftFun = function(leftData) {
         return leftData.hash + '-' + req.user.username;
     };
+
+    console.log("orClause: ", orClause);
 
     const results = fileCollection.chain().eqJoin(userMetadataCollection.chain(), leftFun, rightFunDefault, mapFunDefault).find(orClause).data();
 

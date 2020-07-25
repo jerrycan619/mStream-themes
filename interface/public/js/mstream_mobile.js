@@ -22,9 +22,9 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
   }
   
   function createFileplaylistHtml(dataDirectory, fileLocation = '') {
-    return `<div class="col p-0 file_wrapper">
-              <div class="row mt-1 mb-1 ml-0 mr-0 overflow-hidden align-items-center">
-                <div class="col p-0">
+    return `<div class="col-auto p-0">
+              <div class="row mt-1 mb-1 ml-0 mr-0 align-items-center overflow-hidden">
+                <div class="col p-0 file_wrapper">
                   <div data-directory="${dataDirectory}" class="fileplaylistz row align-items-center">
                     <div class="col-auto">
                       <span class="mdi-set mdi-playlist-music dir_icon"></span>
@@ -33,20 +33,20 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
                       <span class="item-text">${dataDirectory}</span>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div class="song-button-box row align-items-center flex-nowrap sbb_fold ">
-                <div class="col">
-                  <span class="fold mdi-set mdi-chevron-left"></span>
-                </div>
-                <div class="col">
-                  <span title="Add All To Queue" class="addFileplaylist mdi-set mdi-playlist-plus" data-directory="${dataDirectory}"></span>
-                </div>
-                <div class="col">
-                  <span data-directory="${dataDirectory}" title="Download Playlist" class="downloadFileplaylist mdi-set mdi-download"></span>
-                </div>
-                <div class="col">
-                    <span onclick="editSongModal('${fileLocation}');" class="mdi-set mdi-pencil editSong"></span>
+                  <div class="song-button-box row align-items-center flex-nowrap sbb_fold ">
+                    <div class="col">
+                      <span class="fold mdi-set mdi-chevron-left"></span>
+                    </div>
+                    <div class="col">
+                      <span title="Add All To Queue" class="addFileplaylist mdi-set mdi-playlist-plus" data-directory="${dataDirectory}"></span>
+                    </div>
+                    <div class="col">
+                      <span data-directory="${dataDirectory}" title="Download Playlist" class="downloadFileplaylist mdi-set mdi-download"></span>
+                    </div>
+                    <div class="col">
+                        <span onclick="editSongModal('${fileLocation}');" class="mdi-set mdi-pencil editSong"></span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>`;
@@ -63,7 +63,7 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
 
     return `<div class="col-auto p-0 file_wrapper">
               <div class="row mt-1 mb-1 ml-0 mr-0 overflow-hidden align-items-center">  
-                <div class="col p-0">
+                <div class="col p-0 file_wrapper">
                   <div data-file_location="${fileLocation}" class="filez row m-0 align-items-center"> 
                     <div class="col-auto pl-0">
                       <span class="mdi-set mdi-music-note dir_icon"></span> 
@@ -71,10 +71,16 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
                     <div class="col p-0">
                       <span class="${titleClass}">${title}</span>
                     </div>
+                  </div>
+                  <div class="song-button-box row m-0 align-items-center flex-nowrap sbb_fold ">
+                    <div class="col">
+                      <span class="fold mdi-set mdi-chevron-left"></span>
+                    </div>
+                    <div class="col">
+                      <span onclick="addPathToAutoDj(this);" data-directory="${fileLocation}" data-type="file" title="Add to AutoDJ" class="mdi-set mdi-plus"></span>
+                    </div>
+                    ${editButton}
                   </div> 
-                </div>
-                <div class="song-button-box row align-items-center flex-nowrap">
-                  ${editButton}
                 </div>
               </div>
             </div>`;
@@ -486,6 +492,7 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
       $('#contentHeader_text').html(panelName);
       clearHeaderBtns();
       $('#uploadFile').parent().addClass("d-none");
+      $('#uploadFile').show();
     }
   
     function boilerplateFailure(res, err) {
@@ -672,9 +679,12 @@ var spinner1_html = '<div class="d-flex justify-content-center">' +
                                   <span class="item-text">${this.name}</span>
                                 </div>
                               </div>
-                              <div class="song-button-box row align-items-center flex-nowrap sbb_fold ">
+                              <div class="song-button-box row align-items-center flex-nowrap sbb_fold">
                                 <div class="col">
                                   <span class="fold mdi-set mdi-chevron-left"></span>
+                                </div>
+                                <div class="col">
+                                  <span onclick="addPathToAutoDj(this);" data-directory="${this.name}" title="Add to AutoDJ" class="mdi-set mdi-plus"></span>
                                 </div>
                                 <div class="col">
                                   <span title="Add All To Queue" class="recursiveAddDir mdi-set mdi-playlist-plus" data-directory="${this.name}"></span>
@@ -1562,8 +1572,7 @@ Length${index+1}=-1\n`;
         }
         
       });
-  });
-    
+    });
   
     // ###########################################################################################
     // ################################ Albums View ##############################################
@@ -2266,11 +2275,13 @@ Length${index+1}=-1\n`;
 
       $('#fillContent').html('<div class="col-auto slides_system_nav">' +
                                   '<div>Settings</div>' +
+                                  '<div>AutoDj</div>' +
                                   '<div>Federation</div>' +
                                   '<div>Transcode</div>' +
                               '</div>' +
                               '<div class="slides_system col p-0 overflow-hidden">' +
                                   '<div data-simplebar id="getSettings" class="mh-100 h-100 pl-3 pr-3"></div>' +
+                                  '<div data-simplebar id="getAutoDj" class="mh-100 h-100 pl-3 pr-3"></div>' +
                                   '<div data-simplebar id="getFederation" class="mh-100 h-100 pl-3 pr-3"></div>' +
                                   '<div data-simplebar id="getTranscode" class="mh-100 h-100 pl-3 pr-3"></div>' +
                               '</div>');
@@ -2297,17 +2308,21 @@ Length${index+1}=-1\n`;
 
       
       $('.slides_system').on('beforeChange', function(event, slick, currentSlide, nextSlide){
-          
-          if (nextSlide === 1) {
-            getFederation();
-          }
+        $('#header_btns').hide();
+        console.log("current: ", currentSlide); 
 
-          if (nextSlide === 2) {
-            getTranscode();
-          }
+        if (nextSlide === 1) {
+          $('#header_btns').show();
+          getAutoDjView();
+        }
+        
+        if (nextSlide === 2) {
+          getFederation();
+        }
 
-          console.log("current: ", currentSlide);
-          //if (nextSlide)
+        if (nextSlide === 3) {
+          getTranscode();
+        }
       });
 
       getSettings();
@@ -2340,7 +2355,7 @@ Length${index+1}=-1\n`;
   
       const newHtml = `
         <div class="row m-0 flex-column flex-nowrap w-100 overflow-hidden">
-          <div class="col-auto p-0">
+          <!-- <div class="col-auto p-0">
             <div class="row mt-2 mb-2 settings_box">\
               <div class="col">\
                 <div class="row m-0 align-items-center justify-content-between">
@@ -2372,7 +2387,7 @@ Length${index+1}=-1\n`;
                 ${autodjRating_html}
               </select>
             </div>
-          </div>
+          </div> -->
           <div class="col-auto p-0">
             <div class="row mt-4">
               <div class="col">
@@ -2668,6 +2683,141 @@ Length${index+1}=-1\n`;
       localStorage.removeItem('token');
       location.reload(); 
     });
+
+    // ###########################################################################################
+    // ################################### AutoDj ################################################
+
+    window.getAutoDjView = function () {
+      //resetPanel('Auto Dj', 'scrollBoxHeight1');
+      $('#directory_bar').hide();
+      $('#uploadFile').hide();
+      //$('#fillContent').html(spinner1_html);
+      currentBrowsingList = [];
+
+      programState = [{
+        state: 'autoDjView'
+      }];
+
+      MSTREAMAPI.getAllAutoDj(function (response, error) {
+        console.log(response);
+        console.log(error);
+        let categories = [];
+        let paths = [];
+        let output = [];
+        
+        $.each(response, function () {
+          if (this.type === "category") {
+            categories.push({cat_id: this.id, cat_title: this.title, cat_subtitle: this.subtitle});
+          } else if (this.type === "path") {
+            paths.push({path_id: this.id, cat_id: this.category, path: this.path});
+          }
+          
+          currentBrowsingList.push(this);
+        });
+        //console.log("categoriesA", categories);
+        //console.log("pathsA", paths);
+
+        let count = 0;
+
+        categories.forEach(function(category){
+          count++;
+          let outputHtml = `<div class="card w-100">
+                            <div class="card-header pt-0 pb-0" id="heading${count}">
+                              <div class="row m-0 overflow-hidden align-items-center">
+                                <div class="col p-0">
+                                  <button class="btn" data-toggle="collapse" data-target="#collapse${count}" aria-expanded="true" aria-controls="collapse${count}">
+                                    <div class="row m-0 align-items-center">
+                                      <div class="col-auto pl-0">
+                                        <span class="mdi-set mdi-music-circle icon_normal"></span>
+                                      </div>
+                                      <div class="col pl-0 d-flex flex-column">
+                                        <span class="col_track_title">
+                                          ${escapeHtml(category.cat_title)}
+                                        </span>
+                                        <span class="col_track_artist">${escapeHtml(category.cat_subtitle)}</span>
+                                      </div>
+                                    </div>
+                                  </button>
+                                </div>
+                                <div class="col-auto pr-0">
+                                  <span data-stationid="${category.cat_id}" onclick="editAudoDjCat('${category.cat_id}');" class="mdi-set mdi-pencil icon_normal"></span>
+                                </div>
+                              </div>
+                            </div>
+                            <div id="collapse${count}" class="collapse" aria-labelledby="heading${count}" data-parent="#accordion">
+                              <div class="card-body p-0">`;
+          paths.forEach(function(path){
+            if (path.cat_id === category.cat_id) {
+              outputHtml += `     <div class="row flex-nowrap m-0">
+                                      <div class="col p-0 vert_text_scroll">${path.path}</div>
+                                      <div class="col-auto p-0">
+                                        <span onclick="deleteAutoDjPath('${path.path_id}');" class="mdi-set mdi-delete smallIcon"></span>
+                                      </div>
+                                  </div>`;
+            }
+          });
+          outputHtml += `     </div>
+                            </div>
+                            </div>`;
+          output.push(outputHtml);
+        });
+
+        // Add playlists to the left panel // <div id='downloadAllStations'>Download</div>
+        $('#getAutoDj').html("<div data-simplebar class='col h-100 mh-100 p-0'><div class='row m-0 flex-column flex-nowrap w-100 autoDjCatRow'><div id='accordion' class='autoDjViewList'>" + output.join("") + "</div></div></div>");
+      });
+      $('#panel_one_header_button2').removeClass("d-none");
+      $('#panel_one_header_button3').removeClass("d-none");
+      $('#panel_one_header_button4').removeClass("d-none");
+      $('#panel_one_header_button5').removeClass("d-none");
+      $('#panel_one_header_button2').html("<span title='Add Category' onclick='addAutoDjCategory();' class='mdi-set mdi-plus-circle-outline header_icon'></span>");
+      $('#panel_one_header_button3').html("<span title='Import radio stations' onclick='importAutoDjList();' class='mdi-set mdi-import header_icon'></span>");
+      $('#panel_one_header_button4').html(`<span title='Export AutoDj List' onclick="exportAutoDjList();" class='mdi-set mdi-export header_icon'></span>`);
+      $('#panel_one_header_button5').html("<span title='AutoDJ settings' onclick='autoDjSettings();' class='mdi-set mdi-cogs header_icon'></span>");
+    }
+
+    window.exportAutoDjList = function () {
+      
+      function download(filename, storageObj) {
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(storageObj));
+        element.setAttribute('download', filename);
+      
+        element.style.display = 'none';
+        document.body.appendChild(element);
+      
+        element.click();
+      
+        document.body.removeChild(element);
+      }
+      
+      let exportList = [];
+
+      MSTREAMAPI.getAllAutoDj(function (response, error) {
+        let categories = [];
+        let paths = [];
+        
+        $.each(response, function () {
+          if (this.type === "category") {
+            categories.push({cat_id: this.id, cat_title: this.title, cat_subtitle: this.subtitle});
+          } else if (this.type === "path") {
+            paths.push({path_id: this.id, cat_id: this.category, path: this.path});
+          }
+        });
+
+        categories.forEach(function(category){
+          let exportItem = {cat_title: category.cat_title, cat_subtitle: category.cat_subtitle};
+          exportItem.pathList = [];
+          paths.forEach(function(path){
+            if (path.cat_id === category.cat_id) {
+              exportItem.pathList.push(path.path);
+            }
+          });
+          exportList.push(exportItem);
+        });
+
+        download("mStream_autoDj.json", JSON.stringify(exportList));
+      });
+    }
 
     //############################## Transcode Panel ############################
     function getTranscode() {

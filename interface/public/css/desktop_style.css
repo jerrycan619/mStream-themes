@@ -980,6 +980,25 @@ input:focus {
 .markArtist .col_track_artist {
   color: #86b0ff; }
 
+.smallIcon {
+  font-size: 1.3rem; }
+  .smallIcon:hover {
+    cursor: pointer;
+    color: #fff; }
+
+.vert_text_scroll {
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  direction: rtl;
+  display: block;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */ }
+  .vert_text_scroll::-webkit-scrollbar {
+    display: none; }
+
 #sidebar-container {
   overflow-y: auto;
   background-color: rgba(0, 0, 0, 0.8);
@@ -1142,7 +1161,7 @@ input:focus {
   perspective: 50rem;
   -moz-perspective: 50rem; }
   .modal-dialog .modal-body .input-group-text {
-    width: 4rem;
+    width: 100%;
     font-weight: bold;
     font-size: 0.9rem; }
 
@@ -1706,7 +1725,32 @@ input:focus {
   .iconBtn:hover {
     color: #fff; }
 
-.card {
+.autoDjViewList .card {
+  background: transparent; }
+  .autoDjViewList .card .card-header {
+    background: #2b2b2b; }
+    .autoDjViewList .card .card-header button {
+      color: #b3b3b3;
+      text-align: left; }
+      .autoDjViewList .card .card-header button:hover {
+        color: #fff; }
+  .autoDjViewList .card .card-body > .row {
+    height: 2.2rem;
+    line-height: 2.2rem; }
+    .autoDjViewList .card .card-body > .row:nth-child(even) {
+      background: #212121; }
+
+#includeAutoDjCatUl {
+  background: rgba(18, 18, 18, 0.5);
+  margin-bottom: 1rem; }
+  #includeAutoDjCatUl .list-group-item {
+    font-size: 1.2rem;
+    border-color: rgba(255, 255, 255, 0.5); }
+    #includeAutoDjCatUl .list-group-item .removeCatFromIncludedCats:hover {
+      cursor: pointer;
+      color: #fff; }
+
+.loginCard {
   margin-top: auto;
   margin-bottom: auto;
   width: 400px;

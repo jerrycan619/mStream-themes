@@ -172,97 +172,6 @@
         </div>
     </div>
 
-    <!-- Save Playlist Modal -->
-    <!-- <div class="modal fade" id="savePlaylist" tabindex="-1" role="dialog" aria-labelledby="savePlaylist"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div id="flip-modal-front" class="modal-content modal--front">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Save Playlist</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span class="mdi-set mdi-close" aria-hidden="true"></span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="save_playlist_form" class="form">
-                        <input id="playlist_name" class="form__input-text" type="text" required
-                            placeholder="Enter your playlist name" pattern="[a-zA-Z0-9 _-]+">
-                        <label for="playlist_name" class="form__label">Playlist name</label>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" form="save_playlist_form" value="Save Playlist"
-                        class="form__btn btn btn-primary">Save<span
-                            class="form__btn__icon mdi-set mdi-playlist-music" /></button>
-                </div>
-            </div>
-            <div id="flip-modal-back1" class="modal-content modal--back">
-                <div class="modal-header bg-warning">
-                    <span>Error</span>
-                </div>
-                <div class="modal-body"><span>No playlist to save!</span></div>
-            </div>
-            <div id="flip-modal-back2" class="modal-content modal--back">
-                <div class="modal-header bg-success">
-                    <span>Success</span>
-                </div>
-                <div class="modal-body"><span>Playist successfully saved!</span></div>
-            </div>
-        </div>
-    </div> -->
-
-    <!-- Share Playlist Modal -->
-    <!-- <div class="modal fade" id="sharePlaylist" tabindex="-1" role="dialog" aria-labelledby="sharePlaylist"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content modal--front">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Share Playlist</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span class="mdi-set mdi-close" aria-hidden="true"></span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="share_playlist_form" class="form">
-                        <div class="input-group form-group">
-                            <div class="input-group-prepend"><span class="input-group-text">DAYS</span></div> <input
-                                id="share_time" type="number" min="1" step="1" value="14" class="form-control">
-                        </div>
-                        <label for="share_time">Expiration Time</label>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" form="share_playlist_form" value="Share Playlist"
-                        class="form__btn btn btn-primary">Share<span
-                            class="form__btn__icon mdi-set mdi-share" /></button>
-                </div>
-            </div>
-            <div class="modal-content modal--back modal--back1">
-                <div class="modal-header bg-warning">
-                    <span>Error</span>
-                </div>
-                <div class="modal-body"><span>No playlist to share!</span></div>
-            </div>
-            <div class="modal-content modal--back modal--back2">
-                <div class="modal-header bg-success">
-                    <span>Success</span>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span class="mdi-set mdi-close" aria-hidden="true"></span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <span>Copy this link and share it!</span>
-                    <input id="copyShareLink" type="text" class="form-control" readonly>
-                </div>
-                <div class="modal-footer">
-                    <button id="copyShareLinkButton" title="Copy link to Clipboard"
-                        class="form__btn btn btn-primary">Copy link to Clipboard<span
-                            class="form__btn__icon mdi-set mdi-content-copy" /></button>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
     <!-- Modal Template // Filled and Controlled by modal.js -->
     <div class="modal fade" id="ModalTemplate" tabindex="-1" role="dialog" aria-labelledby="editModal"
         aria-hidden="true">
@@ -335,7 +244,7 @@
                         <span title="Previous Directory" class="backButton mdi-set mdi-arrow-left navbar_icon"></span>
                     </div>
                     <div class="col p-0">
-                        <span class="directoryName"></span>
+                        <span class="directoryName vert_text_scroll"></span>
                         <!-- Current Directory -->
                         <input id="search_folders" class="hide" placeholder="Search List">
                     </div>

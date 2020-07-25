@@ -27,7 +27,12 @@ var VUEPLAYER = (function () {
     props: ['index', 'playlist'],
     methods: {
       addToPlaylist: function (event) {
+        console.log("this.playlist.name", this.playlist.name);
         MSTREAMAPI.addToPlaylist(this.playlist.name, cps.filepath, function (res, err) {
+          
+          console.log("cps.filepath", cps.filepath);
+          console.log("res", res);
+
           if (err) {
             iziToast.error({
               title: 'Failed to add song',
@@ -241,7 +246,7 @@ var VUEPLAYER = (function () {
       computed: {
         albumArtPath: function () {
           var meta = this.meta;
-          this.path = meta.filepath;
+          this.path = decodeURIComponent(meta.filepath);
           if (!meta['album-art']) {
             return '/public/img/default.png';
           }

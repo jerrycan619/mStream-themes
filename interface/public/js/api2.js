@@ -174,6 +174,38 @@ var MSTREAMAPI = (function () {
     makePOSTRequest("/radio/delete", { id: id, stationUrl: stationUrl, stationName: stationName }, callback);
   }
 
+  //AutoDJ System
+  mstreamModule.getAllAutoDj = function (callback) {
+    makeGETRequest("/autodj/get-all", false, callback);
+  }
+
+  mstreamModule.getRndSong = function (catList, callback) {
+    makePOSTRequest("/autodj/get-rndSong", { catList: catList }, callback);
+  }
+
+  mstreamModule.getCat = function (cat_id, callback) {
+    makePOSTRequest("/autodj/get-cat", { cat_id: cat_id }, callback);
+  }
+
+  mstreamModule.addCat = function (title, subtitle, callback) {
+    makePOSTRequest("/autodj/add-cat", { title: title, subtitle: subtitle }, callback);
+  }
+  mstreamModule.addPath = function (path, catId, callback) {
+    makePOSTRequest("/autodj/add-path", { path: path, catId: catId }, callback);
+  }
+
+  mstreamModule.deletePath = function (id, callback) {
+    makePOSTRequest("/autodj/delete-path", { id: id }, callback);
+  }
+
+  mstreamModule.deleteCat = function (id, callback) {
+    makePOSTRequest("/autodj/delete-cat", { id: id }, callback);
+  }
+
+  mstreamModule.editCat = function (id, title, subtitle, callback) {
+    makePOSTRequest("/autodj/editCat", { id: id, title: title, subtitle: subtitle }, callback);
+  }
+
   //File system manipulation
   mstreamModule.renameFile = function (currentPath, newPath, metadata, callback) {
     makePOSTRequest("/file/rename", {currentPath: currentPath, newPath: newPath,  metadata: metadata}, callback);

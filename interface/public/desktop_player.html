@@ -6,8 +6,8 @@
 
             </div>
             <div class="col m-0 p-0 track_text d-flex flex-column">
-                <div v-cloak class="track_text_title">{{currentSongTitle}}</div>
-                <div v-cloak class="track_text_artist">{{currentSongArtist}}</div>
+                <div v-cloak v-on:click="searchTitle" class="track_text_title"  style="cursor: pointer;">{{currentSongTitle}}</div>
+                <div v-cloak v-on:click="searchArtist" class="track_text_artist" style="cursor: pointer;">{{currentSongArtist}}</div>
             </div>
         </div>
     </div>

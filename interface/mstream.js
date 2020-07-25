@@ -11,6 +11,7 @@ const jukebox = require('./modules/jukebox.js');
 const sync = require('./modules/sync.js');
 const sharedModule = require('./modules/shared.js');
 const radioModule = require('./modules/onlineRadio.js');
+const autoDjModule = require('./modules/autodj.js');
 const defaults = require('./modules/defaults.js');
 const ddns = require('./modules/ddns');
 const federation = require('./modules/federation');
@@ -106,6 +107,9 @@ exports.serveIt = config => {
   // Radio
   radioModule.setupBeforeSecurity(mstream, program);
 
+  // AutoDJ
+  autoDjModule.setupBeforeSecurity(mstream, program);
+
   // Login functionality
   program.auth = false;
   if (program.users && Object.keys(program.users).length !== 0) {
@@ -161,6 +165,7 @@ exports.serveIt = config => {
   jukebox.setup(mstream, server, program);
   sharedModule.setupAfterSecurity(mstream, program);
   radioModule.setupAfterSecurity(mstream, program);
+  autoDjModule.setupAfterSecurity(mstream, program);
 
   // TODO: Add middleware to determine if user has access to the exact file
   // Setup all folders with express static

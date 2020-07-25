@@ -69,7 +69,7 @@ var VUEPLAYER = (function () {
                     <span class="fold mdi-set mdi-chevron-left icon_normal"></span>\
                   </div>\
                   <div class="col p-0 overflow-hidden">\
-                    <span title="Add to existing Playlist" v-on:click="call_addSongToPlaylistModal()" class="mdi-set mdi-plus icon_normal popperMenu pop-d">\
+                    <span title="Add to existing Playlist" v-on:click="call_addSongToPlaylistMobileModal()" class="mdi-set mdi-plus icon_normal popperMenu pop-d">\
                     </span>\
                   </div>\
                   <div class="col p-0 overflow-hidden">\
@@ -173,8 +173,8 @@ var VUEPLAYER = (function () {
           rateSongMobileModal(this.song);
         },
 
-        call_addSongToPlaylistModal: function () {
-          addSongToPlaylistModal(this.song, mstreamModule.playlists);
+        call_addSongToPlaylistMobileModal: function () {
+          addSongToPlaylistMobileModal(this.song, mstreamModule.playlists);
         },
       },
       computed: {
