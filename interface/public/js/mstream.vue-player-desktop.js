@@ -306,7 +306,7 @@ new Vue({
             this.curVol = parseInt(values[handle]);
             //console.log("CurVol: ", this.curVol);
             MSTREAMPLAYER.changeVolume(this.curVol);
-            console.log(MSTREAMPLAYER.playerStats.volume);
+            //console.log(MSTREAMPLAYER.playerStats.volume);
 
             // TODO: This could probably be done better with v-bind:class but I cant get it to live update on change of curVol
             if (this.curVol >= 66) {
@@ -346,5 +346,43 @@ new Vue({
             //this.set(values[handle]);
             MSTREAMPLAYER.seekByPercentage(values[handle]);
         });
+
+        // ----------------- VolumeBar change on mousewheel --------------------
+        const volBar = this.$refs.volume_bar;
+        const volBarWrapper = this.$refs.volume_bar_wrapper;
+
+        var current = 0;
+        const doScroll = function (e) {
+            // cross-browser wheel delta
+            e = window.event || e;
+            var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+
+            // Do something with `delta`
+            current = MSTREAMPLAYER.playerStats.volume + delta;
+            
+            //Delta is +1 or -1 depending on scroll direction
+            
+            //if(delta== 1 && volBar.volume <= 0.9){volBar.volume+=0.1;}
+            //if(delta== -1 && volBar.volume > 0.1){volBar.volume-=0.1;}
+ 
+            
+            if (current >= 0 && current <=100) {
+                //console.log("current", current);
+                volBar.noUiSlider.set(current);
+
+                if (typeof (Storage) !== "undefined") {
+                    localStorage.setItem("volume", current);
+                }
+            }
+
+            e.preventDefault();
+        };
+
+        if (volBarWrapper.addEventListener) {
+            volBarWrapper.addEventListener("mousewheel", doScroll, false);
+            volBarWrapper.addEventListener("DOMMouseScroll", doScroll, false);
+        } else {
+            volBarWrapper.attachEvent("onmousewheel", doScroll);
+        }
     }
 });

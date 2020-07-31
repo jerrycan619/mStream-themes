@@ -163,6 +163,7 @@ p {
 .dirz,
 .back,
 .artistz,
+.fileplaylistz,
 .albumz,
 .playlist_row_container,
 .playlist-item,
@@ -173,7 +174,7 @@ p {
   color: #b3b3b3;
   font-size: 1rem;
   font-weight: 400;
-  border-image: linear-gradient(to right, #2f2f2f, rgba(34, 34, 34, 0)) 1;
+  border-image: linear-gradient(to left, #2f2f2f, rgba(34, 34, 34, 0)) 1;
   border-width: 1px;
   border-style: solid;
   border-top: 0;
@@ -182,9 +183,10 @@ p {
 
 .filez:hover,
 .back:hover,
+.dirz:hover,
+.fileplaylistz:hover,
 .artistz:hover,
 .playlistz:hover {
-  background-color: #181818;
   color: #fff; }
 
 .dirz {
@@ -233,16 +235,6 @@ p {
   content: "";
   display: block;
   clear: both; }
-
-/*.dirz:hover,*/
-.albumz:hover,
-.artistz:hover,
-.playlistz:hover,
-.fileplaylistz:hover {
-  background-color: #181818 !important; }
-
-.back:hover {
-  background-color: #181818 !important; }
 
 .add_all {
   clear: both;
@@ -1305,7 +1297,8 @@ input:focus {
   line-height: 1rem;
   letter-spacing: .015em;
   color: #fff;
-  text-align: left; }
+  text-align: left;
+  font-weight: bold; }
 
 .track_text_artist {
   font-size: 0.8rem;

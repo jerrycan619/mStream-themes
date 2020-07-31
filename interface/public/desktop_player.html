@@ -61,13 +61,13 @@
                     v-bind:title="playModeTitle"></button>
             </div>
             <div class="col-auto p-0 control_button-wrapper" v-on:click="toggleAutoDJ">
-                <button id="autodj_icon" class="control_button sub_icon  mdi-set mdi-dice-6" title="Auto DJ"></button>
+                <button id="autodj_icon" class="control_button sub_icon  mdi-set mdi-gift" title="Auto DJ"></button>
             </div>
             <div class="col-auto pl-0 pr-3">
                 <div class="row m-0 flex-nowrap align-items-center">
                     <button v-on:click="toggleVolume" id="volume_icon" class="control_button sub_icon  volume-bar__icon mdi-set"
                         aria-label="Mute"></button>
-                    <div class="volume_bar_wrapper">
+                    <div class="volume_bar_wrapper" ref="volume_bar_wrapper">
                         <div id="volume_bar" ref="volume_bar"></div>
                     </div>
                 </div>
